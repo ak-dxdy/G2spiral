@@ -1,0 +1,15 @@
+% gv           -arg="-sFname=DemoInp.txt"  G2spiral.ps &
+% gv -infoAll  -arg="-sFname=DemoInp.txt"  G2spiral.ps &
+
+<<
+   /UserPhiData [ 0  ]
+   /OutputN false
+   /OutputFile (/home/ak/Wiki/Vogt/VogtSpiral.txt) 
+   /UserG2Data [/XYTK8 -1  0  100  -0.3333    1  0  100   1.2 ] 
+%              [       X1 Y1 Tau1   Crv1     X2 Y2 Tau2  Crv2 ]  % define array of 8 items 
+
+%    To use radius instead of curvature, you can use the following PostScript syntax:
+%     -1. 3. div   % "div" operator replaces two preceeding operands by their quotient.
+  
+>> 
+
