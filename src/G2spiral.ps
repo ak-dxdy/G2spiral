@@ -16,7 +16,7 @@
 %  
 %  ------------------- Edit below this line --------------------------
 <<
-   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ] 
+   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
 >> 
 %  ------------------- Edit above this line --------------------------
 
@@ -1080,7 +1080,7 @@ end
 
      9 -2 roll pop pop                 % [... x y s g dt t2 x2 y2 g2 k2 1st_attempt_OK
      7 -1 roll dup 3 -1 roll           % [... x y s g t2 x2 y2 g2 k2 dt dt 1st_attempt_OK
-     {2.0000000 mul} if exch           % [... x y s g t2 x2 y2 g2 k2 dt_rec dt
+     {2.000 mul} if exch               % [... x y s g t2 x2 y2 g2 k2 dt_rec dt
      8 -1 roll 4 index add 2 div mul   % [... x y s t2 x2 y2 g2 k2 dt_rec ds
      8 -2 roll                         % [... x y x2 y2 g2 k2 dt_rec ds s t2
      4  1 roll add                     % [... x y x2 y2 g2 k2 t2 dt_rec s2
@@ -1187,10 +1187,14 @@ end
   } ifelse
 }
 
+%/G2SolveAll {pop /Solutions [] def} def
+
 /G2SolveAll {% [phi array] ---> Fill solutions_array [ <<sol0>> <<sol1>> ] 
    [exch {%
-      /NextPhi 1 Args 
-      G2SolvePhi pop
+      dup /NextPhi 1 Args
+      % avoid Phi = +- Sigma
+      %  ...   .01 eqp not {...}{...} ifelse: to compare with precision 0.01
+      abs Sigma ne {G2SolvePhi pop}{pop} ifelse
    } forall]                     %/PreSolutions 1 Args
    [exch {G2FillSolution} forall] /Solutions 1 Args
    G2DataDict begin
@@ -1202,7 +1206,7 @@ end
    end
 }
 
-/G2SolvePhi{% phi --> dict1 dict2 count=0,1,2
+/G2SolvePhi{% phi --> may_be_dict1 may_be_dict2   dict_count: 0,1,2
 20 dict begin
    dup abs Sigma lt {-1}{1} ifelse /JJ ED
    /SW 1 index 0 ge JJ -1 eq and {-1}{1} ifelse def   
@@ -1244,7 +1248,7 @@ end
           D2     mul  JJ +1 eq {neg  Sgn mul} if     /QW ED
       /IsSpiral G2CheckSpiral def
       
-      %   Create dict if either it_is_spiral, or check_for_spirality_not_required
+      %   Create dict if either it_is_spiral, or check_for_spirality_is_not_required
       CheckSpiral not IsSpiral or {%
           <</Phi Phi /PW PW  /QW  QW  /NN NN /JJ JJ 
             /Rw  Rw  /WW WW  /IsSpiral IsSpiral /Ntype Ntype>>  %dup Pdict
@@ -1341,7 +1345,7 @@ NormBox length 0 eq {%
          GivenCurve aload length 2 idiv {%
             Matrix transform G2neg counttomark 2 roll
          } repeat
-         -2 dup neg dup
+         -2 -2 2 2
          -1 0 .5 Alpha Polar XYadd 1 0 .5 Beta Polar XYadd % to see unit tangents
         ] MinMaxXY
        ] G2SqBox 
@@ -2087,7 +2091,7 @@ end
     /X1 -1 def /Y1 0 def /X2 1 def /Y2 0 def
     /Normalized true def /HalfChord 1 def         % alpha a beta b
     4 copy /Crv2 ED /Tau2 ED /Crv1 ED /Tau1 ED
-    /CrvB ED /Beta ED /CrvA ED /Alpha ED 
+           /CrvB ED /Beta ED /CrvA ED /Alpha ED 
     /Matrix [1 0 0 1 0 0] def
     G2Vogt
  end 
