@@ -1,66 +1,45 @@
-%!PS-Adobe-3.0
-%%BoundingBox: 0 0 595 842
+%!//PS-Adobe-3.0
+% //%BoundingBox: 0 0 595 842
 %
-% gv -infoErrors -geometry 1000x1000 -arg="-sFname=g2.txt"  Demo.ps &
-% gv -infoAll                        -arg="-sFname=g2.txt"  Demo.ps &
+%    This file does not meet Data Structuring Conventions (DSC)
+%    parce que pages are generated in loop, 
+%    and DSC page numbering (like %%Page: 13) is not possible.
+%    So, navigation between pages (e.g., to previous page) is disabled. 
 %
+% gs       -sFname=InputData.ps   G2spiral.ps &
+% gv -arg="-sFname=InputData.ps"  G2spiral.ps &
+%
+% You can convert this script to PDF format by various converters, e.g., ImageMagic's convert.exe
+
 (Start) ==
 
-% You can modify this script, adjusting it to your own needs as explained below.
-% You can view this (or modified) script
-%     under Windows: by opening it in GSVIEW and other available PostScript viewers;
-%     under Unix:    by opening it in command line as "gv filename.ps" (and other PostScript viewers);
-% You can convert this script to PDF format by various converters, e.g., ImageMagic's convert.exe
 %  
-%  Edit below this line -------------------------------------------
+%  ------------------- Edit below this line --------------------------
 <<
-   /UserG2Data [/XYTK8 -82.64 -20. 300  0.025  48.55 23.5 -20.0 -0.04 ] 
+   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ] 
 >> 
-%  Edit above this line -------------------------------------------
+%  ------------------- Edit above this line --------------------------
 
 /Fname where {%
    pop Fname ==
    clear Fname run 
 } {/Fname () def} ifelse
 
-
-% Parabola with elliptic Solutions
-%/p .5 def /q .5 def /hh1 1 p add dup mul q dup mul add def 
-%                    /hh2 1 p sub dup mul q dup mul add def 
-
-
-%    For an example with short spirals (0 < p1 < p2), simply uncomment the line below:
-%  /UserG2Data [ 90 30 0.2  1. 0]  def
-%    For an example with long spirals within   bounded region, uncomment the line below:
-%                          90 30 -0.2 -1 
-%    For an example with long spirals within unbounded region, uncomment the line below:
-%                          90 30 -0.2 -1 
-%    Data such that sin(alpha+beta)=0 or p1*p2 < 0  cause error.
-
-% ================= Load some entries from FigDict:
-
-/FigDict 111 dict def       % 105
-/DebugMode /TeXDict where dup {exch pop} if not def % DebugMode = true/false
-
-/CurrentScale {%  calculate  +-sqrt(|ad-bc|) from [a b c d tx ty]
-   matrix currentmatrix aload pop pop pop 4 -1 roll mul 3 1 roll mul sub 
-   dup abs sqrt exch 0 lt {neg} if
-} bind def
+%  to run PSclean, tmp uncomment:
+%  ABpp4 Conc2 Ell2 Parab3 Cornu3 LogSpir2 Norm4 XYTK8
 
 /BeginFig {%
 countdictstack
 FigDict begin  
   /DictCheck exch def
-  gsave true setstrokeadjust .5 dup translate
+  gsave .5 dup translate
       [] ArrowSet 
       /PicDict
       <<  /PicX1 0 /PicX2 500 /PicY1 0 /PicY2 800 /PicW 500 /PicH 800 
           /PicScal 1. /PicMX matrix 
-          /IniScal CurrentScale 
           /PicMinus (\261)
       >> def
 %      /TcleanW .15 def   % Tclean_Width parameter
-      /KdrawLength 100 def
       true setstrokeadjust
 end      
 } bind def
@@ -68,13 +47,11 @@ end
 /EndFig {%   ? check stack and dict_stack ?
   grestore
   gsave 1 0 0 setrgbcolor 4 setlinewidth
-        DebugMode 
-        {count 0 ne 
-          {Pstack 0 0 moveto 600 840 lineto 600 0 moveto 0 840 lineto stroke} if % StackNotEmpty
-         countdictstack DictCheck ne 
-          {0 0 100 0 360 arc stroke} if                % Dict_not_popped
-        } if
-        flush  
+     count 0 ne 
+     {Pstack 0 0 moveto 600 840 lineto 600 0 moveto 0 840 lineto stroke} if % StackNotEmpty
+     countdictstack DictCheck ne 
+     {0 0 100 0 360 arc stroke} if                % Dict_not_popped
+     flush  
   grestore      
 } bind def
 
@@ -143,7 +120,6 @@ product 0 5 getinterval (DView) eq not {%
 
 % systemdict /colorimage known {} {} ifelse
 
-
 %  ----------------------------------- Standard 16         
 /White   {1.  1.   1.  setrgbcolor} bind def
 /Silver  {.75 .75  .75 setrgbcolor} bind def   
@@ -164,7 +140,6 @@ product 0 5 getinterval (DView) eq not {%
 %  ----------------------------------- Standard 16         
 
 /Green2  { 0  .75   0  setrgbcolor} bind def
-
 /Brown  {0.647 0.165 dup setrgbcolor} bind def   % 165 42 42
 /Sienna {0.647 0.32  .17 setrgbcolor} bind def   % 165 82 45
 
@@ -175,6 +150,7 @@ product 0 5 getinterval (DView) eq not {%
 
 /GenSec <<
 
+/KdrawLength 100 
 /MAX {2 copy lt {exch} if pop} bind %def
 /MIN {2 copy gt {exch} if pop} bind %def
 % compare to given precision
@@ -247,10 +223,6 @@ product 0 5 getinterval (DView) eq not {%
 /Asin {dup dup mul 1 sub neg sqrt atan Upd180} bind 
 /Acos {Asin 90 exch sub} bind 
 /Exp {2.718281828 exch exp} bind 
-%/Cosr {//Radian mul cos} bind 
-%/Sinr {//Radian mul sin} bind 
-/CubeRoot {dup abs 1. 3. div exp exch 0 lt {neg} if} bind 
-% ---------------------------------------------------------------
 /Signum {%    returns -1, or 0, or 1
     dup 0 lt {pop -1}{0 gt {1}{0} ifelse} ifelse
 } bind
@@ -273,36 +245,23 @@ product 0 5 getinterval (DView) eq not {%
    2 index div 3 1 roll exch div exch
 } bind 
 
-/XYmod {% dx dy
+/XYmod {% dx dy --> |dz|
    dup mul exch dup mul add sqrt
 } bind
-
-/XYpolar {% x y --> r  phi
-   exch 2 copy dup mul exch dup mul add sqrt 3 1 roll
-   2 index 0. eq {pop pop 0.} {Atan180} ifelse
-} bind 
 
 /FLT {% x y --> Mob(x,y)   // Mobius params in currentdict
 %       z*z2 + z1           z1 = x1 + i*y0 = Rmob*cos(l0)-1 + i*Rmob*sin(l0)
 %       ---------,  
 %       z*z1 + z2           z2 = x2 + i*y0 = Rmob*cos(l0)+1 + i*Rmob*sin(l0)
 %
+% MobiusDict begin
    2 copy Xflt2 Yflt0 XYmul Xflt1 Yflt0 XYadd 4 2 roll
           Xflt1 Yflt0 XYmul Xflt2 Yflt0 XYadd XYdiv
+% end          
 } bind
 
 /Polar {%   r phi --> x=r*cos  y=r*sin
   2 copy cos mul 3 1 roll sin mul
-} bind
-
-% --------------------------------------------- deprecated (XYpolar)
-/ToPolar {% x y --> r  phi
-   exch 2 copy dup mul exch dup mul add sqrt 3 1 roll
-   2 index 0. eq {pop pop 0.} {Atan180} ifelse
-} bind 
-
-/ToPolar2 {% x1 y1 x2 y2 --> r  phi             % previous XY_Polar  
-   3 -1 roll sub 3 1 roll sub neg exch XYpolar
 } bind
 
 /LocalXY {%    x1 y1  x2 y2  -> c mu x0 y0
@@ -311,16 +270,6 @@ product 0 5 getinterval (DView) eq not {%
  3  1 roll 2 copy add 2 div 5 1 roll sub neg  % X0 Y0 dy dx 
  2 copy dup mul exch  dup mul add sqrt 2 div  % X0 Y0 dy dx c 
  5  1 roll Atan0 Upd180 3 1 roll              % c mu X0 Y0 
-} bind
-
-/LocalMX {% c Mu X0 Y0  ---> Matrix
-          % Usage:
-          % To local: X Y MX  transform --> x y; Tau-Mu --> tau_loc;  k*c --> knorm
-          % Backward: x y MX itransform        ; tau+Mu            ;  kn/c
-   neg exch neg exch matrix translate 3 1 roll     % .... tmatrix c mu
-   neg matrix rotate exch                          % .... tmx rmx c
-   1 exch div dup matrix scale                     %....  tmx rmx smx
-   matrix concatmatrix matrix concatmatrix
 } bind
 
 /MinMax {%  [ X-array ] Minmax --> Xmin Xmax
@@ -339,308 +288,12 @@ product 0 5 getinterval (DView) eq not {%
   3 -1 roll exch
 } bind 
 
-/Solve2 {%   p  q  --> real_roots of x^2+px+q=0  true 
-         %          or                           false
-  exch -2. div 2 copy dup mul exch sub dup 0. lt {% q -p/2 D
-    pop pop pop false                             % false  
-  } {
-    sqrt 1 index 0. lt {sub} {add} ifelse dup  % q x0 x0
-    3 1 roll div 2 copy gt {exch} if true      % x1 x2 true
-  } ifelse
-} bind  
-
-/Solve3 {%   a2 a1 a0  --> real_roots of x^3+a2*x^2+a1*x+a0: [x1 (x2) (x3)]
-10 dict begin
-  /a0 ED /a1 ED dup /a2 ED -3 div /xadd ED
-  /p3 a2 xadd mul a1 add 3 div def           % p3 is p/3
-  /s3 p3 abs sqrt def
-  /q a0 xadd dup dup mul 2 mul a1 sub mul sub def
-  /Q %a1 dup dup 27 div a2 dup mul 108 div sub mul mul
-     %a0 dup 4 div a1 xadd mul 2 div add  xadd dup dup mul mul sub mul
-     %add
-     p3 dup dup mul mul q 2 div dup mul add
-  def
-  [
-  Q 0 lt {
-    p3 0 ge {Solve3_err1} if
-    % cos(a)=A/B, a=-q, -B <= A <=B
-    /a -2 p3 mul s3 mul q neg  % B A
-       2 copy sub sqrt 3 1 roll add dup 0 lt  {(Solve3_err2)== abs} if sqrt
-       Atan90 2 mul 3 div def     % a = alpha/3
-       2 a cos mul    -2 a 60 sub cos mul    -2 a 60 add cos mul
-  } {
-     p3 0 gt { 
-        2 s3 mul p3 mul abs q Atan90 2 div dup sin CubeRoot exch cos CubeRoot Atan90
-        2 mul dup cos exch sin div -2 mul 
-     } {
-        % p3 < 0:   p3 0 eq {Err4} if 
-        2 s3 mul p3 mul abs q div Asin % Not optimized for precision !!!
-                                 2 div dup sin CubeRoot exch cos CubeRoot Atan90
-        -2. exch 2 mul sin div 
-     } ifelse
-  } ifelse
-  ] {} Sort [exch {s3 mul xadd add} forall]
-end
-} bind  
-
-
-/SolveEQ {% proc x1 x2 eps_y --->  x true   or false
-          % proc x1 x2 0.000 --->  x true   or false  // eps may be 0. 
-  4 1 roll
-  2 index 3 copy exec                % eps proc x1 x2 proc x1 y2
-  3 1 roll exch exec                 % eps proc x1 x2 y2 y1
-  2 copy mul 0. gt {
-     exch 
-     %/Bad_EQ_x1x2y1y2 4 Args 
-     6 {pop} repeat false
-  } {
-     % make y increasing from x1 to x2 (with possibly x2<x1):
-     exch
-     2 copy gt {4 2 roll exch 4 2 roll exch} if      % eps proc t1 t2 y1 y2
-     % loop                                                
-     {                                               % eps proc t1 t2 y1 y2
-       2 copy sub abs 6 index le {
-          pop pop add 2 div 3 1 roll pop pop true exit % t0
-       } if
-       4 2 roll 2 copy add 2. div                     % eps proc y1 y2 t1 t2 t0
-       3 copy eq exch 2 index eq or                   % eps proc y1 y2 t1 t2 t0 t2=t0||t1=t0
-  %old:
-  %    {7 {pop} repeat false exit} if  
-  %new:
-       {7 1 roll 6 {pop} repeat true exit} if  
-       dup 6 index exec                               % eps proc y1 y2 t1 t2 t0 y0
-       dup 0 gt {                                     % |
-          6 -2 roll pop                               % eps proc t1 t2 t0 y0 y1
-          4 -1 roll pop exch                          % eps proc t1 t0 y1 y0
-       } {
-          6 3 roll pop exch pop                       % eps proc t2 t0 y0 y2
-          4 2 roll exch 4 2 roll                      % eps proc t0 t2 y0 y2
-       } ifelse
-     } loop
-  } ifelse
-} bind
-
-% --------------------------------------------------------- Markers (in GenSec)
-
-/Dotted {%  L = distance between circles in Radii  *---*--- ...
-         %  L = 0  --- un_dot
-   dup 0 le {[] 0 0}{[ 0 3 -1 roll currentlinewidth mul] 0 1} ifelse 
-   setlinecap setdash 
-} bind 
-
-/Spoint {%  Squared point at currentpoint 
-  gsave currentpoint newpath translate
-        dup abs dup dup scale currentlinewidth exch div setlinewidth 0 setlinecap
-%        0 lt {0 setlinewidth -.5 dup 1 1 rectstroke}{1 setlinewidth -.5 0 moveto 1 0 rlineto stroke} ifelse
-        0 gt {-.5 dup 1 1 rectstroke}{-.5 0 moveto 1 0 rlineto stroke} ifelse
-  grestore
-} bind 
-
-/Spoint45 {%  R  // rotated square
-  gsave currentpoint newpath translate dup scale 0 setlinecap 1 setlinewidth
-        .3535534 dup neg dup moveto dup lineto stroke
-  grestore
-} bind 
-
-/Rpoint {%  Radius  (R<0 --- fill with white)  (curr.point) 
-    gsave currentpoint newpath [] 0 setdash translate dup 0 ge 
-%      {PicLW 1 setlinecap 0 0 moveto 0 0 rlineto}
-%      {-2 div PicDict /PicScal get div 0 0 3 -1 roll 0 360 arc closepath clip 
-      {setlinewidth 1 setlinecap 0 0 moveto 0 0 rlineto}
-      {-2 div 0 0 3 -1 roll 0 360 arc closepath clip 
-             gsave 1 setgray fill grestore
-      } ifelse stroke
-    grestore
-} bind 
-
-/Across {% R Ang
-  gsave currentpoint translate newpath [] 0 setdash  
-     rotate
-     dup dup scale  currentlinewidth exch div setlinewidth
-     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke                   
-  grestore     
-} bind 
-
-/Rcross {% R >< 0
-%  Picmm
-  gsave currentpoint translate newpath [] 0 setdash 0 setlinecap
-     dup 0 lt {45 rotate abs} if
-     dup dup scale  currentlinewidth exch div setlinewidth
-%      dup scale
-     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke                   
-  grestore     
-} bind 
-
 % --------------------------------------------------------- Arrows (in GenSec)
 /ArrowDict << 
    /Lback 2  /Lforw 6  /Lwid 3 
    /ArrowType 2    % 0: no arrow; 1: normal arrow: 2: curvilinear arrow (Moebius)
 %  /ArrowCrv  0    % basic curvature (for Moebius)   
 >> 
-
-/ArrowSet {% [Lback Lforw Lwid]
-           % [] to set defaults
-  dup length  3  ne {pop [2 6 3]} if   % [Lb Lf Lw]
-  ArrowDict begin aload pop          % Lb Lf Lw
-   /Lwid ED /Lforw ED  /Lback ED
-  end
-} bind
-
-/ArrowScale { % scale_factor
-  ArrowDict begin
-    [Lback Lforw Lwid] ArrowSet
-    dup Lwid mul /Lwid ED dup Lforw mul /Lforw ED Lback mul /Lback ED   end
-} bind
-
-/ArrowHead {% (curr.pt.context) Lback Lforw Lwid dir
-%                                2  6  3  
-%     draw arrow head from current point in given direction 
-
-%  gsave Red 3 PicLW currentpoint newpath moveto 3 copy exch pop Polar rlineto 5 Rpoint stroke grestore
-%  ArrowDict Pdict
-
-  gsave currentpoint newpath 0 setlinecap 0 setlinejoin
-    translate 
-       rotate
-       0 0 moveto                                      % Lback Lforw Lwid
-       3 -1 roll neg exch 2 copy lineto                % Lforw -Lback Lwid
-       3 -1 roll 0 lineto                              % -Lback Lwid
-       neg lineto closepath fill
-  grestore
-} bind
-
-/ArrowHeadCrv {% (curr.pt.) x2 y2 k
-%                               
-%     draw curved arrow head from current point to given direction 
-
-   ArrowDict begin
-     Lforw currentlinewidth mul
-     Lback currentlinewidth mul
-     Lwid  currentlinewidth mul
-   end
-   8 dict begin
-   /lw ED /lb ED /lf ED /k ED 2 copy 2 copy
-
-   gsave currentpoint newpath  0 setlinecap 0 setlinejoin 
-       XYsub            % x2 y2 x2 y2 x2-x1 y2-y1
-       4 2 roll translate
-       exch atan rotate
-        lf 2 div k mul Radian mul rotate        
-%		  lf 2 div k mul Asin  rotate
-%		  lf 2 div k mul abs dup 1 le {pop}{lf exch div /lf ED} ifelse
-		  /ll lf lb add def
-		  k lf mul //Radian mul dup cos /e1 exch def sin /e2 exch def % exp(ikL)= e1+i*e2
-          k abs .001 lt {0 lf neg} {1 e1 sub k div e2 neg k div } ifelse /f2 ED /f1 ED 
-                                                  		  %  (1-exp(ikL))/k = f1+i*f2   
-	      /Mob {%                                     % x y   
-%		  /IN 2 Args
-		       2 copy f1 f2 XYmul 0 2 XYmul 4 2 roll % numerator z
-			   1 e1 sub e2 neg XYmul 1 e1 add lf mul e2 lf mul XYadd XYdiv
-%		  /OUT 2 Args	   
-		  } bind def
-          0 0 moveto
-		  0               0 
-		  ll neg   lw neg
-		  lf neg          0 
-		  ll neg   lw
-          0               0
-          4 {% p1 p2
-%               gsave Green 4 copy moveto lineto stroke grestore
-			   3 index 3 index 2 copy Mob 6 2 roll
-               XYadd 2 div exch 2 div exch Mob 4 2 roll
-%               gsave Blue 3 Rpoint 4 copy moveto 3 Rpoint moveto 3 Rpoint grestore
-			   Arc3 pop			   
-          } repeat 	pop pop
-          fill %stroke		  
-%         2 0 Mob moveto 10 Rpoint 10 0 Mob moveto 10 Rpoint
-	   end
-%	 gsave 1 PicLW Green 0 0 moveto 3 Rpoint 1 0 rlineto 0 0 moveto 0 .5 rlineto  stroke grestore
-  grestore
-   moveto  %  set current point, expected by user
-} bind
-
-
-/rl^ {% dx dy [optional_arrow_descr] :  rlineto-arrow
-%                                          2  6  3  
-  dup type /arraytype ne {ArrowDict begin Lback Lforw Lwid end}
-                         {aload pop} ifelse          % dx dy Lback Lforw Lwid
-  3 {currentlinewidth mul 5 1 roll} repeat           % Lback Lforw Lwid dx dy
-  gsave 2 copy rmoveto currentpoint 7 2 roll grestore% x y Lback Lforw Lwid dx dy
-  exch 2 copy dup mul exch dup mul add sqrt          % x y Lback Lforw Lwid dy dx dl
-  3 1 roll atan exch                                 % x y Lback Lforw Lwid fi dl 
-              % commented 14.08.2018
-  3 index sub % dup 0 lt {pop 0} if                    % x y Lback Lforw Lwid fi dl'
-  1 index 2 copy cos mul 3 1 roll sin mul rlineto    % x y Lback Lforw Lwid fi       
-      ArrowHead 
-  moveto   % restore user_expected current point
-} bind
-
-/l^ %%%% def   lineto-arrow
-{%
-   	currentpoint 3 -1 roll sub neg 
-        3 1 roll sub exch rl^
-} bind
-
-/arc^ {% x0 y0 r phi1 phi2
-    gsave 5 copy arc currentpoint 7 2 roll newpath  % xend yend x0 y0 r phi1 phi2
-    grestore 
-    1. 3 index abs div dup 7 1 roll                 % xend yend k x0 y0 r phi1 phi2 k
-    ArrowDict /Lforw get mul currentlinewidth mul
-    //Radian mul sub arc                            % xend yend k
-    ArrowDict /ArrowType get 2 eq{%
-        ArrowHeadCrv      
-    }{%
-        pop l^
-    } ifelse
-} bind
-
-/arcn^ { %def  arc-arrow
-    gsave 5 copy arcn currentpoint 7 2 roll grestore % xend yend x0 y0 r phi1 phi2
-%	2 copy le {360 sub} if
-    -1. 3 index abs div dup 7 1 roll                 % xend yend k x0 y0 r phi1 phi2 k (<0)
-    ArrowDict /Lforw get mul currentlinewidth mul
-    //Radian mul sub arcn                            % xend yend k
-    ArrowDict /ArrowType get 2 eq{%
-        ArrowHeadCrv      
-    }{%
-        pop l^
-    } ifelse
-} bind
-
-/arc^^ {% x0 y0 R fi1 fi2              arrow-arc-arrow
-    2 copy add 2 div 3 1 roll sub abs 2 div  % x0 y0 R fi0 |dfi|
-    5 copy 
-    gsave newpath 1 index add     arc^  stroke grestore
-    gsave newpath 1 index sub neg arcn^ stroke grestore
-} bind
-
-/crv^ {%  (curr.pt.context) x1 y1 x2 y2 x3 y3  curveto_arrow
-3 {currentpoint 8 -2 roll 3 -1 roll sub 3 1 roll sub neg exch} repeat rcrv^
-} bind
-
-/rcrv^ {% rcurveto_arrow:  (curr.pt.context) x1 y1 x2 y2 x3 y3
-%
-% k(1)=-18L1L2sin(a-b)+24cL1sin(a-2b)+24c^2sin(2b)-6L1^2sin(2a-2b)-40cL2sin(b))/(3L2^3)
-% gs/dt(1) = 3L2
-%
- 2 copy currentpoint 10 4 roll 4 copy   % p3 p0 p1 p2 p3 p2 p3 
- 3 -1 roll sub 3 1 roll sub neg exch    % p3 p0 p1 p2 p3 p3-p2
- dup mul exch dup mul add sqrt 3. mul   % p3 p0 p1 p2 p3 3|p3-p2|
- dup 0. eq {(Singular EndPoint) ==} if  % p3 p0 p1 p2 p3 3|p3-p2|
- ArrowDict /Lforw get                                                 %???
- currentlinewidth mul exch div          % p3 p0 p1 p2 p3  dt         %???   
- dup 1. gt                                                           %???
- %{9 {pop} repeat rl^ }              %   just rl^ to end pt
- {pop rcurveto pop pop pop pop}      %   just rcurveto to end pt
- {dup neg 1. add dup 2 copy mul dup %   ... dt t1=(1-dt) t1 t1^2 t1^2
-  dup 3 index mul dup                       6 {8 -1 roll mul 7 1 roll} repeat
-  dup 2 mul dup                 2 {7 index mul 6 -1 roll add 5 1 roll} repeat
-  dup 2 {4 index 7 index 2 index mul sub mul 3 mul 3 -1 roll add exch} repeat
-  rcurveto  3 -1 roll add 3 1 roll add exch l^
- } ifelse
-} bind
-
-% --------------------------------------------------------- Drawing (in GenSec)
 
 /XYdraw {% draw array [x y x y ...]  or --mark-- x y x y ...
    dup type /arraytype eq 
@@ -650,13 +303,6 @@ end
       2 idiv 1 sub 3 1 roll moveto {lineto} repeat
    } ifelse
 } bind 
-
-%/XYdrawPt {% draw array [x y x y ...]  or --mark-- x y x y ...
-%   dup type /arraytype eq 
-%   {aload length}
-%   {counttomark dup 2 add -1 roll pop} ifelse  
-%   2 idiv {moveto 1 ???LWPoint} repeat
-%} bind 
 
 /text_wh  %% (text) text_wh   --> width height
 { gsave currentpoint translate
@@ -687,26 +333,6 @@ end
   grestore rmoveto
 } bind 
 
-%  Apply set_text to firsrt char only
-/set_text1 {  %% (text1) Cx Cy set_text1
-   2 index 0 1 getinterval 3 1 roll set_text pop 
-} bind 
-
-/Aset_text  %% (curr.pt) % (text) Angle AddShift  Aset_text  show !!!
-{ gsave currentpoint translate
-    2 index text_wh  % extr. text to get its size % -> (text) A Sh wx wy
-    newpath
-    2 div exch 2 div 2 copy mul sqrt 2 div dup % (t) A Sh wy wx dxy dxy
-    2 index add exch 3 index add               % (t) A Sh wy wx a b
-    2 copy mul 3 1 roll                        % (t) A Sh wy wx ab a b
-    6 index cos mul dup mul exch    
-    6 index sin mul dup mul add sqrt div       % (t) A Sh wy wx Rpolar
-    4 -1 roll 1 add mul                        % (t) A wy wx  RpolarSh
-    4 -1 roll Polar                            % (t) wy wx  dx dy
-    4 -1 roll sub 3 1 roll sub neg exch        %  (t) x y   
-  grestore rmoveto 
-} bind 
-
 /Tclean {%  |curr. pt| (text) optional_W  --> text_unchanged
    dup type /stringtype eq {.15} if exch          % .15 (text)
    gsave 1 setgray dup 3 1 roll                   % (text) .15 (text)  
@@ -729,110 +355,7 @@ end
      grestore moveto 
     } if
 } bind
-
-/Pshow  {%   (r123) Pshow  : Prints 2-nd and next characters as power
-   dup 0 1 getinterval search {%           % (rest) (1st) () true
-     pop show dup stringwidth pop .6 mul   % (rest) dx
-     currentpoint 4 1 roll add 3 1 roll    % xn yn (rest)
-     gsave
-       0 currentfont /ScaleMatrix   %  known ... etc
-       get 0 get .55 mul rmoveto currentpoint translate 
-       0.666 dup scale  0 0 moveto show 
-     grestore moveto 
-    } if
-} bind 
-
-%  Tilde show
-/Tshow {%  (char)
-  gsave currentpoint translate
-    dup text_wh exch 2 div exch  % (c) wx/2 wy
-    moveto 
-    (\176) .5 0.3 set_text show  % "similar" symbol 
-  grestore
-  show
-} bind 
-
-%  Bar show
-/Bshow {%  (char)
-  gsave currentpoint translate
-    dup text_wh exch 2 div exch  % (c) wx/2 wy
-    moveto 
-    (-) .5 0.3 set_text show  % "minus" symbol, \055
-  grestore
-  show
-} bind 
-     
-/IPshow  {%   (Main) (Ind) (Pow) IPshow  : Prints index and power near Main: Main_{Ind}^{Pow}
-          %   (no font changes for the moment)
-   3 -1 roll
-   % dup length ... 
-   show currentpoint                         % I P x y
-   gsave
-       2 copy translate .6 dup scale
-       currentfont /ScaleMatrix   %  known ... etc
-       get 0 get dup                         % I P x y S S
-       -.2 mul 0 exch rmoveto               % I P x y S
-       5 -1 roll show currentpoint pop exch  % P x y dx1 S 
-       0 0 moveto 
-       0.66 mul 0 exch rmoveto               % P x y dx1
-       4 -1 roll show currentpoint pop MAX   % x y dx
-       .6 mul 3 -1 roll add exch
-   grestore moveto 
-} bind 
-
-/SHOW {%  _subscript ^superscript | normalsize $math$
-7 dict begin
-gsave
-currentpoint /ybas exch def /xbas exch def
-/mx matrix currentmatrix def
-/cf currentfont def
-/sf currentfont /ScaleMatrix   %  known ... etc
-                               get 0 get def
-/small false def
-/math false def
-dup length {dup} repeat length 1 sub 0 1 3 -1 roll
-{1 getinterval
-dup (^) eq
- {pop small
-      {mx setmatrix xbas ybas moveto}
-      {/xbas currentpoint pop def
-       /small true def
-      } ifelse
-      0 .55 sf mul rmoveto 0.7 dup scale
- }
- { dup (_) eq
-   {pop small
-      {mx setmatrix xbas ybas moveto}
-      {/xbas currentpoint pop def
-       /small true def
-      } ifelse
-       0 sf -0.15 mul rmoveto 0.7 dup scale
-   }
-   { dup (|) eq
-     {pop mx setmatrix currentpoint pop ybas moveto /small false def}
-     { dup ($) eq
-       {pop math {cf} {/Symbol findfont sf scalefont} ifelse setfont
-        /math math not def
-       }
-       {%gsave 1 0 0 setrgbcolor currentpoint moveto 0 sf rlineto stroke grestore
-       show} ifelse
-     } ifelse
-   } ifelse
- } ifelse
-%gsave 0 1 0 setrgbcolor 1 setlinecap xbas ybas moveto 0 0 rlineto stroke grestore
-%Anykey
-} for
-currentpoint
-grestore
-moveto
-end
-} 
-
-/Defformat {%  x ---> number_of_decimal_digits after decimal point
-  10 string cvs (.) search
-  {pop pop length} {pop 0} ifelse
-} bind 
-
+% /Pshow {...}  /Tshow {...} /Bshow {...}  --- removed
 
 /I_format {%   |value|  -->  string
 %/I_f 1 Args
@@ -883,7 +406,7 @@ end
    } if                                           % bool_deg v mode
    exch dup 0 lt {%
       neg
-      currentfont begin FontName end /Symbol eq pop true %
+      currentfont /FontName get /Symbol eq pop true %
       {(\055)}{(\261)} ifelse
    } {()} ifelse 3 1 roll                         % deg (sign) mode |v|
    dup type /integertype eq {%
@@ -907,74 +430,6 @@ end
    exch {(\260) AppStr} if
 %/RES 1 Args
 } bind 
-
-
-%       USE  (\261) FOR MINUS SIGN !!!
-/OldFormat {%   value +-n_dec.digits  Format --->  string
-      % f.e. -123.4775 2  Format --->  (-123.48)
-      %      -123.4775 0  Format --->  (-123)
-
-      % n < 0 --- keep trailing zeros
-      % f.e.  3.4000  2  Format --->  (3.4)
-      %       3.4000 -2  Format --->  (3.40)
-   dup mark 4 2 roll abs exch dup 0 lt {   % n [ |n| v bool
-    currentfont begin FontName end /Symbol eq %
-      {(\055)}{(\261)} ifelse 3 1 roll  
-   } if                                    % n [ (-?) |n| v            
-    abs 10 2 index exp mul cvi             % n [ () |n| I=|v|*10^|n| 
-    12 string cvs dup length               % n [ () |n| (III) l
-    3 -1 roll sub                          % n [ () (III) l-n
-    dup 0 le
-    { (0.) exch neg {(0) AppStr} repeat    % n [ () (III) (0.00)
-       exch}                               % n [ () (0.00) (III)
-    {1 index 0 3 -1 roll getinterval       % n [ () (II)=(entfrac) (ent)
-     anchorsearch                          % n [ () (frac) (ent) true
-     not {(???)} if (.) AppStr exch        % n [ () (ent.) (frac) 
-    } ifelse 
-    counttomark 1 sub {AppStr} repeat      % n [ (-ent.frac) 
-    3 1 roll pop
-     0 gt {%       remove trailing zeros
-%(Remove) == Pstack
-           dup 0 exch                      % [ ()  (ent.) (frac) nz (frac)  --- count end-zeros
-           {48 eq {1 add}{pop 0} ifelse} forall   %   ....(frac) nz
-           1 index length exch sub 0 exch  % [ ()  (ent.) (frac) 0 l1
-           getinterval                     % [ ()  (ent.) (frac) 
-       } if
-} bind 
-
-/RectLine {% x1 x2 y1 y2  a b c  (line is ax+by=c) -->                     false
-                                                %  --> xmin xmax true  p q true
-9 dict begin                                    %  --> ymin ymax false p q true
-%/Rect 7 Args
-   /c ED /b ED /a ED  2 copy gt {exch} if /y2 ED /y1 ED 2 copy gt {exch} if /x2 ED /x1 ED
-   /hor a abs b abs le def
-   a 0. ne b 0. ne and {%                                   %  2----3
-      hor {a b c b}{b a c a} ifelse div /q exch def div neg /p exch def
-      [a x1 mul b y1 mul add c sub                          %  |    |  
-       a x2 mul b y1 mul add c sub                          %  1----4
-       a x2 mul b y2 mul add c sub                          %
-       a x1 mul b y2 mul add c sub  3 index %/F4321 4 Args  % [ F1 F4 F3 F2 F1
-       1 index mul 0. le {x1 hor not {a mul c exch sub b div} if 5 1 roll} if % [ ? 1 4 3 2 
-       1 index mul 0. le {y2 hor     {b mul c exch sub a div} if 4 1 roll} if 
-       1 index mul 0. le {x2 hor not {a mul c exch sub b div} if 3 1 roll} if 
-               mul 0. le {y1 hor     {b mul c exch sub a div} if         } if  % [ ? ?   
-       counttomark 2 ge {] MinMax p q hor true   %/RectT 3 Args
-                        }{] pop           false  %/RectF 1 Args
-                        } ifelse
-   } { 
-      a 0. ne {%     b = 0, vertical
-            c a div dup /q ED dup x2 le exch x1 ge and dup {y1 y2 0. q false 6 -1 roll} if
-      } { 
-         b 0. ne {%  a = 0
-            c b div dup /q ED dup y2 le exch y1 ge and dup {x1 x2 0. q true   6 -1 roll} if
-         } {false} ifelse 
-      } ifelse
-   } ifelse
- end
- % updated version:
- {3 1 roll true}{false} ifelse
-%   dup {/RectT 6 Args} {/RectF 1 Args} ifelse
-} bind
 
 %----------------------------------------------------------------------------  Arcs
 /_Arc0 {%  (curr.pt) if_arrow tau length  --> new_Tau (= tau)
@@ -1028,100 +483,14 @@ end
    %(Arc OK) == %pstack
 } bind 
 
-/_ArcTo {%  (curr.pt) tau xdest ydest --> tau k len/rot
-     currentpoint 4 2 roll LocalXY pop pop              % tau c mu
-     %  k = sin(mu-tau)/c
-     2 index sub Upd180 dup sin dup 0. eq               % tau c tau-mu sin(t-m) k=0
-     3 index 0. eq  or                                  % ..... k=0_or_c=0                   
-     {pop abs 179 gt {neg} if 0. exch}                  % tau 0. l=+-c
-     {3 -1 roll div exch} ifelse 2. mul                 % tau k l/rot
-} bind  
-  
 /Arc {%  (curr.pt) tau k len/rot --> new_Tau
    false 4 1 roll _Arc
-} bind 
-
-/Arc^ {%  (curr.pt) tau k len/rot --> new_Tau
-   1 index 0. eq 
-   {exch pop true 3 1 roll   _Arc0}
-   {%
-     gsave   
-       3 copy Arc pop currentpoint 5 2 roll 
-     grestore %/EPtkr 5 Args 
-     2 copy ArrowDict /Lforw get 2 index mul abs       % xe ye tau k rot k rot |L*k|
-     currentlinewidth mul //Radian mul exch            % xe ye tau k rot k rot_arr rot
-     abs 1 index sub 0 lt {%                           % xe ye tau k rot k dr   
-     	 pop pop Arc
-     }{%                                               % xe ye tau k rot k dr
-        2 index 0 gt {neg} if
-        1 index 6 3 roll 4 index add Arc               % xe ye k dr k tau'
-        3 1 roll exch                                  % xe ye k tau' k dr
-        gsave 
-%            gsave currentpoint newpath moveto Green 4 PicLW 3 copy Arc pop stroke grestore
-           Arc currentpoint 
-        grestore 4 -1 roll                            % xe ye taunew xnew ynew k
-        ArrowDict /ArrowType get 2 eq{%
-          ArrowHeadCrv      
-        }{%
-           pop l^
-        } ifelse
-     } ifelse
-     3 1 roll moveto
-   } ifelse  
-} bind
-
-/_Arc3 {%  (curr.pt) x1 y1 x2 y2 --> tau x2 y2 
-%   gsave 4 copy moveto 3 Rpoint moveto 3 Rpoint grestore 
-
-   2 copy currentpoint XYsub exch atan 5 1 roll % mu0 x1 y1 x2 y2
-   4 copy XYsub neg exch neg      atan 5 1 roll % mu0 mu2 x1 y1 x2 y2
-   6 2 roll currentpoint XYsub exch atan        % x2 y2 mu0 mu2 mu1
-   exch sub add 3 1 roll
-} bind 
-
-/Arc3 {%  (curr.pt) x1 y1 x2 y2
-    _Arc3 _ArcTo Arc
-} bind 
-
-/Arc3^ {%  (curr.pt) x1 y1 x2 y2
-   _Arc3 _ArcTo Arc^
-} bind 
-
-/Crv123 {%  x0 y0 x1 y1 x2 y2 --> tau1 crv
-   4 copy 4 2 roll XYsub exch Atan180   % x0 y0 x1 y1 x2 y2 mu2
-   7 1 roll 6 2 roll                    % mu2 x2 y2 x0 y0 x1 y1
-   3 index 3 index XYsub exch Atan180   % mu2 x2 y2 x0 y0 mu1
-   6 -1 roll 1 index sub Upd180         % x2 y2 x0 y0 mu1 rot
-   dup sin 7 3 roll                     % mu1 rot sinr x2 y2 x0 y0
-   XYsub 2 copy exch Atan180            % mu1 rot sinr dx dy mu
-   6 1 roll dup mul exch dup mul add    % mu mu1 rot sinr hh
-   sqrt 2. div div 4 1 roll             % crv mu mu1 rot
-   1 index add add exch sub
-   exch
 } bind def
-
-%------------------------------------------------------- KKlib
-%   [ x0 y0 tau k rot_or_len par ...]
-%-------------------------------------------------------------
 
 /Kload {%  [x y t k ...]  N_to_keep  --> x y t ... (Poss. nulls added)
          exch aload length dup 2 add -1 roll
          sub dup 0 ge {{pop}} {neg {null}} ifelse repeat
 } bind 
-
-/Qdef {% [x1 y1 t1 k1 ...] [x2 y2 t2 k2 ...]  --> Q
-  4 Kload 5 -1 roll 4 Kload             % x2 y2 t2 k2 x1 y1 t1 k1   
-  4 2 roll 8 -2 roll                    % t2 k2 t1 k1 x1 y1 x2 y2
-   LocalXY pop pop                      % t2 k2 t1 k1 c mu
-   dup 7 -1 roll sub neg exch           % k2 t1 k1 c beta mu
-   5 -1 roll sub neg 2 copy add 2 div   % k2 k1 c be al omg
-   sin dup mul 6 1 roll 2 index         % so^2 k2 k1 c be al c
-   5 -1 roll mul exch sin add           % so^2 k2 c be kn1+sin(a)
-   4  1 roll sin neg 3 1 roll mul add   % so^2 kn1+sin(a) kn2-sin(b)
-   mul add
-   % To get exactly  0. or  1.  ---
-   % 8192. mul round 8192. div
-} bind
 
 /_Kdraw {% [x y t k l/rho ...]  ---> (curr_pt) t k l/rh
          % Prepare curr. point and args for Arc or Arc^
@@ -1136,287 +505,169 @@ end
 /Kdraw {% [x y t k l/rho ...]
    _Kdraw Arc pop
 } bind
-
-/Kdraw^ {% [x y t k l/rho ...]
-   _Kdraw Arc^ pop
-} bind
-
-/Kdraw^^ {% [x y t k l/rho ...]
-   gsave newpath dup _Kdraw 2. div Arc^ pop grestore
-   Kdraw 
-} bind
-
-/KdrawS {%   [x y tau k] S
-         %   [x y tau k1 any S]
-  dup type /arraytype eq {dup 5 get} if
-  exch 4 Kload 4 2 roll moveto                                  % S tau k
-  2 index 0 lt {neg 3 1 roll 180 sub 3 1 roll neg 3 1 roll} if  % S>=0 tau k
-  2 index 0. eq {
-     pop pop pop
-  } {                                                           % S>0 tau k   
-     dup 0. eq {
-        pop Polar rlineto
-     } {                                                        % S>0 tau k   
-        3 -1 roll 1 index mul Radian mul abs                    % tau k rho
-        dup 360. gt {
-          3 copy pop 360 Arc pop                                % tau k rho>360    
-          360. div dup floor sub 360. mul
-        } if Arc pop
-     } ifelse
-  } ifelse   
-} bind
-
-/KdrawS^ {%   [x y tau k] S
-          %   [x y tau k1 any S]
-  dup type /arraytype eq {dup 5 get} if
-  exch 4 Kload 4 2 roll moveto                                  % S tau k
-  2 index 0 lt {neg 3 1 roll 180 sub 3 1 roll neg 3 1 roll} if  % S>=0 tau k
-  2 index 0. eq {
-     pop pop pop
-  } {                                                           % S>0 tau k   
-     dup 0. eq {
-        pop Polar rl^
-     } {                                                        % S>0 tau k   
-        3 -1 roll 1 index mul Radian mul abs                    % tau k rho
-        dup 360. gt {
-          3 copy pop 360 Arc pop                                % tau k rho>360    
-          360. div dup floor sub 360. mul
-        } if Arc^ pop
-     } ifelse
-  } ifelse   
-} bind
-
-/Ksplit {% [K0]  S  N    S0 -> [K0] [K1] .. [KN]
-         %      dS  N=0: S0  360 deg case;            (xN,yN)=(x0,y0) 
-         %     any  N<0: S0  360 deg case, |N| parts; (xN,yN)=(x0,y0)   
-         %
-%/Ksplit 4 Args
-9 dict begin
-  /S0 ED 
-  3 -1 roll 4 Kload /k ED /tau0 ED /y0 ED /x0 ED % S N
-  dup 1 lt k 0. ne and dup /case360 ED {%
-     /S360 2 Pi mul k div abs def
-     dup 0 eq {pop S360 exch div .5 add round cvi}{abs exch pop} ifelse
-     S360 exch                 % S N  (>=2)
-   } if
-   dup 1 le {pop 2} if                           % S N  (>=2)
-   dup /N ED div /dS ED
-   [x0 y0 tau0 k S0]
-   1 1 N {
-      [ exch dS mul dup /S ED k mul Radian mul tau0 add /tau ED  x0 y0
-        k 0 eq 
-           {S tau0 Polar}
-           {tau  sin tau0 sin sub k div 
-            tau0 cos tau  cos sub k div 
-         } ifelse XYadd tau k S S0 add
-       ]  
-    } for
-    case360 {%
-       pop %(Case360: replace) == == 
-       [x0 y0 tau0 360 k 0. gt {add}{sub} ifelse k S0 S360 add]
-           %(by) == dup ==
-    } if  
-end
-} bind
-
-/IntegrateA {%  [f_i] dx --> [y_i]
-             % [y_i= int( f(x) dx)],   y(0)=0
-%/IntA 2 Args
-  [ 0. 4 2 roll exch                   % [0. dx [f]
-  dup 0 get                            % [0. dx  [f] f0 
-  1 1 3 index length 1 sub {%          % [0. dx  [f] f0 i
-     2 index exch get dup              % [... dx [f] f_i-1  f_i f_i
-     3 1 roll add 2. div 3 index mul   % [... dx [f] f_i  dg
-     4 index add 4 1 roll              % [... dx [f] f_i  
-  } for
-  pop pop pop ]                        % [dy]
-%/IntA_result 1 Args
-} bind
-
-/IntegrateF {%  proc(x) x1 x2 N --> [y] dx
-%/IntF 4 Args
-  [ 5 1 roll exch 2 index sub        % [proc x1 N x2-x1
-  1 index div exch 0 1 3 -1 roll     % [proc x1 dx 0 1 N
-  {                                  % [proc x1 dx i
-     1 index mul 2 index add         % [proc x1 dx xi
-     3 index exec 4 1 roll           % [... proc x1 dx
-  }
- for 
-3 1 roll pop pop             % [... dx
-  counttomark 1 add 1 roll ] exch    % [x_i] dx
-  dup 3 1 roll IntegrateA exch       % [y_i] dx
-} bind
-
-%         Parabolic integration:
-% 
-/IntegrateP {%  proc(x) a  b N/dx --> Intergal
-%/IntP 4 Args
-  dup type /realtype eq {1 index 3 index sub exch div ceiling cvi} if
-  0. 5 1 roll exch 2 index sub     % 0 proc a N b-a
-  1 index div                      % 0 proc a N dx
-  2 index 4 index exec 4 1 roll    % 0 proc y(a) a N dx
-  dup 2. div 3 -1 roll             % 0 proc y(a) a dx dx/2 N
-  {                                % S proc y1 x1 dx dx/2
-     3 copy 6 -1 roll add          % S proc y1 dx dx/2 x1 dx x0
-     6 index exec 4 mul            % S proc y1 dx dx/2 x1 dx 4*y0
-     6 -1 roll add 3 1 roll add    % S proc dx dx/2 4*y0+y1 x2
-     dup 5 index exec exch         % S proc dx dx/2 4*y0+y1 y2 x2
-     5 2 roll 4 index add          % S proc y2 x2 dx dx/2 4*y0+y1+y2
-     1 index mul 3. div
-      7 -1 roll add 6 1 roll       % S proc y2 x2 dx dx/2
-  } repeat  pop pop pop pop pop 
-} bind
-
-/Ctks {% tau0 k s  --> dx dy tau1
- 2 copy mul Radian mul dup dup 5 1 roll   % tau ks k s ks ks
- 0 eq {%
-   pop exch pop 0                         % tau ks s 0 
- } {
-   2 div                                  % tau ks k s ks/2
-   exch pop dup                           % tau ks k ks/2 ks/2
-   cos exch sin dup                       % tau ks k cos(ks/2) sin(ks/2) sin(ks/2)
-   4 -1 roll div 2 mul dup 3 1 roll       % tau ks cos(ks/2) card sin(ks/2) card
-   mul 3 1 roll mul exch                  % tau ks=dtau dx dy
- } ifelse                                 % tau dtau dx dy
- 3 index 0 ne {
-      3 index cos 4 index sin XYmul       % tau dtau dx' dy'
- } if
- 4 2 roll add
-} bind
-
-/KLKL {% [ [k1 l1] [k2 l2] ... ]          --> x y tau
-       % [ [k1 l1] [k2 l2] ... ] x0 y0 t0 --> x y tau 
-   dup type (arraytype) eq {0. 0. 0.} if
-   4 -1 roll                   % x0 y0 t0 [...]
-   { aload pop Ctks            % x y dx dy t'
-     5 1 roll XYadd 3 -1 roll  % x' y' t'
-   } forall 
-} bind 
-
-%https://en.wikibooks.org/wiki/PostScript_FA
-% Ghostscript has a bubble sort procedure in gs_init.ps.
-% <array> <lt-proc> .sort <array>
-
-
-% Primitive sorting procedure
-/Sort {% [x_i] {sortkeyproc}
-       %       proc may be:
-       %       {}    to sort in increasing order;
-       %       {neg} to sort in decreasing order; 
-       %       {[1 0 4] {get} forall} to access the element of nested array
-       %       other
-9 dict begin
-%  /ED {exch Pdef} def
-  /_sortkey ED
-  [ exch aload length dup /L ED dup 1 sub {% [x0 ... x5 6
-     dup index _sortkey /xmin ED /lmin 0 def
-     dup 1 sub -1  1 {dup /l ED
-        index _sortkey % /tested 1 Args 
-        dup xmin lt {%
-           /xmin ED /lmin l def
-        } {pop} ifelse
-     } for 
-     dup /t ED lmin roll t 1 sub
-  } repeat pop
-  ] %/EndSort 1 Args
-  %  Check
-  dup 0 get _sortkey 1 index {_sortkey % prev next
-     dup 3 1 roll gt {Pstack SortError} if} forall pop
-end
-} bind
-
 >> def
 
+/FigDict <<  %--------------- Start Loading FigDict ----------------------       
+
+/GrayLevel 0.95
+
+/ArrowDict << /Lback 2  /Lforw 6  /Lwid 3 
+   /ArrowType 2    % 0: no arrow; 1: normal arrow: 2: curvilinear arrow (Moebius)
+   /ArrowCrv  0    % basic curvature (for Moebius)   
+>>
+
+/ArrowSet {%  [Lback Lforw Lwid] or [] to set defaults
+  ArrowDict begin aload length 0 eq {2 6 3} if  /Lwid ED /Lforw ED /Lback ED   end
+} bind
+
+/ArrowScale { % scale_factor
+  [] ArrowSet
+  ArrowDict begin  dup Lwid mul /Lwid ED dup Lforw mul /Lforw ED Lback mul /Lback ED   end
+} bind
+
+/PicScale {% scalefactor
+  PicDict begin
+    1. PicScal div dup scale 
+    dup 0 le {pop}{dup dup scale dup /PicScal ED 1. exch div setlinewidth} ifelse
+  end
+} bind
+
+/PicLW {% LineWidth
+  PicDict /PicScal get div setlinewidth 
+} bind
+
+/Picmm {% N 
+  595 mul 210 div PicDict /PicScal get div
+} bind
+
+/PicBegin {% [x1 y1 x2 y2] scale 
+   dup 0 gt {PicScale} {pop} ifelse
+   PicDict begin
+     aload length 0 gt {
+      [/PicY2 /PicX2 /PicY1 /PicX1] {exch def} forall
+      /PicW PicX2 PicX1 sub def  
+      /PicH PicY2 PicY1 sub def
+     } if
+     PicX1 neg PicY1 neg translate
+   end
+} bind
+
+/PicBox {% --> x1 y1 x2 y2
+   PicDict begin PicX1 PicY1 PicX2 PicY2 end
+} bind
+
+/PicFont {%  /FontName scale
+   exch 
+   << /T /Times-Roman /TI /Times-Italic                % My abbreviations
+      /H /Helvetica   /HB /Helvetica-Bold /S /Symbol
+      /C /Cyr-abc  % (for Cyrillic-Italic_abv...) --- to mark sub_pictures only
+   >> 1 index 2 copy known {get exch pop}{pop pop} ifelse   
+   findfont exch PicDict /PicScal get div scalefont setfont
+   PicDict /PicMinus currentfont /FontName get /Symbol eq {(\055)}{(\261)} ifelse put
+} bind
+
+/PicAxes {%      (X_text) (Y_text) [x1 y1 x2 y2 --- optional array]
+                 % (text) = (-)  --> do not draw axis
+                 % (text) = (.*) --> show text from the other side of the axis
+  dup type /arraytype eq
+  {aload pop}{PicBox} ifelse            % (Xtxt) (Ytxt) x1 y1 x2 y2
+  3 -1 roll 5 -1 roll                   % (Xtxt) x1 x2 y2 y1 (Ytxt)
+  ArrowDict begin
+    dup (-) eq
+    {pop pop pop}
+    {%                                  % (Xtxt) x1 x2 y2 y1 (Ytxt) 
+     3 1 roll 0. exch moveto 0. exch l^ 
+     dup length 0 eq
+     {pop}
+     {Lwid currentlinewidth mul 1.2 mul exch       % |dx| (Ytext)
+      (.) search {pop pop exch neg 0 rmoveto 1.}{exch 0 rmoveto 0.} ifelse
+      1. set_text show
+     }ifelse 
+    }ifelse                             % (Xtxt) x1 x2
+    2 index (-) eq
+    {pop pop pop}
+    {exch 0. moveto 0. l^ 
+     dup length 0 eq
+     {pop}
+     {0 Lwid currentlinewidth mul 1.2 mul 3 -1 roll       % 0 |dY| (Xtext)
+      (.) search {pop pop 3 1 roll rmoveto 0.}{3 1 roll neg rmoveto 1.} ifelse
+      1. exch set_text show
+     }ifelse
+    }ifelse  stroke
+  end
+} bind
+
+/PicPath {%  output clipping path
+   PicDict begin 
+     newpath
+     PicX1 PicY1 moveto PicW 0 rlineto 0 PicH rlineto PicW neg 0 rlineto
+     PicX1 PicY1 lineto       
+   end
+} bind
+
+/ArrowHead {% (curr.pt.context) Lback Lforw Lwid dir
+%                                2  6  3  
+%     draw arrow head from current point in given direction 
+
+%  gsave Red 3 PicLW currentpoint newpath moveto 3 copy exch pop Polar rlineto 5 Rpoint stroke grestore
+  gsave currentpoint newpath 0 setlinecap 0 setlinejoin
+    translate 
+       rotate
+       0 0 moveto                                      % Lback Lforw Lwid
+       3 -1 roll neg exch 2 copy lineto                % Lforw -Lback Lwid
+       3 -1 roll 0 lineto                              % -Lback Lwid
+       neg lineto closepath fill
+  grestore
+} bind
+
+/rl^ {% dx dy [optional_arrow_descr] :  rlineto-arrow
+%                                          2  6  3  
+  dup type /arraytype ne {ArrowDict begin Lback Lforw Lwid end}
+                         {aload pop} ifelse          % dx dy Lback Lforw Lwid 
+  3 {currentlinewidth mul 5 1 roll} repeat           % Lback Lforw Lwid dx dy
+  gsave 2 copy rmoveto currentpoint 7 2 roll grestore% x y Lback Lforw Lwid dx dy
+  exch 2 copy dup mul exch dup mul add sqrt          % x y Lback Lforw Lwid dy dx dl
+  3 1 roll atan exch                                 % x y Lback Lforw Lwid fi dl 
+  3 index sub dup 0 lt {pop 0} if                    % x y Lback Lforw Lwid fi dl'
+  1 index 2 copy cos mul 3 1 roll sin mul rlineto    % x y Lback Lforw Lwid fi       
+      ArrowHead 
+  moveto   % restore user_expected current point
+} bind
+
+/l^ %%%% def   lineto-arrow
+{%
+   	currentpoint 3 -1 roll sub neg 
+        3 1 roll sub exch rl^
+} bind
+
+/Rpoint {%  Radius  (R<0 --- fill with white)  (curr.point) 
+    gsave currentpoint newpath [] 0 setdash translate dup 0 ge 
+      {PicLW 1 setlinecap 0 0 moveto 0 0 rlineto}
+      {-2 div PicDict /PicScal get div 0 0 3 -1 roll 0 360 arc closepath clip 
+             gsave 1 setgray fill grestore
+      } ifelse stroke
+    grestore
+} bind
+
+/Rcross {% R >< 0
+%  Picmm
+  gsave currentpoint translate newpath [] 0 setdash  
+     dup 0 lt {45 rotate abs} if
+     dup PicDict /PicScal get 
+     div dup scale  % now as if "|size| dup scale"
+     currentlinewidth exch div setlinewidth
+     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke                   
+  grestore     
+} bind
+>> def % --------------- End Loading FigDict ----------------------       
+
 /GenSecDict GenSec def
-userdict /GenSecLoaded true put
 
-/BPdict <<
-
-/INFflt 1024 /Lamflt 0 /Expflt 1 
-/Yflt0 0 /Xflt0 0 /Xflt1 0 /Xflt2 0
-/Xmob 0 /Ymob 0 /Xinv 0 /Yinv 0
-
-/SetMobius {% Rmob Lam0
-            % Rmob=1, Lam0= +-180 means z0=infty (y0=0, x1 =-2, x2=0)
-BPdict begin
-  2 copy /Lamflt ED /Expflt ED
-  Polar /Yflt0 ED dup /Xflt0 ED dup 1. sub  /Xflt1 ED 1. add /Xflt2 ED
-  0 0 FLT /Ymob ED /Xmob ED
-  Xflt1 Yflt0 
-  2 copy abs exch abs add INFflt div 1. lt
-    {pop pop INFflt dup} {Xflt2 neg Yflt0 neg 4 2 roll XYdiv} ifelse
-   /Yinv exch def /Xinv exch def
-end
-} bind
-
-/Cosh {Exp 1. 1 index div add 2. div} bind 
-/Sinh {Exp 1. 1 index div sub 2. div} bind 
-/Tanh {Exp 1. 1 index div 2 copy sub 3 1 roll add div} bind
-
-/Asinh {dup abs dup dup mul 1 add sqrt add ln exch 0 lt {neg} if}  bind
-/Atanh {% atanh(x)=.5*ln[(1+x)/(1-x)] 
-   1. exch 2 copy add 3 1 roll sub div ln 2. div
-} bind
-
-/Focus 1 
-  
-/RF2XY {%   rho phi --> x y
-  exch 2 copy Cosh exch cos add dup  % phi rho N N
-  3 -1 roll Sinh exch div            % phi N x
-  Focus mul
-  3 -1 roll sin 3 -1 roll div        % x y
-  Focus mul
-} bind  
-
-/RF2XYT {%   rho phi --> x y tau (tau_to_phi=const; no 90 add
-  RF2XY 2 copy 2 copy                      % x y x y x y
-  exch         Focus add Atan180 3 1 roll  % x y arg(F+Z) x y
-  neg exch neg Focus add Atan180 add Upd180
-} bind
-
-/RF2Tcum {%  rho phi --> Theta
-   2 copy Upd180 dup 4 -1 roll sub -360. div       % rho rho phi180 n
-   round 360 mul 3 -1 roll Signum mul neg 3 1 roll % add rho phi180
-   2 div dup cos 3 1 roll sin exch                 % add cos(phi/2) sin(phi/2) rho
-   Exp 1. 2 copy add 4 1 roll  sub mul             % add cos(phi/2) exp+1 sin(phi/2)*(exp-1)
-   3 1 roll mul Atan90 -2 mul add
-} bind
-
-/XY2RF {%   x y --> rho phi                    % 
-  Focus div exch  Focus div exch
-  2 copy  dup mul exch                         % x y y^2 x
-  2 copy   1 add dup mul add                   % x y y^2 x   h1^2
-  3 1 roll 1 sub dup mul add div               % x y h1^2/h2^2
-  ln 2 div 3 1 roll                            % rho x y
-  dup 2 mul 3 1 roll                           % rho 2y x y
-  dup mul exch dup mul add 1 exch sub          % rho 2y 1-x^2-y^2
-  atan Upd180
-} bind 
-
-/ups {% rho phi
-    dup sin exch cos 3 -1 roll abs Exp add Atan90
-} bind
-
-/upsbar {% rho phi
-    180 add ups neg
-} bind
-
-/Ups {% rho phi
-%   2 copy ups 2 mul sub exch Signum mul
-    dup sin 1 index cos 3 index abs Exp add Atan90 2 mul sub exch Signum mul
-} bind
-
-/Ups0 {% rho phi
-    2 div dup sin exch cos              % rho sin(phi/2) cos(phi/2)
-    3 -1 roll 2 div Exp 1. 1 index div  % sin(phi/2) cos(phi/2) exp 1/exp
-    2 copy sub 5 -1 roll mul 4 1 roll
-    add mul Atan90 2 mul
-} bind
-
-/UpsInv {% rho phi
-    1 index 0 eq {(UpsInv[0,phi] !!!) ==} if
-    dup sin 1 index cos 3 index abs Exp exch sub Atan90 2 mul add exch Signum mul
-} bind
+/MobiusDict <<
+   /INFflt 1024 /Lamflt 0 /Expflt 1 
+   /Yflt0 0 /Xflt0 0 /Xflt1 0 /Xflt2 0
+   /Xmob 0 /Ymob 0 /Xinv 0 /Yinv 0
+   /Focus 1 
 >> def
 % --------------------------------------------------------- GenSec.ps end
 
@@ -1503,40 +754,10 @@ end
 %      END
   end
 } bind
-
-/KCornu {% S --> x y tau k
-   dup Fresnel 3 -1 roll                % [ x y s 
-   2 div dup dup mul Radian mul exch    % [ x y Tau1 k=s/2
-} bind
-
-/NCornu {% S1 S2 N --> [ [K0] ... [KN]]   K_i=[x y t k 0 s]
-9 dict begin
-  3 copy /N exch def exch sub exch div /dS exch def    % s1 s2
-  exch dup /S1 exch def
-  Fresnel 3 -1 roll Fresnel                            % x1 y1 x2 y2
-  LocalXY   /Y0 ED /X0 ED /Mu ED /HalfChord ED /Sin Mu sin def /Cos Mu cos def
-[/HalfChord HalfChord] ==
-%   /Matrix [Mu cos HalfChord div
-%            Mu sin HalfChord div dup neg exch 2 index          % cos -sin sin cos
-%            4 copy X0 mul exch Y0 mul add neg 3 1 roll         % ...              tx cos -sin
-%                   X0 mul exch Y0 mul add neg] def
-  [ 0 1 N {%
-     dS mul S1 add [ exch dup 
-     Fresnel X0 Y0 XYsub                                % [ s x y 
-     Cos HalfChord div Sin neg HalfChord div XYmul 
-     3 -1 roll dup 2 div dup dup mul Radian mul Mu sub 3 1 roll % [ x y Tau s s/2
-     HalfChord mul exch HalfChord div 0 exch
-     ]
-   } for ]
-end
-} bind
 >> def
 
 %(BiarcDict.ps)  runlibfile
 %!
-userdict begin
-/ED {exch def} bind def
-
 /BiarcData <<
    /Alpha 0 /Beta 0 /Gamma 0 /Omega 0 /Bpar 0 
    /Acum  0 /Bcum 0 /Sigma 0 /Rho1 0 /Rho2 0
@@ -1545,12 +766,11 @@ userdict begin
    /kn1  0 /kn2 0 /SinOmg 0  /SinA 0 /SinB 0
    /K1 [] /K2 [] /Kinf []
    /HalfChord 1 /Mu 0 /BiMatrix matrix identmatrix /X0 0 /Y0 0
-%  /Modified null
 >> def
 
 /BiarcDict <<
 
-/Ldiscont 2.  %  --- length of infinite lines, equal to Chord length by default
+/Ldiscont 20.  %  --- length of infinite lines
 
 /BiarcInitXY {% [X1 Y1 X2 Y2]
  BiarcData begin
@@ -1569,7 +789,6 @@ userdict begin
 } 
 
  %%%%%%%%%%%%  Returns incorrect XJ, YJ, ... in the case of BiarcInitXY
-
 /MakeBiarc {% Alpha Beta par type  -->  (fill dict) 
             %  -1: discontinuous biarc
             %   0: p-parameter
@@ -1719,20 +938,6 @@ userdict begin
 % [K1 Kinf K2] ==
 } 
 
-/BiarcDraw^ {%  dict
-  begin
-  Ninf 0 gt {% 
-     Kinf length 0 eq {%
-		      K1 Kdraw K2 Kdraw
-		   }{
-        kn1 0 eq {K1 Kdraw Kinf Kdraw^}{K1 Kdraw^ Kinf Kdraw} ifelse K2 Kdraw
-     } ifelse		   
-  }{%
-		   K1 Kdraw^ K2 Kdraw
-  } ifelse 
-  end
-} 
-
 /BiarcDraw {%  dict
    begin
     Ninf 0 gt {% 
@@ -1746,399 +951,7 @@ userdict begin
     } ifelse 
    end
 } 
-
-/MakeBilens {% Alpha Beta p1 p2  -->  dict 
-  << 5 1 roll
-     4 copy pop 0 MakeBiarc
-     BiarcData begin
-       /Alpha Alpha /Beta Beta /Sigma Sigma /Gamma Gamma /Omega Omega
-       /B1.Bpar Bpar /B1.XJ XJ    /B1.YJ YJ   /B1.TauJ TauJ
-        /k1  kn1 /g2 kn2 /K1 K1 /G2 K2
-        /QB kn1 SinA add
-     end
-     counttomark -4 roll exch pop 0 MakeBiarc
-     BiarcData begin                      % /QB  k1+SinA
-       kn2 SinB sub mul Sigma 2 div sin dup mul add
-       /B2.Bpar Bpar /B2.XJ XJ    /B2.YJ YJ   /B2.TauJ TauJ
-       /g1  kn1 /k2 kn2  /G1 K1 /K2 K2
-     end 
-  >>
-}
-
-/TPdata <<
-  /Len 0 /KP1 [] /KP2 [] /KP3 [] /KP4 [] /A 0 /B 0 /Tau 0 /Nu 0
->> 
-
-/TriarcP {% p         (Alpha Beta p1 p2 in working dict)
-TPdata begin
-  Alpha Beta 3 -1 roll 0 MakeBiarc 
-  BiarcData begin 
-    /TJ TauJ  /XJ XJ  /YJ YJ  /P0 Bpar
-    /Theta 1 Bpar sub 1 Bpar add mul Gamma sin mul 
-           Bpar dup mul 1 add Gamma cos mul 2 Bpar mul add  Atan180 
-  end 
-  def def def def def
-  /A P0 dup mul p1 p2 mul add 2 P0 mul p1 mul sub def
-  /B P0 dup mul p1 p2 mul add 2 P0 mul p2 mul sub def
-  /Nu B
-    P0 p2 p1 sub mul p2 P0 sub mul P0 p1 sub mul sqrt 2 mul add
-    Omega 2 div Tan mul A Atan90 2 mul def
-  /Tau Theta Nu add def
-
-  [-1 0 XJ YJ] BiarcInitXY 
-  Alpha Tau k1 1 MakeBiarc
-%  BiarcData BiarcDraw stroke
-  BiarcData begin
-    /KP1 [ K1 aload pop] /KP2 [K2 aload pop] /Len1 Len1 /Len2 Len2
-  end def def def def
-
-  [XJ YJ 1 0] BiarcInitXY 
-  Tau Beta k2 2 MakeBiarc
-%  BiarcData BiarcDraw stroke
-  BiarcData begin
-    /KP3 [ K1 aload pop] /KP4 [K2 aload pop] /Len3 Len1 /Len4 Len2 
-  end def def def def
-end
-}
->> def
-end   % pop userdict
-
-
-GenSec begin BPdict begin
-
-FigDict begin %--------------- Start Loading FigDict ----------------------       
-
-/GrayLevel 0.95 def
-
-
-/ArrowDict << /Lback 2  /Lforw 6  /Lwid 3 
-   /ArrowType 2    % 0: no arrow; 1: normal arrow: 2: curvilinear arrow (Moebius)
-   /ArrowCrv  0    % basic curvature (for Moebius)   
->> def
-
-/ArrowSet {%  [Lback Lforw Lwid] or [] to set defaults
-  ArrowDict begin aload length 0 eq {2 6 3} if  /Lwid ED /Lforw ED /Lback ED   end
-} bind def
-
-/ArrowScale { % scale_factor
-  [] ArrowSet
-  ArrowDict begin  dup Lwid mul /Lwid ED dup Lforw mul /Lforw ED Lback mul /Lback ED   end
-} bind def
-
-/PicScale {% scalefactor
-  PicDict begin
-    1. PicScal div dup scale 
-    dup 0 le {pop}{dup dup scale dup /PicScal ED 1. exch div setlinewidth} ifelse
-  end
-} bind def
-
-/PicLW {% LineWidth
-  PicDict begin PicScal div setlinewidth end
-} def
-
-/Picmm {% N 
-  595 mul 210 div PicDict begin PicScal div end
-} def
-
-/PicBegin {% [x1 y1 x2 y2] scale 
-   dup 0 gt {PicScale} {pop} ifelse
-   PicDict begin
-     aload length 0 gt {
-      [/PicY2 /PicX2 /PicY1 /PicX1] {exch def} forall
-      /PicW PicX2 PicX1 sub def  
-      /PicH PicY2 PicY1 sub def
-     } if
-     PicX1 neg PicY1 neg translate
-   end
-} bind def
-
-/PicBox {% --> x1 y1 x2 y2
-   PicDict begin PicX1 PicY1 PicX2 PicY2 end
-} def
-
-%/PicFrame {% [x1 y1 x2 y2] (optional false_translate) --> output clipping path
-%   dup type /booleantype ne {true} if exch
-%   PicDict begin 
-%     aload length 0 ne
-%     { [/PicY2 /PicX2 /PicY1 /PicX1] {ED} forall} if
-%     /PicW PicX2 PicX1 sub def  
-%     /PicH PicY2 PicY1 sub def
-%     {PicX1 neg PicY1 neg translate} if
-%     PicMX currentmatrix pop
-%     PicPath
-%   end
-%} def
-
-/PicFont {%  /FontName scale
-   exch 
-   << /T /Times-Roman /TI /Times-Italic                % My abbreviations
-      /H /Helvetica   /HB /Helvetica-Bold /S /Symbol
-      /C /Cyr-abc  % (for Cyrillic-Italic_abv...) --- to mark sub_pictures only
-   >> 1 index 2 copy known {get exch pop}{pop pop} ifelse   
-   findfont exch PicDict /PicScal get div scalefont setfont
-   PicDict /PicMinus currentfont /FontName get /Symbol eq {(\055)}{(\261)} ifelse put
-} def
-
-/PicAxes {%      (X_text) (Y_text) [x1 y1 x2 y2 --- optional array]
-                 % (text) = (-)  --> do not draw axis
-                 % (text) = (.*) --> show text from the other side of the axis
-  dup type /arraytype eq
-  {aload pop}{PicBox} ifelse            % (Xtxt) (Ytxt) x1 y1 x2 y2
-  3 -1 roll 5 -1 roll                   % (Xtxt) x1 x2 y2 y1 (Ytxt)
-  ArrowDict begin
-    dup (-) eq
-    {pop pop pop}
-    {%                                  % (Xtxt) x1 x2 y2 y1 (Ytxt) 
-     3 1 roll 0. exch moveto 0. exch l^ 
-     dup length 0 eq
-     {pop}
-     {Lwid currentlinewidth mul 1.2 mul exch       % |dx| (Ytext)
-      (.) search {pop pop exch neg 0 rmoveto 1.}{exch 0 rmoveto 0.} ifelse
-      1. set_text show
-     }ifelse 
-    }ifelse                             % (Xtxt) x1 x2
-    2 index (-) eq
-    {pop pop pop}
-    {exch 0. moveto 0. l^ 
-     dup length 0 eq
-     {pop}
-     {0 Lwid currentlinewidth mul 1.2 mul 3 -1 roll       % 0 |dY| (Xtext)
-      (.) search {pop pop 3 1 roll rmoveto 0.}{3 1 roll neg rmoveto 1.} ifelse
-      1. exch set_text show
-     }ifelse
-    }ifelse  stroke
-  end
-} def
-
-/PicPath {%  output clipping path
-   PicDict begin 
-     newpath
-     PicX1 PicY1 moveto PicW 0 rlineto 0 PicH rlineto PicW neg 0 rlineto
-     PicX1 PicY1 lineto       
-   end
-} def
-
-%/forallXY {%  [array: x0 y0 x1 y1 ...] {proc} 
-%  false 3 1 roll [[3 -1 roll false] cvx {true} /ifelse] cvx forall pop
-%} def 
-
-/ArrowHead {% (curr.pt.context) Lback Lforw Lwid dir
-%                                2  6  3  
-%     draw arrow head from current point in given direction 
-
-%  gsave Red 3 PicLW currentpoint newpath moveto 3 copy exch pop Polar rlineto 5 Rpoint stroke grestore
-
-  gsave currentpoint newpath 0 setlinecap 0 setlinejoin
-    translate 
-       rotate
-       0 0 moveto                                      % Lback Lforw Lwid
-       3 -1 roll neg exch 2 copy lineto                % Lforw -Lback Lwid
-       3 -1 roll 0 lineto                              % -Lback Lwid
-       neg lineto closepath fill
-  grestore
-} bind def
-
-/rl^ {% dx dy [optional_arrow_descr] :  rlineto-arrow
-%                                          2  6  3  
-  dup type /arraytype ne {ArrowDict begin Lback Lforw Lwid end}
-                         {aload pop} ifelse          % dx dy Lback Lforw Lwid 
-  3 {currentlinewidth mul 5 1 roll} repeat           % Lback Lforw Lwid dx dy
-  gsave 2 copy rmoveto currentpoint 7 2 roll grestore% x y Lback Lforw Lwid dx dy
-  exch 2 copy dup mul exch dup mul add sqrt          % x y Lback Lforw Lwid dy dx dl
-  3 1 roll atan exch                                 % x y Lback Lforw Lwid fi dl 
-  3 index sub dup 0 lt {pop 0} if                    % x y Lback Lforw Lwid fi dl'
-  1 index 2 copy cos mul 3 1 roll sin mul rlineto    % x y Lback Lforw Lwid fi       
-      ArrowHead 
-  moveto   % restore user_expected current point
-} bind def
-
-/l^ %%%% def   lineto-arrow
-{%
-   	currentpoint 3 -1 roll sub neg 
-        3 1 roll sub exch rl^
-} bind def
-
-/crv^ {%  (curr.pt.context) x1 y1 x2 y2 x3 y3  curveto_arrow
-3 {currentpoint 8 -2 roll 3 -1 roll sub 3 1 roll sub neg exch} repeat rcrv^
-} bind def
-
-/rcrv^ {% rcurveto_arrow:  (curr.pt.context) x1 y1 x2 y2 x3 y3
- 2 copy currentpoint 10 4 roll 4 copy   % p3 p0 p1 p2 p3 p2 p3 
- 3 -1 roll sub 3 1 roll sub neg exch    % p3 p0 p1 p2 p3 p3-p2
- dup mul exch dup mul add sqrt 3. mul   % p3 p0 p1 p2 p3 3|p3-p2|
- dup 0. eq {(Singular EndPoint) ==} if  % p3 p0 p1 p2 p3 3|p3-p2|
- ArrowDict /Lforw get                                                 %???
- currentlinewidth mul exch div          % p3 p0 p1 p2 p3  dt         %???   
- dup 1. gt                                                           %???
- %{9 {pop} repeat rl^ }              %   just rl^ to end pt
- {pop rcurveto pop pop pop pop}      %   just rcurveto to end pt
- {dup neg 1. add dup 2 copy mul dup %   ... dt t1=(1-dt) t1 t1^2 t1^2
-  dup 3 index mul dup                       6 {8 -1 roll mul 7 1 roll} repeat
-  dup 2 mul dup                 2 {7 index mul 6 -1 roll add 5 1 roll} repeat
-  dup 2 {4 index 7 index 2 index mul sub mul 3 mul 3 -1 roll add exch} repeat
-  rcurveto  3 -1 roll add 3 1 roll add exch l^
- } ifelse
-} bind def
-
-/Rpoint {%  Radius  (R<0 --- fill with white)  (curr.point) 
-    gsave currentpoint newpath [] 0 setdash translate dup 0 ge 
-      {PicLW 1 setlinecap 0 0 moveto 0 0 rlineto}
-      {-2 div PicDict /PicScal get div 0 0 3 -1 roll 0 360 arc closepath clip 
-             gsave 1 setgray fill grestore
-      } ifelse stroke
-    grestore
-} bind def
-
-/Rcross {% R >< 0
-%  Picmm
-  gsave currentpoint translate newpath [] 0 setdash  
-     dup 0 lt {45 rotate abs} if
-     dup PicDict /PicScal get 
-     div dup scale  % now as if "|size| dup scale"
-     currentlinewidth exch div setlinewidth
-     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke                   
-  grestore     
-} bind def
-
-
-/_Arc0 {%  (curr.pt) if_arrow tau length  --> new_Tau (= tau)
-   %/_Arc0: 3 Args
-    2 copy exch Polar 3 -1 roll                   % if_arr tau dx dy len   
-    0. ge
-    {4 -1 roll  {rl^} {rlineto} ifelse}           % tau
-    {% line through infinity
-     currentpoint 3 -1 roll add 3 1 roll add exch % if_arr tau xdest ydest
-     KdrawLength 3 index Polar 2 copy rlineto     % if_arr tau xdest ydest DX DY
-     -2 mul exch -2 mul exch rmoveto              % if_arr tau xdest ydest  
-     4 -1 roll  {l^} {lineto} ifelse
-    } ifelse  
-} bind def
-
-/_Arc90 {%  (curr.pt) tau k rot_or_length(if k=0) arrow  --> new_Tau
-   %/Arc90: 4 Args
-   % rotation =< 90, sign correct
-    4 1 roll
-    1 index 0. eq                             % arr tau k rot/s  k=0 
-    {exch pop _Arc0} 
-    {dup 3 index add 4 1 roll                 % arr tau k rot  
-     2 div dup 3 index add 3 1 roll           % arr tau' tau mu k r/2
-     dup 3 1 roll sin exch div abs 2 mul      % arr tau' tau mu r/2 2c
-     dup 4 -1 roll Polar 5 2 roll              % arr tau' x3 y3 tau r/2 2c 
-     exch cos 1 add 3 mul div 2 mul dup        % arr tau' x3 y3 tau p p (p=4c/3/(1+cos))
-     3 -1 roll Polar 5 2 roll                  % arr tau' x1 y1 x3 y3 p 
-     5 index 180 sub Polar                     % arr tau' x1 y1 x3 y3 dx2 dy2 
-     2 index add 4 1 roll                      % arr tau' x1 y1 y2  x3 y3 dx2   
-     2 index add 4 1 roll                      % arr tau' x1 y1 x2 y2 x3 y3
-     8 -1 roll {rcrv^} {rcurveto} ifelse
-    } ifelse
-    %(Arc90 OK) ==
-} bind def
-
-/_Arc {%  (curr.pt) bool_arrow tau k len/rot --> new Tau
-   %/_Arc 4 Args
-   1 index 0. eq 
-   {exch pop _Arc0}
-   { % update sign of rotation  
-     2 copy mul 0. lt {neg} if                         % bool tau k rot
-     dup abs 90 div ceiling dup cvi 3 1 roll div exch  % bool tau k rot/N N 
-     1 sub
-     {                                                 % bool tau  k d_rot  
-        3 copy false _Arc90 4 -1 roll pop 3 1 roll     % bool tau' k d_rot
-     } repeat 
-     4 -1 roll _Arc90
-   } ifelse 
-   %(Arc OK) == %pstack
-} bind def
-
-/_ArcTo {%  (curr.pt) tau xdest ydest --> tau k len/rot
-     currentpoint 4 2 roll LocalXY pop pop              % tau c mu
-     %  k = sin(mu-tau)/c
-     2 index sub Upd180 dup sin dup 0. eq               % tau c tau-mu sin(t-m) k=0
-     3 index 0. eq  or                                  % ..... k=0_or_c=0                   
-     {pop abs 179 gt {neg} if 0. exch}                  % tau 0. l=+-c
-     {3 -1 roll div exch} ifelse 2. mul                 % tau k l/rot
-} bind def 
-  
-
-/Arc {%  (curr.pt) tau k len/rot --> new_Tau
-   false 4 1 roll _Arc
-} bind def
-
-/Arc^ {%  (curr.pt) tau k len/rot --> new_Tau
-   1 index 0. eq 
-   {exch pop true 3 1 roll   _Arc0}
-   {%
-     2 copy ArrowDict /Lforw get 2 index mul abs       % tau k rot k rot |L*k|
-     currentlinewidth mul //Radian mul exch            % tau k rot k dr rot
-     1 index sub 0 lt {%                               % tau k rot k dr   
-     	 pop pop Arc
-     }{%                                               % tau k rot k dr 
-        1 index 6 3 roll 4 index sub Arc               % k dr k tau'
-        3 1 roll exch                                  % k tau' k dr
-        gsave 
-%                              gsave currentpoint newpath moveto Green 4 PicLW 3 copy Arc pop stroke grestore
-           Arc currentpoint 
-        grestore 4 -1 roll     % taunew xnew ynew k
-        ArrowDict /ArrowType get 2 eq{%
-          ArrowHeadCrv      
-        }{%
-           pop l^
-        } ifelse
-     } ifelse
-   } ifelse  
-} bind def
-
-/_Arc3 {%  (curr.pt) x1 y1 x2 y2 --> tau x2 y2 
-%   gsave 4 copy moveto 3 Rpoint moveto 3 Rpoint grestore 
-
-   2 copy currentpoint XYsub exch atan 5 1 roll % mu0 x1 y1 x2 y2
-   4 copy XYsub neg exch neg      atan 5 1 roll % mu0 mu2 x1 y1 x2 y2
-   6 2 roll currentpoint XYsub exch atan        % x2 y2 mu0 mu2 mu1
-   exch sub add 3 1 roll
-} bind def
-
-/Arc3 {%  (curr.pt) x1 y1 x2 y2
-    _Arc3 _ArcTo Arc
-} bind def
-
-/Arc3^ {%  (curr.pt) x1 y1 x2 y2
-   _Arc3 _ArcTo Arc^
-} bind def
-
-%------------------------------------------------------- KKlib
-%   [ x0 y0 tau k rot_or_len par ...]
-%-------------------------------------------------------------
-
-/Kload {%  [x y t k ...]  N_to_keep  --> x y t ... (Poss. nulls added)
-         exch aload length dup 2 add -1 roll
-         sub dup 0 ge {{pop}} {neg {null}} ifelse repeat
-} bind def
-
-/_Kdraw {% [x y t k l/rho ...]  ---> (curr_pt) t k l/rh
-         % Prepare curr. point and args for Arc or Arc^
-  5 Kload 5 -2 roll moveto                      % t k len/rho
-  %  allow l/rh=0/null
-  dup dup null eq exch 0. eq or 
-  { % to be corrected
-    pop dup 0. eq {KdrawLength} {360} ifelse    % t k l/rh  
-  } if
-} bind def
-
-/Kdraw {% [x y t k l/rho ...]
-   _Kdraw Arc pop
-} bind def
-
-/Kdraw^ {% [x y t k l/rho ...]
-   _Kdraw Arc^ pop
-} bind def
-
-/Kdraw^^ {% [x y t k l/rho ...]
-   gsave newpath dup _Kdraw 2. div Arc^ pop grestore
-   Kdraw 
-} bind def
-
-%currentdict length ==
-end % --------------- End Loading FigDict ----------------------       
+>> def      % end loading BiarcDict       
 
 /G2HermiteDict <<
 
@@ -2195,7 +1008,7 @@ end % --------------- End Loading FigDict ----------------------
 
 /SetMobius {% Rmob Lam0
             % Rmob=1, Lam0= +-180 means z0=infty (y0=0, x1 =-2, x2=0)
-BPdict begin
+MobiusDict begin
   2 copy /Lamflt ED /Expflt ED
   Polar /Yflt0 ED dup /Xflt0 ED dup 1. sub  /Xflt1 ED 1. add /Xflt2 ED
   0 0 FLT /Ymob exch def /Xmob exch def
@@ -3181,7 +1994,6 @@ end
 } 
 
 /Conc2 {% r2 phi                               % Concentric 
-/Conc2 2 Args
    [ 2 index abs dup 1 lt {pop 1.} if 1.1 mul dup dup neg dup 4 2 roll] 
     G2DataDict /GivenBox 3 -1 roll put         % r2 phi
    1. 0 90. 1.   6 -2 roll 2 copy Polar        % 1. 0 90. 1. r2 phi X2 y2  
@@ -3223,7 +2035,6 @@ end
 } 
 
 /Cornu3 {% S1 S2 Mag:  Cornu,  k(s) = s/Mag 
-/Cornu3: 3 Args
 FresnelDict   begin
                                                 % s1 s2 Mag
   pop /Mag 1 def   %%%% 2 div  /Mag ED          % because my Fresnel corresponds to k=s/2    
@@ -3283,7 +2094,6 @@ end
 } 
 
 /XYTK8 {%  Store G2 Hermite data in G2DataDict
- /XYTK8: 8 Args
  G2DataDict begin                                      % K1 K2
    /Crv2 ED /Tau2 ED /Y2 ED /X2 ED 
    /Crv1 ED /Tau1 ED /Y1 ED /X1 ED
@@ -3302,7 +2112,6 @@ end
    } ifelse
  end  % pop G2DataDict
 }
-
 >> def
 
 %  Some options (edit at your own risk):
@@ -3363,11 +2172,11 @@ end
 
 /Times-Roman findfont 14 scalefont setfont
 
-%GenSecDict   begin : on top  
+GenSecDict    begin 
 FigDict       begin
 G2HermiteDict begin
 G2DataDict    begin
-BiarcDict /Ldiscont 20 put
+MobiusDict    begin
 33 dict       begin   % working dict
 %countdictstack ==
 

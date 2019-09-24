@@ -1,0 +1,105 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 0 0 318 134
+
+[(GenSec.ps) (FigDict.ps)  (FresnelDict.ps)] {runlibfile} forall
+
+(========== CornuData.eps ) ==
+
+[FresnelDict] BeginFigD
+
+[-2.5 -2.2 2.5 2.2] 30  PicBegin
+/T 12 PicFont
+
+gsave
+/s1 -1.5 def
+/s2  2.2 def
+gsave
+  .2 PicLW PicPath stroke PicPath clip newpath
+
+  .6 PicLW 
+  (x) (y) PicAxes
+
+.2 PicLW
+[-6 .125 9.01 {Fresnel} for XYdraw stroke
+
+/K1 [s1 KCornu] def
+/K2 [s2 KCornu] def
+
+.6 PicLW 
+Green
+   newpath
+   gsave [2 Picmm dup] 0 setdash K1 Kdraw stroke grestore
+Blue
+   gsave [2 Picmm dup] 0 setdash K2 Kdraw stroke grestore
+   K2 2 Kload 2 copy moveto 3 Rpoint (B) .0 1.1 set_text show
+   moveto .8 K2 2 get Polar rl^ stroke
+Green
+   newpath
+   K1 2 Kload 2 copy moveto 3 Rpoint (A) 0. 1.1 set_text Tclean show
+   moveto 1. K1 2 get Polar rl^ stroke
+Black
+  1 0 moveto 3 Rcross (1) .15 1.1 set_text show
+Brown 1.6 PicLW
+[ s1 s2 20 forfor {Fresnel} for XYdraw stroke
+.7 -1. moveto
+(s1) Ishow ( = ) show s1 1 Format show 
+.7 -1. moveto (s1) 0. 1.5 set_text pop
+(s2) Ishow ( = ) show s2 1 Format show
+
+Red
+/S 12 PicFont
+.4 PicLW
+Pi90 sqrt dup moveto 3 Rcross
+Pi90 sqrt 0 moveto 3 Rcross
+0 Pi90 sqrt moveto 3 Rcross  ((p/2)1/2) 1. .5 set_text pop ((p/2)) () (1/2) IPshow
+grestore
+
+5.5 0 translate
+
+/s1 1.5 def
+/s2 3.5 def
+
+  .2 PicLW PicPath stroke PicPath clip newpath
+
+  .6 PicLW 
+  (x) (y) PicAxes
+
+.2 PicLW
+[-9 .125 6.01 {Fresnel} for XYdraw stroke
+
+/K1 [s1 KCornu] def
+/K2 [s2 KCornu] def
+
+.6 PicLW 
+Green
+   newpath
+   gsave [2 Picmm dup] 0 setdash K1 Kdraw stroke grestore
+Blue
+   gsave [2 Picmm dup] 0 setdash K2 Kdraw stroke grestore
+   K2 2 Kload 2 copy moveto 3 Rpoint (B) .0 1.1 set_text show
+   moveto .8 K2 2 get Polar rl^ stroke
+Green
+   newpath
+   K1 2 Kload 2 copy moveto 3 Rpoint (A) 0. 1.1 set_text Tclean show
+   moveto 1. K1 2 get Polar rl^ stroke
+Black
+  1 0 moveto 3 Rcross (1) .15 1.1 set_text show
+Brown 1.6 PicLW
+[ s1 s2 20 forfor {Fresnel} for XYdraw stroke
+.7 -1. moveto
+(s1) Ishow ( = ) show s1 1 Format show 
+.7 -1. moveto (s1) 0. 1.5 set_text pop
+(s2) Ishow ( = ) show s2 1 Format show
+Red
+.4 PicLW
+Pi90 sqrt dup moveto 3 Rcross
+Pi90 sqrt 0 moveto 3 Rcross
+0 Pi90 sqrt moveto 3 Rcross -2 Picmm 0 rmoveto Pi90 sqrt dup == 6 Format 1. .5 set_text show
+
+
+grestore
+
+EndFig             % grestore, end FigDict and local_dict
+
+
+
