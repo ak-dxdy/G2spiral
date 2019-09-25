@@ -19,17 +19,19 @@ gsave
   .6 PicLW 
   (x) (y) PicAxes
 
-.6 PicLW
+.8 PicLW
 Green
    newpath
    0 0 1 90 450 arc^ stroke
 Blue
    newpath
    0 0 r2 90 450 arc^ stroke
-   r2 phi Polar moveto 3 Rpoint (B) 1.05 1.1 set_text show
+   r2 phi Polar 2 copy moveto 3 Rpoint (B) 1.05 1.1 set_text show
+   moveto .8 phi 90 add Polar rl^ stroke
 Green
    newpath
-   1 0 moveto 3 Rpoint (A) 0.5 1.1 set_text Tclean show
+   1 0 moveto 3 Rpoint (A) 0.7 1.1 set_text Tclean show
+   1 0 moveto 1. 90 Polar rl^ stroke
 Black
   -1 0 moveto 3 Rcross (-1) .15 1.1 set_text Tclean show
 
@@ -59,17 +61,19 @@ grestore
   .6 PicLW 
   (x) (y) PicAxes
 
-1 PicLW
+.8 PicLW
 Green
    newpath
    0 0 1 90 450 arc^ stroke
 Blue
    newpath
    0 0 r2 90 450 arc^ stroke
-   r2 phi Polar moveto 4 Rpoint (B) .0 1.1 set_text show
+   r2 phi Polar 2 copy moveto 3 Rpoint (B) 0. 1.1 set_text show
+   moveto .7 phi 90 add Polar rl^ stroke
 Green
    newpath
    1 0 moveto 4 Rpoint (A) 0.5 1.1 set_text Tclean show
+   1 0 moveto 1. 90 Polar rl^ stroke
 Black
   -1 0 moveto 3 Rcross (-1) .5 1.1 set_text Tclean show
 

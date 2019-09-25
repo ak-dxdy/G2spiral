@@ -16,7 +16,7 @@
 %  
 %  ------------------- Edit below this line --------------------------
 <<
-   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ] 
+   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
 >> 
 %  ------------------- Edit above this line --------------------------
 
@@ -358,13 +358,10 @@ product 0 5 getinterval (DView) eq not {%
 % /Pshow {...}  /Tshow {...} /Bshow {...}  --- removed
 
 /I_format {%   |value|  -->  string
-%/I_f 1 Args
     dup dup 0 gt {log cvi} if  1 add string cvs
-%/Ires 1 Args
 } bind 
 
 /F_format {%   rm_000 |v| prec
-%/F_f 3 Args
     dup 3 1 roll 10. exch exp mul round cvi   % rm_000 prec I=1000*v
     I_format                                  % rm_000 prec (1234000)
     dup length 2 index sub                    % rm_000 prec (1234000) len-prec
@@ -385,7 +382,6 @@ product 0 5 getinterval (DView) eq not {%
           (.) exch AppStr                        % (str1) rm (.str2) 
        } ifelse                                  %  (str1.) (str2)
        AppStr
-%/Fres 1 Args
 } bind 
 
 %       USE  (\261) FOR MINUS SIGN ?  NO!!!
@@ -1043,7 +1039,6 @@ end
          { dup abs 8 index abs 2 copy lt {exch} if pop        %... dt t2 x2 y2 g2 k2 kmax     
            13 -2 roll 2 copy 15 2 roll                        %      ... x2 y2 g2 k2 kmax x y
            6 index 6 index XYsub dup mul exch dup mul add sqrt 2. div      % ... kmax h/2
-%/dh2 1 Args
            dup 3 1 roll mul                                                %     c k*c   
            % check small angle: HalfChord < Radius/2 (ang < 60, sin(ang/2)< .5 )
            dup .5 lt
@@ -1080,7 +1075,7 @@ end
 
      9 -2 roll pop pop                 % [... x y s g dt t2 x2 y2 g2 k2 1st_attempt_OK
      7 -1 roll dup 3 -1 roll           % [... x y s g t2 x2 y2 g2 k2 dt dt 1st_attempt_OK
-     {2.0000000 mul} if exch           % [... x y s g t2 x2 y2 g2 k2 dt_rec dt
+     {2.000 mul} if exch               % [... x y s g t2 x2 y2 g2 k2 dt_rec dt
      8 -1 roll 4 index add 2 div mul   % [... x y s t2 x2 y2 g2 k2 dt_rec ds
      8 -2 roll                         % [... x y x2 y2 g2 k2 dt_rec ds s t2
      4  1 roll add                     % [... x y x2 y2 g2 k2 t2 dt_rec s2
@@ -1187,10 +1182,14 @@ end
   } ifelse
 }
 
+%/G2SolveAll {pop /Solutions [] def} def
+
 /G2SolveAll {% [phi array] ---> Fill solutions_array [ <<sol0>> <<sol1>> ] 
    [exch {%
-      /NextPhi 1 Args 
-      G2SolvePhi pop
+      dup /NextPhi 1 Args
+      % avoid Phi = +- Sigma
+      %  ...    .01 eqp not {...}{...} ifelse to compare with precision 0.01
+      abs Sigma ne {G2SolvePhi pop}{pop} ifelse
    } forall]                     %/PreSolutions 1 Args
    [exch {G2FillSolution} forall] /Solutions 1 Args
    G2DataDict begin
@@ -1202,7 +1201,7 @@ end
    end
 }
 
-/G2SolvePhi{% phi --> dict1 dict2 count=0,1,2
+/G2SolvePhi{% phi --> may_be_dict1 may_be_dict2   dict_count: 0,1,2
 20 dict begin
    dup abs Sigma lt {-1}{1} ifelse /JJ ED
    /SW 1 index 0 ge JJ -1 eq and {-1}{1} ifelse def   
@@ -1217,7 +1216,6 @@ end
              dup mul exch dup mul add /D1 ED
    /D0 Phi Theta0 eq  Phi Theta0 neg eq or
     {0} {SinPhi SinSig mul dup mul 2 D2 mul gA mul gB mul add} ifelse def
-%   [Sin1 Sin2 Sigma CosSig CosPhi] == 
    [D0 0 lt {%
      [(D1230, j) D1 D2 D3 D0 JJ] == 
      (Discriminant!) ==
@@ -1244,7 +1242,7 @@ end
           D2     mul  JJ +1 eq {neg  Sgn mul} if     /QW ED
       /IsSpiral G2CheckSpiral def
       
-      %   Create dict if either it_is_spiral, or check_for_spirality_not_required
+      %   Create dict if either it_is_spiral, or check_for_spirality_is_not_required
       CheckSpiral not IsSpiral or {%
           <</Phi Phi /PW PW  /QW  QW  /NN NN /JJ JJ 
             /Rw  Rw  /WW WW  /IsSpiral IsSpiral /Ntype Ntype>>  %dup Pdict
@@ -1334,14 +1332,16 @@ end
  %  define /NormBox
 NormBox length 0 eq {%
     gsave newpath
-       BiarcData1 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
-       BiarcData2 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
-       0.05 setflat flattenpath  
-       [[[{} {} {} {} pathforall] MinMaxXY 
+%       BiarcData1 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
+%       BiarcData2 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
+%       0.05 setflat flattenpath  
+%       [[[{} {} {} {} pathforall]
+       [[[Solutions {/Spiral4 get aload pop} forall]
+       MinMaxXY 
          GivenCurve aload length 2 idiv {%
             Matrix transform G2neg counttomark 2 roll
          } repeat
-         -2 dup neg dup
+         -1.2 -.5 1.2 .5
          -1 0 .5 Alpha Polar XYadd 1 0 .5 Beta Polar XYadd % to see unit tangents
         ] MinMaxXY
        ] G2SqBox 
@@ -1424,6 +1424,7 @@ grestore moveto
    %GivenBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
    GivenBox dup aload pop 4 2 roll XYsub 1.25 div 2 copy lt {exch} if pop XpageMax exch div
    PicBegin
+   PicPath clip newpath
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
    .8 PicLW X1 Y1 moveto X0 Y0 l^ X2 Y2 lineto stroke
@@ -1613,7 +1614,7 @@ grestore moveto
         SinSig 2 index div 3 1 roll
         CosSig sub exch div moveto -4 Rpoint
       } forall
-      
+
       1000   0             %/PhiPrev 1000 def /id 0 def
       Solutions {%
          begin
@@ -1649,7 +1650,12 @@ grestore moveto
    Solutions length 3 string cvs ( solutions.) AppStr G2show
 
    BeginFig
-   NormBox  dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
+   [NormBox 
+    % centering NormalBox for the picture with Locus:
+     aload pop 4 copy XYadd 2. 0. XYdiv      % [ X1 Y1 X2 Y2 dx dy
+     2 copy 6 2 roll XYsub 6 2 roll XYsub 4 2 roll
+   ] /ConicBox 1 Args 
+   dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
    NormalDataPic 
    EndFig
  grestore
@@ -2087,7 +2093,7 @@ end
     /X1 -1 def /Y1 0 def /X2 1 def /Y2 0 def
     /Normalized true def /HalfChord 1 def         % alpha a beta b
     4 copy /Crv2 ED /Tau2 ED /Crv1 ED /Tau1 ED
-    /CrvB ED /Beta ED /CrvA ED /Alpha ED 
+           /CrvB ED /Beta ED /CrvA ED /Alpha ED 
     /Matrix [1 0 0 1 0 0] def
     G2Vogt
  end 
