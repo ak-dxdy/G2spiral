@@ -1191,7 +1191,10 @@ end
       %  ...   .01 eqp not {...}{...} ifelse: to compare with precision 0.01
       abs Sigma ne {G2SolvePhi pop}{pop} ifelse
    } forall]                     %/PreSolutions 1 Args
-   [exch {G2FillSolution} forall] /Solutions 1 Args
+   /Nsol 1 def
+   [exch {
+       G2FillSolution /Nsol Nsol 1 add def
+   } forall] % /Solutions 1 Args
    G2DataDict begin
      /Solutions ED
      /MaxCrvLen 2 
@@ -1244,10 +1247,11 @@ end
       
       %   Create dict if either it_is_spiral, or check_for_spirality_is_not_required
       CheckSpiral not IsSpiral or {%
-          <</Phi Phi /PW PW  /QW  QW  /NN NN /JJ JJ 
-            /Rw  Rw  /WW WW  /IsSpiral IsSpiral /Ntype Ntype>>  %dup Pdict
         (Accepted) ==
         /count count 1 add def
+%  "double" solutions got with:   /UserG2Data [/LogSpir2 30 40] /UserPhiData 10
+          <</Phi Phi /PW PW  /QW  QW  /NN NN /JJ JJ /Rw  Rw /WW WW
+            /IsSpiral IsSpiral /Ntype Ntype /DBL count 2 eq  >>  %dup Pdict
       } {
         (Rejected) ==
       } ifelse       % if IsSpiral        
@@ -1258,6 +1262,7 @@ end
 }
 
 /G2FillSolution {%  Solution_dict  ---> reject or update dict
+                 %  take solution number Nsol from outer dict
 dup begin
    /Sin1 Omega Phi 2 div add sin def
    /Sin2 Omega Phi 2 div sub sin def
@@ -1278,10 +1283,15 @@ dup begin
    RB0 LB0 SetMobius
    /Spiral4 G2MakeCurve4 /CrvLen exch def def
 
+%   /MaxPol Spiral4 aload 1. exch length 2 idiv{% [x1 y1 ... xN yN MaxPol^2
+%      3 1 roll dup mul exch dup mul add MAX
+%   } repeat sqrt def 
+
    %JJ -1 eq RB0 1. eq and LB0 0 eq and { reject} if
+   /ID Nsol 4 string cvs DBL {(*) AppStr} if def
 
    CrvLen 0 le {%
-      %pop  --- DO NOT reject Solution dict
+      %pop  --- DO NOT reject Solution dict   ? why ?
       G2DataDict begin /Nrejected Nrejected 1 add def end
    }{        
 %     /CrvPlot G2MakeKS
@@ -1325,7 +1335,13 @@ end
     7 1 roll 5 1 roll 3 1 roll                           % Xmin h Xmax h Ymin h Ymax h
     add 7 1 roll sub 6 1 roll add 4 1 roll sub 4 1 roll
     GivenCurve aload pop
-   ] MinMaxXY] G2SqBox /GivenBox exch def
+    Solutions length dup 0 eq {pop} {
+       2 idiv Solutions exch get /Spiral4 get
+       aload length dup /_N ED 2 idiv  {%  ... xN yN 
+          G2neg Matrix itransform  _N 2 roll
+       } repeat
+    } ifelse
+   ] MinMaxXY] dup == G2SqBox /GivenBox exch def
  } if  
  [/GivenBox GivenBox] ==
 
@@ -1424,7 +1440,7 @@ grestore moveto
    %GivenBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
    GivenBox dup aload pop 4 2 roll XYsub 1.25 div 2 copy lt {exch} if pop XpageMax exch div
    PicBegin
-   PicPath clip newpath
+   .4 PicLW  PicPath stroke PicPath clip newpath
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
    .8 PicLW X1 Y1 moveto X0 Y0 l^ X2 Y2 lineto stroke
@@ -1463,8 +1479,9 @@ grestore moveto
 }
 
 /G2Output {%
-   /OutputFile OutputFile (w) file def
-   OutputFile (\% c= ) HalfChord 12 string cvs AppStr writestring
+   /OutputFile OutputFile (w) file def  % check for stopped
+   OutputFile (\% c= ) GivenDataString AppStr writestring
+%  OutputFile (\% c= ) HalfChord 12 string cvs AppStr writestring
    Solutions {%
       begin %------------
       OutputFile (\n\% Phi: ) Phi 10 string cvs AppStr
@@ -1491,8 +1508,11 @@ grestore moveto
 /GivenDataPage {%   // GivenDataString  from WorkDict
  gsave
 %   ErrCode 0 gt {Red} if
-   Title length 0 eq {(Given data: )}{Title} ifelse  PageStart
-   GivenDataString G2show1
+   Title length 0 eq {
+     GivenDataString  PageStart
+   } {
+     Title PageStart  GivenDataString G2show1
+} ifelse 
 
    Black
    Comment length 0 gt {Comment G2show1} if  
@@ -1519,16 +1539,10 @@ grestore moveto
       G2show1  
    } if 
    CheckSpiral not {Blue (No spirality test!) G2show1} if
-   Fname length 0 gt {%
-     (Input from: ) G2show1 Fname G2show
-   } if  
-
-   OutputFile length 0 gt {%
-     (Output to: ) G2show1  OutputFile G2show
-   } if  
+   Fname      length 0 gt {(Input from: ) G2show1 Fname G2show   } if  
+   OutputFile length 0 gt { (Output to: ) G2show1 OutputFile G2show } if  
 
    Black
-
    G2SetBoxes
    GivenDataPic 
    OutputFile length 0 gt {G2Output} if
@@ -1591,7 +1605,7 @@ grestore moveto
     } if
 }
 
-/NormalDataPic {%
+/ConicDataPic {%
    gsave PicPath clip newpath .9 setgray
       0 0 moveto 0 0 2 Omega Theta0 G2Phi2Xi arcn 0 0 lineto closepath fill
    grestore 
@@ -1599,7 +1613,6 @@ grestore moveto
    .6 PicLW (x) (y) PicAxes
    Sigma 90 gt {1 0 moveto 0 4 rlineto -1 0 moveto 0 -4 rlineto stroke} if
    Sigma 90 lt {0 0 1 -180 0 arc stroke} if
-   G2DataShowNorm
    gsave PicPath clip newpath
 %      Sigma abs 90 lt {0 0 moveto 3 XiLim Polar rl^ stroke} if
       G2Locus
@@ -1615,13 +1628,8 @@ grestore moveto
         CosSig sub exch div moveto -4 Rpoint
       } forall
 
-      1000   0             %/PhiPrev 1000 def /id 0 def
       Solutions {%
          begin
-           1 add dup 4 string cvs                        % prev count (ID)
-           Phi dup 5 1 roll 4 -1 roll eq                 % phi count  ID bool
-%  "double" solutions got with:   /UserG2Data [/LogSpir2 30 40] /UserPhiData 10
-           {(*) AppStr} if /ID exch def                  % phi count 
            [IsSpiral not {1 Picmm dup} if] 0 setdash
            0 PicLW
            0 0 moveto WW 0 eq 
@@ -1631,15 +1639,14 @@ grestore moveto
            .6 PicLW [] 0 setdash           
            Ntype currentlinewidth mul Xi Polar XYadd moveto
            4 IsSpiral not {neg} if Rpoint
-%          Phi PhiPrev eq {2 copy .2 Xi Polar XYadd}{0 0} ifelse moveto l^
          end
-      } forall pop pop
+      } forall
    grestore 
 }
 
-/NormalDataPage {%
+/ConicDataPage {%
  gsave
-   (Normalized data) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse
+   (Conic info) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse
       AppStr PageStart
    (a) Alpha G2CodeDeg  G2show1  (b) Beta G2CodeDeg G2show2
    (a) CrvA G2Code G2show1 (,  ) G2show (g1) gA G2Code G2show
@@ -1656,6 +1663,33 @@ grestore moveto
      2 copy 6 2 roll XYsub 6 2 roll XYsub 4 2 roll
    ] /ConicBox 1 Args 
    dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
+   ConicDataPic 
+   EndFig
+ grestore
+}
+
+/NormalDataPic {%
+   /T 12 PicFont
+   .6 PicLW (x) (y) PicAxes
+   Sigma 90 gt {1 0 moveto 0 4 rlineto -1 0 moveto 0 -4 rlineto stroke} if
+   Sigma 90 lt {0 0 1 -180 0 arc stroke} if
+   G2DataShowNorm
+}
+
+/NormalDataPage {%
+ gsave
+   (Normalized data) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse
+      AppStr PageStart
+   (a) Alpha G2CodeDeg  G2show1  (b) Beta G2CodeDeg G2show2
+   (a) CrvA G2Code G2show1 (,  ) G2show (g1) gA G2Code G2show
+   (b) CrvB G2Code G2show2 (,  ) G2show (g2) gA G2Code G2show
+   (Q) Q    G2Code G2show1  (,   ) show
+   (s) Sigma G2CodeDeg G2show (;   ) show
+   %TODO  "4+1 solutions found ..."
+   Solutions length 3 string cvs ( solutions.) AppStr G2show
+
+   BeginFig
+   NormBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
    NormalDataPic 
    EndFig
  grestore
@@ -1739,7 +1773,8 @@ end
       true   G2ShowConic
       false  G2ShowConic
    } if   
-   CrvLen 0 gt {Black 1.2 PicLW Spiral4 XYdraw stroke} if
+   Phi 0 eq {Red2}{Black} ifelse
+   CrvLen 0 gt {1.2 PicLW Spiral4 XYdraw stroke} if
    G2ShowGivenCurve
 }
 
@@ -1785,10 +1820,15 @@ end
 
 /AllSolutionsPage {%
  gsave
-   (All Solutions) ( \() AppStr Solutions length 4 string cvs AppStr (\)) AppStr PageStart
-   (a) Alpha G2CodeDeg G2show1  (b) Beta  G2CodeDeg G2show2
-   (   ) show                   (s) Sigma G2CodeDeg G2show
-   (a) CrvA  G2Code    G2show1  (b) CrvB G2Code    G2show2
+   (All Solutions) ( \() AppStr Solutions length 4 string cvs AppStr
+   (\),  normalized) AppStr
+   WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr 
+ PageStart
+   (a) Alpha G2CodeDeg G2show1 (,  ) show
+   (b) Beta  G2CodeDeg G2show  (,  ) show
+   (s) Sigma G2CodeDeg G2show
+   (a) CrvA  G2Code    G2show2 (,  ) show (b)  CrvB  G2Code G2show
+
    CheckSpiral not {Blue (No spirality test!) G2show1} if
    BeginFig
    gsave
@@ -2167,8 +2207,8 @@ end
 %[/G2DataDict G2DataDict length] ==
 %---------------------------------------------------------------
 % Solution dictionary:
-% /Nu /Xi /Rw /WW /JJ /PW /QW /PP /QQ /HH1 /HH2 
-% /IsSpiral (bool) ID 
+% /ID /Phi /Xi /Rw /WW /JJ /PW /QW /PP /QQ /HH1 /HH2 
+% /IsSpiral (bool) /DBL
 % RB0 LB0 
 % /Acon /Bcon                      % for debug
 % /Spiral4 [] /CrvPlot [] Length
@@ -2227,7 +2267,7 @@ dup 0 eq {%
                              % ErrCode
 dup 0 eq {%
    pop
-   /GivenDataString (GivenData: [ ) 
+   /GivenDataString (UserData: [ ) 
    UserG2Data 0 get type /nametype eq {(/) AppStr} if
    UserG2Data {%
       20 string cvs AppStr ( ) AppStr
@@ -2271,20 +2311,28 @@ end end
 G2DataDict begin
 G2SetPhiArray dup /PhiArray exch def
 G2SolveAll
-/TotalPages Solutions length 0 gt {3}{2} ifelse def
-ShowAll {/TotalPages TotalPages Solutions length add def} if
   
 (G2SolveAll OK) ==
 %Solutions {Pdict (EndSolDict-------------------) == exit}  forall
 
+/Nsols Solutions length def
+
+/TotalPages 2                 % Given + Conic
+   Nsols 0 eq {1 add} if      % NormalDataPage
+   Nsols 1 gt {1 add} if      % AllSolutionsPage (with NormalData)
+   ShowAll    {Nsols add} if
+def
+
 GivenDataPage  save showpage restore
 %  countdictstack ==
-NormalDataPage save showpage restore
-AllSolutionsPage  save showpage restore
+Nsols 0 eq {NormalDataPage    save showpage restore} if
+Nsols 1 gt {AllSolutionsPage  save showpage restore} if
 
 ShowAll {
    Solutions {begin SolutionPage end save showpage restore} forall
 } if
+
+ConicDataPage
 
 %G2DataDict Pdict   
 
