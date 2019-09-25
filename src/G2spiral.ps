@@ -1188,7 +1188,7 @@ end
    [exch {%
       dup /NextPhi 1 Args
       % avoid Phi = +- Sigma
-      %  ...    .01 eqp not {...}{...} ifelse to compare with precision 0.01
+      %  ...   .01 eqp not {...}{...} ifelse: to compare with precision 0.01
       abs Sigma ne {G2SolvePhi pop}{pop} ifelse
    } forall]                     %/PreSolutions 1 Args
    [exch {G2FillSolution} forall] /Solutions 1 Args
