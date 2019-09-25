@@ -16,7 +16,9 @@
 %  
 %  ------------------- Edit below this line --------------------------
 <<
-   /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
+%  /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
+   /UserG2Data  [/XYTK8 0   0  -105 -.4      1. 1.  -75  0.3] 
+   /UserPhiData 5.
 >> 
 %  ------------------- Edit above this line --------------------------
 
@@ -2332,7 +2334,7 @@ ShowAll {
    Solutions {begin SolutionPage end save showpage restore} forall
 } if
 
-ConicDataPage
+ConicDataPage save showpage restore
 
 %G2DataDict Pdict   
 
