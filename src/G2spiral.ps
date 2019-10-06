@@ -1168,7 +1168,7 @@ end
       } {false} ifelse
    }{
       NN 2 mul Omega Nu abs sub sin mul SinPhi abs mul Omega Nu abs add cos sub
-          /TestSp2 1 Args
+%         /TestSp2 1 Args
       0 le 
    } ifelse
 }
@@ -1201,7 +1201,7 @@ end
      /Solutions ED
      /MaxCrvLen 2 
      Solutions {%
-       /CrvLen get 2 copy lt {exch} if pop
+       /CrvLen get MAX
      } forall def
    end
 }
@@ -1235,7 +1235,7 @@ end
         [exch 1]
      } if
    } ifelse]                                    % [[N Ntype] [N Ntype]] 
-   /Narray 1 Args
+%  /Narray 1 Args
    /count 0 def
    {%                                           % next_N 
       aload pop /Ntype ED dup /NN ED
@@ -1518,20 +1518,20 @@ grestore moveto
 
    Black
    Comment length 0 gt {Comment G2show1} if  
-%   (X_1|) X1 G2Code G2show1       (X_2|) X2 G2Code G2show2
-%   (Y_1|) Y1 G2Code G2show1       (Y_2|) Y2 G2Code G2show2
    (X1) X1 G2Code G2show1 (,  ) show (Y1) Y1 G2Code G2show
-   (X2) X2 G2Code G2show2 (,  ) show (Y2) Y2 G2Code G2show (,  ) show
-   (c) HalfChord G2Code G2show
-   (t1) Tau1 G2CodeDeg G2show1  (t2) Tau2 G2CodeDeg G2show2
-   (k1) Crv1 G2Code G2show1 (,  ) G2show (g1) gA G2Code G2show
-   (k2) Crv2 G2Code G2show2 (,  ) G2show (g2) gB G2Code G2show
+   (t1) Tau1 G2CodeDeg G2show2 (,  ) show
+   (k1) Crv1 G2Code G2show  ( // ) G2show (g1) gA G2Code G2show
+
+   (X2) X2 G2Code G2show1 (,  ) show (Y2) Y2 G2Code G2show (,  ) show
+   (t2) Tau2 G2CodeDeg G2show2 (,  ) show 
+   (k2) Crv2 G2Code G2show  ( // ) G2show (g2) gB G2Code G2show
+   (c) HalfChord G2Code G2show1 (,   ) show 
    Q 0 ge {Red} if 
-   (Q)   Q  G2Code G2show1 Black (,   ) show 
+   (Q)   Q  G2Code G2show Black (,   ) show 
    Sigma abs 180 gt {Red}{Black} ifelse (s) Sigma G2CodeDeg G2show
    Black (;   ) show 
-   Solutions length 3 string cvs ( solutions found for ) AppStr
-   Ngiven 4 string cvs AppStr ( values of parameter. ) AppStr show
+   Solutions length 3 string cvs ( / ) AppStr
+   Ngiven 4 string cvs AppStr    ( solutions found) AppStr show
    (F) PhiMin  G2CodeDeg G2show1
 %/G2RJtext %  --> (text)
    Nrejected 0 gt {
@@ -1576,8 +1576,17 @@ grestore moveto
      GivenCrvPlot aload length 2 idiv {Kmag mul G2neg moveto -3.4 Rpoint} repeat
    grestore  
 }
+
+/NormalDataShow {
+   (a) Alpha G2CodeDeg G2show1 (,  ) show
+   (b) Beta  G2CodeDeg G2show  (,  ) show
+   (s) Sigma G2CodeDeg G2show  (;  ) show
+   (a) CrvA  G2Code    G2show2 (,  ) show
+   (b) CrvB  G2Code    G2show  (,  ) show
+   (Q) Q     G2Code    G2show 
+}
   
-/G2DataShowNorm {
+/G2DrawNorm {
    -1 0 moveto 3 Rpoint 1 0 moveto 3 Rpoint
    gsave Blue
       1 PicLW
@@ -1613,6 +1622,7 @@ grestore moveto
    grestore 
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
+% ? (forgotten...)
    Sigma 90 gt {1 0 moveto 0 4 rlineto -1 0 moveto 0 -4 rlineto stroke} if
    Sigma 90 lt {0 0 1 -180 0 arc stroke} if
    gsave PicPath clip newpath
@@ -1629,18 +1639,15 @@ grestore moveto
         SinSig 2 index div 3 1 roll
         CosSig sub exch div moveto -4 Rpoint
       } forall
-
       Solutions {%
          begin
-           [IsSpiral not {1 Picmm dup} if] 0 setdash
+           %[IsSpiral not {1 Picmm dup} if] 0 setdash
            0 PicLW
-           0 0 moveto WW 0 eq 
-             {PW neg QW neg}
-             {PW WW div QW WW div} 
-           ifelse lineto currentpoint stroke              
+           0 0 moveto WW 0 eq {PW neg QW neg} {PW WW div QW WW div} ifelse
+               lineto currentpoint stroke              
            .6 PicLW [] 0 setdash           
-           Ntype currentlinewidth mul Xi Polar XYadd moveto
-           4 IsSpiral not {neg} if Rpoint
+           Ntype currentlinewidth mul Xi Polar XYadd moveto   % ???
+           4 Rpoint  % debug: 4 IsSpiral not {neg} if Rpoint
          end
       } forall
    grestore 
@@ -1648,23 +1655,27 @@ grestore moveto
 
 /ConicDataPage {%
  gsave
-   (Conic info) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse
-      AppStr PageStart
-   (a) Alpha G2CodeDeg  G2show1  (b) Beta G2CodeDeg G2show2
-   (a) CrvA G2Code G2show1 (,  ) G2show (g1) gA G2Code G2show
-   (b) CrvB G2Code G2show2 (,  ) G2show (g2) gA G2Code G2show
-   (Q) Q    G2Code G2show1  (,   ) show
-   (s) Sigma G2CodeDeg G2show (;   ) show
+   (Conic info) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr
+   PageStart
+   NormalDataShow
    %TODO  "4+1 solutions found ..."
    Solutions length 3 string cvs ( solutions.) AppStr G2show
 
    BeginFig
-   [NormBox 
+   [[-1.5 dup 1.5 dup %NormBox aload pop
+      PhiArray {% do not include "infinite control point"
+        dup 0. eq {pop} {%
+           dup sin exch cos                      % sinphi cosphi
+           SinSig 2 index div 3 1 roll   CosSig sub exch div
+        } ifelse
+      } forall
+     ] MinMaxXY
     % centering NormalBox for the picture with Locus:
-     aload pop 4 copy XYadd 2. 0. XYdiv      % [ X1 Y1 X2 Y2 dx dy
-     2 copy 6 2 roll XYsub 6 2 roll XYsub 4 2 roll
+%     4 copy XYadd 2. 0. XYdiv      % [ X1 Y1 X2 Y2 dx dy
+%     2 copy 6 2 roll XYsub 6 2 roll XYsub 4 2 roll
    ] /ConicBox 1 Args 
    dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
+   0 PicLW PicPath stroke
    ConicDataPic 
    EndFig
  grestore
@@ -1673,20 +1684,19 @@ grestore moveto
 /NormalDataPic {%
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
+% ?   -1 0 moveto (-1) .5 Alpha 0 le {-.15}{1.15} ifelse set_text show
+% ?    1 0 moveto  (1) .5 Beta  0 ge {-.15}{1.15} ifelse set_text show
    Sigma 90 gt {1 0 moveto 0 4 rlineto -1 0 moveto 0 -4 rlineto stroke} if
    Sigma 90 lt {0 0 1 -180 0 arc stroke} if
-   G2DataShowNorm
+   G2DrawNorm
 }
 
 /NormalDataPage {%
  gsave
-   (Normalized data) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse
-      AppStr PageStart
-   (a) Alpha G2CodeDeg  G2show1  (b) Beta G2CodeDeg G2show2
-   (a) CrvA G2Code G2show1 (,  ) G2show (g1) gA G2Code G2show
-   (b) CrvB G2Code G2show2 (,  ) G2show (g2) gA G2Code G2show
-   (Q) Q    G2Code G2show1  (,   ) show
-   (s) Sigma G2CodeDeg G2show (;   ) show
+   (Normalized data) WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr
+   PageStart
+   NormalDataShow
+
    %TODO  "4+1 solutions found ..."
    Solutions length 3 string cvs ( solutions.) AppStr G2show
 
@@ -1708,7 +1718,7 @@ grestore moveto
   .2 PicLW PicPath stroke
   .6 PicLW (s ) (.k) PicAxes
   CrvLen 0 moveto 1.2 Rpoint CrvLen -2 Format .5 -.2 set_text show
-  Black .6 PicLW
+ .6 PicLW Phi 0 eq {Red2}{Brown} ifelse
   CrvPlot aload length 2 idiv 1 sub 3 1 roll 
   Kmag mul moveto {Kmag mul lineto} repeat stroke
   0 CrvA Kmag mul moveto 0 CrvB Kmag mul l^ stroke 
@@ -1764,7 +1774,10 @@ end
 /SolutionPic {%
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
-%  G2DataShowNorm
+   -1 0 moveto (-1) .5 Alpha 0 le {-.15}{1.15} ifelse set_text show
+    1 0 moveto  (1) .5 Beta  0 ge {-.15}{1.15} ifelse set_text show
+
+%  G2DrawNorm
    ShowConic { 
       Red2
       Rw 1 gt {Red 0 0 1 0 360 arc stroke} if
@@ -1775,8 +1788,11 @@ end
       true   G2ShowConic
       false  G2ShowConic
    } if   
-   Phi 0 eq {Red2}{Black} ifelse
-   CrvLen 0 gt {1.2 PicLW Spiral4 XYdraw stroke} if
+   .6 PicLW Phi 0 eq {Red2}{Brown} ifelse
+   CrvLen 0 gt {%
+      Spiral4 dup XYdraw stroke
+      aload length 2 idiv {moveto 3 Rpoint} repeat
+   } if
    G2ShowGivenCurve
 }
 
@@ -1785,10 +1801,7 @@ end
  gsave        
    (Solution ) ID AppStr IsSpiral not {(   (not spiral)) AppStr} if
    PageStart
-   (a) Alpha G2CodeDeg G2show1 (,  ) show
-   (b) Beta  G2CodeDeg G2show  (,  ) show
-   (s) Sigma G2CodeDeg G2show
-   (a) CrvA  G2Code    G2show2 (,  ) show (b)  CrvB  G2Code G2show
+   NormalDataShow
    (j) Phi G2CodeDeg   G2show1 ( / ) show (x) Xi G2CodeDeg G2show
    (/,  ) show (w) WW G2Code G2show (,  ) show
    Rw 0 ne {(rw) Rw G2Code G2show (,  ) show} if
@@ -1825,11 +1838,8 @@ end
    (All Solutions) ( \() AppStr Solutions length 4 string cvs AppStr
    (\),  normalized) AppStr
    WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr 
- PageStart
-   (a) Alpha G2CodeDeg G2show1 (,  ) show
-   (b) Beta  G2CodeDeg G2show  (,  ) show
-   (s) Sigma G2CodeDeg G2show
-   (a) CrvA  G2Code    G2show2 (,  ) show (b)  CrvB  G2Code G2show
+   PageStart
+   NormalDataShow
 
    CheckSpiral not {Blue (No spirality test!) G2show1} if
    BeginFig
@@ -1837,7 +1847,10 @@ end
       NormBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
       /T 12 PicFont
       .6 PicLW (x) (y) PicAxes
-      G2DataShowNorm
+      -1 0 moveto (-1) .5 Alpha 0 le {-.15}{1.15} ifelse set_text show
+       1 0 moveto  (1) .5 Beta  0 ge {-.15}{1.15} ifelse set_text show
+
+      G2DrawNorm
       gsave
          0 .85 .85 setrgbcolor
          BiarcDict begin BiarcData1 BiarcDraw stroke BiarcData2 BiarcDraw stroke end
@@ -1847,9 +1860,10 @@ end
 %    gsave 0 .2 .2 setrgbcolor closepath fill grestore
      %stroke
       1.2 PicLW 
-      Solutions {%
+      % move "universal solution" to the end of stack:
+      [Solutions {dup /Phi get 0 eq {counttomark 1 roll} if} forall counttomark -1 roll] {%
          begin  
-           Phi 0 eq {Red2 .4 PicLW} {Black .2 PicLW} ifelse
+           Phi 0 eq {Red2 .4 PicLW} {Brown .2 PicLW} ifelse
            CrvLen 0 gt {Spiral4 XYdraw stroke} if 
          end
       } forall
@@ -1871,7 +1885,7 @@ end
     Red .2 PicLW
     Solutions {%
       begin
-        Phi 0 eq {Red2 .4 PicLW} {Red .2 PicLW} ifelse
+        Phi 0 eq {Red2 .8 PicLW} {Brown .4 PicLW} ifelse
         CrvLen 0 gt {%
         CrvPlot aload length 2 idiv 1 sub 3 1 roll 
         Kmag mul moveto {Kmag mul lineto} repeat stroke
@@ -1879,7 +1893,7 @@ end
       end
     } forall     
     G2GivenCrvPlot
-    .6 PicLW [1 Picmm dup] 0 setdash
+    .6 PicLW [1 Picmm dup] 0 setdash Black
     0 CrvA Kmag mul moveto MaxCrvLen 0 rlineto
     0 CrvB Kmag mul moveto MaxCrvLen 0 rlineto stroke
 
@@ -2164,21 +2178,18 @@ end
 
 %  Some options (edit at your own risk):
 /G2Options <<
-  /Margin          30
-  /Title          ()       %  not yet...
+  /Margin         30
+  /Title          ()
   /ShowConic      false
-%  /ShowXiPage    true 
-%  /AddUniversal  true 
-  /BlackWhite    false
-% /ShowCrvPage   false
-  /CheckSpiral   true                  % test with false
-  /BaseLineSkip  20
-  /Indent        10
-  /DTminCrv     1. 1024. div 1024. div      
-  /CrvPrecision 0.002                  
-  /FindCubic    false
-  /ShowBilens false
-  /ShowAll    true
+  /BlackWhite     false        % not yet...
+  /CheckSpiral    true          % test with false
+  /BaseLineSkip   20
+  /Indent         10
+  /DTminCrv       1. 1024. div 1024. div      
+  /CrvPrecision   0.002                  
+  /FindCubic      false
+  /ShowBilens     false
+  /ShowChaque     true
   /LimitCrvLength 5000. 
 >> def
 
@@ -2210,7 +2221,7 @@ end
 %---------------------------------------------------------------
 % Solution dictionary:
 % /ID /Phi /Xi /Rw /WW /JJ /PW /QW /PP /QQ /HH1 /HH2 
-% /IsSpiral (bool) /DBL
+% /IsSpiral (bool) /DBL (bool)
 % RB0 LB0 
 % /Acon /Bcon                      % for debug
 % /Spiral4 [] /CrvPlot [] Length
@@ -2322,7 +2333,7 @@ G2SolveAll
 /TotalPages 2                 % Given + Conic
    Nsols 0 eq {1 add} if      % NormalDataPage
    Nsols 1 gt {1 add} if      % AllSolutionsPage (with NormalData)
-   ShowAll    {Nsols add} if
+   ShowChaque    {Nsols add} if
 def
 
 GivenDataPage  save showpage restore
@@ -2330,7 +2341,7 @@ GivenDataPage  save showpage restore
 Nsols 0 eq {NormalDataPage    save showpage restore} if
 Nsols 1 gt {AllSolutionsPage  save showpage restore} if
 
-ShowAll {
+ShowChaque {
    Solutions {begin SolutionPage end save showpage restore} forall
 } if
 
