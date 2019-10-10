@@ -212,9 +212,7 @@ product 0 5 getinterval (DView) eq not {%
 /Atan0 {2 copy 0 eq exch 0 eq and {/Atan0 2 Args pop}{Atan180} ifelse} bind
 
 /Atan90 {% y x --> arctan(y/x) in [-90,90]
-  dup 0 eq
-  {pop {-90}{0 (Atan90: 0/0) ==}{90} ArthIf exch pop}
-  {2 copy mul 2 mul 3 1 roll dup mul exch dup mul sub atan Upd180 2 div} ifelse
+   dup 0. lt {neg exch neg exch} if Atan180
 } bind
 
 /a2_b2 {% a  b   --> a^2-b^2
