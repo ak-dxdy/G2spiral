@@ -2,9 +2,9 @@
 % //%BoundingBox: 0 0 595 842
 %
 %    This file does not meet Data Structuring Conventions (DSC)
-%    parce que pages are generated in loop, 
+%    parce que pages are generated in loop,
 %    and DSC page numbering (like %%Page: 13) is not possible.
-%    So, navigation between pages (e.g., to previous page) is disabled. 
+%    So, navigation between pages (e.g., to previous page) is disabled.
 %
 % gs       -sFname=InputData.ps   G2spiral.ps &
 % gv -arg="-sFname=InputData.ps"  G2spiral.ps &
@@ -13,18 +13,19 @@
 
 (Start) ==
 
-%  
+%
 %  ------------------- Edit below this line --------------------------
 <<
 %  /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
-   /UserG2Data  [/XYTK8 0   0  -105 -.4      1. 1.  -75  0.3] 
+   /UserG2Data  [/XYTK8 0   0  -105 -.4      1. 1.  -75  0.3]
    /UserPhiData 5.
->> 
+   /MaxLength 40   % 30 to test all rejected
+>>
 %  ------------------- Edit above this line --------------------------
 
 /Fname where {%
    pop Fname ==
-   clear Fname run 
+   clear Fname run
 } {/Fname () def} ifelse
 
 %  to run PSclean, tmp uncomment:
@@ -32,29 +33,29 @@
 
 /BeginFig {%
 countdictstack
-FigDict begin  
+FigDict begin
   /DictCheck exch def
   gsave .5 dup translate
-      [] ArrowSet 
+      [] ArrowSet
       /PicDict
-      <<  /PicX1 0 /PicX2 500 /PicY1 0 /PicY2 800 /PicW 500 /PicH 800 
-          /PicScal 1. /PicMX matrix 
+      <<  /PicX1 0 /PicX2 500 /PicY1 0 /PicY2 800 /PicW 500 /PicH 800
+          /PicScal 1. /PicMX matrix
           /PicMinus (\261)
       >> def
 %      /TcleanW .15 def   % Tclean_Width parameter
       true setstrokeadjust
-end      
+end
 } bind def
 
 /EndFig {%   ? check stack and dict_stack ?
   grestore
   gsave 1 0 0 setrgbcolor 4 setlinewidth
-     count 0 ne 
+     count 0 ne
      {Pstack 0 0 moveto 600 840 lineto 600 0 moveto 0 840 lineto stroke} if % StackNotEmpty
-     countdictstack DictCheck ne 
+     countdictstack DictCheck ne
      {0 0 100 0 360 arc stroke} if                % Dict_not_popped
-     flush  
-  grestore      
+     flush
+  grestore
 } bind def
 
 %(GenSec.ps)      runlibfile
@@ -65,7 +66,7 @@ end
 /Pi   3.14159265358979323846 def
 /PiPi Pi 2 mul def
 /Pi90 Pi 2 div def
-/Radian 180. Pi div def 
+/Radian 180. Pi div def
 /ED {exch def} bind def
 
 /AppStr  {% <str1> <str2> appstr <str3> % borrowed from Ghostscript
@@ -108,8 +109,8 @@ end
 % ========================================================= Colors (userdict)
 product 0 5 getinterval (DView) eq not {%
 %   /BlackWhite false def
-%   statusdict % is the printer color printer? 
-%   begin /processcolors where {pop processcolors}{-1} ifelse 
+%   statusdict % is the printer color printer?
+%   begin /processcolors where {pop processcolors}{-1} ifelse
 %   end 0 le /BlackWhite exch def
 
    /BlackWhite false def
@@ -122,24 +123,24 @@ product 0 5 getinterval (DView) eq not {%
 
 % systemdict /colorimage known {} {} ifelse
 
-%  ----------------------------------- Standard 16         
+%  ----------------------------------- Standard 16
 /White   {1.  1.   1.  setrgbcolor} bind def
-/Silver  {.75 .75  .75 setrgbcolor} bind def   
-/Gray    {.50 .50  .50 setrgbcolor} bind def   
+/Silver  {.75 .75  .75 setrgbcolor} bind def
+/Gray    {.50 .50  .50 setrgbcolor} bind def
 /Black   { 0   0    0  setrgbcolor} bind def
 /Red     {1.   0    0  setrgbcolor} bind def
 /Maroon  {.50  0    0  setrgbcolor} bind def
-/Yellow  {1.  1.    0  setrgbcolor} bind def 
+/Yellow  {1.  1.    0  setrgbcolor} bind def
 /Olive   {.50 .50   0  setrgbcolor} bind def
-/Lime    { 0  1.    0  setrgbcolor} bind def   
+/Lime    { 0  1.    0  setrgbcolor} bind def
 /Green   { 0  .50   0  setrgbcolor} bind def
 /Aqua    { 0  1.   1.  setrgbcolor} bind def              % /Cyan
-/Teal    { 0  .50  .50 setrgbcolor} bind def   
+/Teal    { 0  .50  .50 setrgbcolor} bind def
 /Blue    { 0   0   1.  setrgbcolor} bind def
-/Navy    { 0   0   .50 setrgbcolor} bind def   
-/Fuchsia {1.   0   1.  setrgbcolor} bind def   
+/Navy    { 0   0   .50 setrgbcolor} bind def
+/Fuchsia {1.   0   1.  setrgbcolor} bind def
 /Purple  {.50  0   .50 setrgbcolor} bind def
-%  ----------------------------------- Standard 16         
+%  ----------------------------------- Standard 16
 
 /Green2  { 0  .75   0  setrgbcolor} bind def
 /Brown  {0.647 0.165 dup setrgbcolor} bind def   % 165 42 42
@@ -152,7 +153,7 @@ product 0 5 getinterval (DView) eq not {%
 
 /GenSec <<
 
-/KdrawLength 100 
+/KdrawLength 100
 /MAX {2 copy lt {exch} if pop} bind %def
 /MIN {2 copy gt {exch} if pop} bind %def
 % compare to given precision
@@ -170,7 +171,7 @@ product 0 5 getinterval (DView) eq not {%
    0. eq {pop 1} if dup
    5 -1 roll dup floor sub 2 div        % xN x0 step step eps/2
    mul 3 -1 roll add                    % xN step x0'
-   exch 3 -1 roll                       % x0' step xN 
+   exch 3 -1 roll                       % x0' step xN
 } bind
 
 /forforall {% x0 xN Nf=Ni+eps --> [x0' x1 ... xN']
@@ -188,12 +189,12 @@ product 0 5 getinterval (DView) eq not {%
    dup 0. eq {%            ???  nado li ???
       pop pop exch pop
    } {
-      4 -1 roll 1 sub {                    % [ xN' x0' step 
+      4 -1 roll 1 sub {                    % [ xN' x0' step
          2 copy add exch                   % [ xN' x0' x1 x2 x3 ... step
       } repeat pop counttomark -1 roll
    } ifelse
    ]
-} bind 
+} bind
 
 % --------------------------------------------------------- Math (in GenSec)
 
@@ -202,13 +203,13 @@ product 0 5 getinterval (DView) eq not {%
   {dup -180 gt {exit} if 360 add} loop
 } bind
 
-%/Sqrt0 {dup 0 le {pop 0}{sqrt} ifelse} bind 
+%/Sqrt0 {dup 0 le {pop 0}{sqrt} ifelse} bind
 
 /Atan180 {% sin cos
   1 index 0 lt {exch neg exch atan neg}{atan} ifelse
 } bind
 %   Return 0 as atan(0,0)
-/Atan0 {2 copy 0 eq exch 0 eq and {/Atan0 2 Args pop}{Atan180} ifelse} bind 
+/Atan0 {2 copy 0 eq exch 0 eq and {/Atan0 2 Args pop}{Atan180} ifelse} bind
 
 /Atan90 {% y x --> arctan(y/x) in [-90,90]
   dup 0 eq
@@ -221,31 +222,31 @@ product 0 5 getinterval (DView) eq not {%
 } bind
 
 % ---------------------------------------------------------------
-/Tan  {dup sin exch cos div} bind 
-/Asin {dup dup mul 1 sub neg sqrt atan Upd180} bind 
-/Acos {Asin 90 exch sub} bind 
-/Exp {2.718281828 exch exp} bind 
+/Tan  {dup sin exch cos div} bind
+/Asin {dup dup mul 1 sub neg sqrt atan Upd180} bind
+/Acos {Asin 90 exch sub} bind
+/Exp {2.718281828 exch exp} bind
 /Signum {%    returns -1, or 0, or 1
     dup 0 lt {pop -1}{0 gt {1}{0} ifelse} ifelse
 } bind
 
 /XYadd {% x1 y1 x2 y2  --> x1+x2 y1+y2
   3 -1 roll add 3 1 roll add exch
-} bind 
+} bind
 
 /XYsub {% x1 y1 x2 y2  --> x1-x2 y1-y2
   3 -1 roll sub neg 3 1 roll sub exch
-} bind 
+} bind
 
 /XYmul {% x1 y1 x2 y2  --> (x1+I*y1)*(x2+I*y2)
    4 copy   3 -1 roll mul neg 3 1 roll mul add
    5 1 roll 4 -1 roll mul     3 1 roll mul add
-} bind 
+} bind
 
 /XYdiv {% x1 y1 x2 y2  --> (x1+I*y1)/(x2+I*y2)
    2 copy dup mul exch dup mul add 5 1 roll neg XYmul
    2 index div 3 1 roll exch div exch
-} bind 
+} bind
 
 /XYmod {% dx dy --> |dz|
    dup mul exch dup mul add sqrt
@@ -253,13 +254,13 @@ product 0 5 getinterval (DView) eq not {%
 
 /FLT {% x y --> Mob(x,y)   // Mobius params in currentdict
 %       z*z2 + z1           z1 = x1 + i*y0 = Rmob*cos(l0)-1 + i*Rmob*sin(l0)
-%       ---------,  
+%       ---------,
 %       z*z1 + z2           z2 = x2 + i*y0 = Rmob*cos(l0)+1 + i*Rmob*sin(l0)
 %
 % MobiusDict begin
    2 copy Xflt2 Yflt0 XYmul Xflt1 Yflt0 XYadd 4 2 roll
           Xflt1 Yflt0 XYmul Xflt2 Yflt0 XYadd XYdiv
-% end          
+% end
 } bind
 
 /Polar {%   r phi --> x=r*cos  y=r*sin
@@ -268,17 +269,17 @@ product 0 5 getinterval (DView) eq not {%
 
 /LocalXY {%    x1 y1  x2 y2  -> c mu x0 y0
 %--------
- 3 -1 roll 2 copy add 2 div 5 1 roll sub      % Y0 x1 x2 dy 
- 3  1 roll 2 copy add 2 div 5 1 roll sub neg  % X0 Y0 dy dx 
- 2 copy dup mul exch  dup mul add sqrt 2 div  % X0 Y0 dy dx c 
- 5  1 roll Atan0 Upd180 3 1 roll              % c mu X0 Y0 
+ 3 -1 roll 2 copy add 2 div 5 1 roll sub      % Y0 x1 x2 dy
+ 3  1 roll 2 copy add 2 div 5 1 roll sub neg  % X0 Y0 dy dx
+ 2 copy dup mul exch  dup mul add sqrt 2 div  % X0 Y0 dy dx c
+ 5  1 roll Atan0 Upd180 3 1 roll              % c mu X0 Y0
 } bind
 
 /MinMax {%  [ X-array ] Minmax --> Xmin Xmax
   dup 0 get exch 2 copy
   { 2 copy gt {exch} if pop} forall 3 1 roll
   { 2 copy lt {exch} if pop} forall
-} bind 
+} bind
 
 /MinMaxXY {%  [ X Y X Y ] --> X1 Y1 X2 Y2
   [[ true  4 -1 roll               % [ [ true [xy]
@@ -288,39 +289,39 @@ product 0 5 getinterval (DView) eq not {%
   } forall pop ] MinMax            % [y y y X1 X2
   counttomark 1 add 2 roll] MinMax % X1 X2 Y1 Y2
   3 -1 roll exch
-} bind 
+} bind
 
 % --------------------------------------------------------- Arrows (in GenSec)
-/ArrowDict << 
-   /Lback 2  /Lforw 6  /Lwid 3 
+/ArrowDict <<
+   /Lback 2  /Lforw 6  /Lwid 3
    /ArrowType 2    % 0: no arrow; 1: normal arrow: 2: curvilinear arrow (Moebius)
-%  /ArrowCrv  0    % basic curvature (for Moebius)   
->> 
+%  /ArrowCrv  0    % basic curvature (for Moebius)
+>>
 
 /XYdraw {% draw array [x y x y ...]  or --mark-- x y x y ...
-   dup type /arraytype eq 
+   dup type /arraytype eq
    {aload length}
-   {counttomark dup 2 add -1 roll pop} ifelse 
+   {counttomark dup 2 add -1 roll pop} ifelse
    dup 0 eq {pop}{
       2 idiv 1 sub 3 1 roll moveto {lineto} repeat
    } ifelse
-} bind 
+} bind
 
 /text_wh  %% (text) text_wh   --> width height
 { gsave currentpoint translate
-    newpath 0 0 moveto false charpath flattenpath pathbbox  % ->  0 0 wx wy 
-    4 2 roll pop pop     % -> wx wy       
-  grestore 
-} bind 
+    newpath 0 0 moveto false charpath flattenpath pathbbox  % ->  0 0 wx wy
+    4 2 roll pop pop     % -> wx wy
+  grestore
+} bind
 
 /set_text { %% (text) Cx Cy set_text  show !!!
                 %                       -> Cy=1.5
-                %    +---------------+  -> Cy=1. 
-                %    |TextBoundingBox|  -> Cy=0.5 
+                %    +---------------+  -> Cy=1.
+                %    |TextBoundingBox|  -> Cy=0.5
                 %    +-------+-------+  -> Cy=0.
                 %    |       |       |  -> Cy=-0.5 (-0.7)
-                % Cx=0.     0.5      1. 
-                %    Arrange specified point of (text+margins)Bbox 
+                % Cx=0.     0.5      1.
+                %    Arrange specified point of (text+margins)Bbox
                 %    to current_point
                 % f.e., centering is (text) 0.5  0.5  Arrange_text
   gsave currentpoint translate
@@ -333,18 +334,18 @@ product 0 5 getinterval (DView) eq not {%
     2 index sub neg
     3 1 roll sub
   grestore rmoveto
-} bind 
+} bind
 
 /Tclean {%  |curr. pt| (text) optional_W  --> text_unchanged
    dup type /stringtype eq {.15} if exch          % .15 (text)
-   gsave 1 setgray dup 3 1 roll                   % (text) .15 (text)  
+   gsave 1 setgray dup 3 1 roll                   % (text) .15 (text)
       text_wh currentpoint translate 2 copy scale % (text) .15 w h
       %Yellow
       exch div exch neg dup 3 -1 roll mul exch    % (text) x1 (eg, -.11) y1 (eg, -0.2)
-      1 index -2 mul 1 add 1 index -2 mul 1 add %/Rect 4 Args 
+      1 index -2 mul 1 add 1 index -2 mul 1 add %/Rect 4 Args
       rectfill
    grestore
-} bind 
+} bind
 
 /Ishow  {%   (r123) Ishow  : Prints 2-nd and next characters as index
    dup 0 1 getinterval search {%           % (rest) (1st) () true
@@ -352,16 +353,16 @@ product 0 5 getinterval (DView) eq not {%
      currentpoint 4 1 roll add 3 1 roll    % xn yn (rest)
      gsave
        0 currentfont /ScaleMatrix   %  known ... etc
-       get 0 get -.15 mul rmoveto currentpoint translate 
-       0.666 dup scale  0 0 moveto show 
-     grestore moveto 
+       get 0 get -.15 mul rmoveto currentpoint translate
+       0.666 dup scale  0 0 moveto show
+     grestore moveto
     } if
 } bind
 % /Pshow {...}  /Tshow {...} /Bshow {...}  --- removed
 
 /I_format {%   |value|  -->  string
     dup dup 0 gt {log cvi} if  1 add string cvs
-} bind 
+} bind
 
 /F_format {%   rm_000 |v| prec
     dup 3 1 roll 10. exch exp mul round cvi   % rm_000 prec I=1000*v
@@ -379,12 +380,12 @@ product 0 5 getinterval (DView) eq not {%
           [ exch {} forall counttomark {dup 48 eq {pop}{exit} ifelse} repeat
           ] dup length string 0 2 copy 5 -1 roll % str 0 str 0 [...]
           {put 1 add 2 copy} forall pop pop pop
-          dup length 0 gt {(.) exch AppStr} if  % (str1) rm (.str2) 
+          dup length 0 gt {(.) exch AppStr} if  % (str1) rm (.str2)
        } {
-          (.) exch AppStr                        % (str1) rm (.str2) 
+          (.) exch AppStr                        % (str1) rm (.str2)
        } ifelse                                  %  (str1.) (str2)
        AppStr
-} bind 
+} bind
 
 %       USE  (\261) FOR MINUS SIGN ?  NO!!!
 /Format {%   value frmt_mode optional_(D)_for_degrees --->  string
@@ -408,12 +409,12 @@ product 0 5 getinterval (DView) eq not {%
       {(\055)}{(\261)} ifelse
    } {()} ifelse 3 1 roll                         % deg (sign) mode |v|
    dup type /integertype eq {%
-      exch 3 1 roll                               % deg n (s) |v|   
+      exch 3 1 roll                               % deg n (s) |v|
       I_format                                    % deg n (s) (v)
    } {%
       % real                                      % deg (sign) mode |v|
       exch
-      dup 0 lt {abs true}{false} ifelse 3 1 roll  % deg (s) rm_000 |v| mode 
+      dup 0 lt {abs true}{false} ifelse 3 1 roll  % deg (s) rm_000 |v| mode
       abs dup 10 idiv 5 1 roll                    % deg n (s) rm_000 |v| |mode|
       10 mod F_format
    } ifelse                                       % deg n (s) (formatted)
@@ -421,65 +422,65 @@ product 0 5 getinterval (DView) eq not {%
    dup length 3 -1 roll                           % deg (frm) l n
 %/F_len_req 3 Args
    2 copy lt {
-      % length less than required:  
+      % length less than required:
       exch sub ( ) exch 1 sub {( ) AppStr} repeat % deg (frm) (   )
       exch AppStr
    } {pop pop} ifelse
    exch {(\260) AppStr} if
 %/RES 1 Args
-} bind 
+} bind
 
 %----------------------------------------------------------------------------  Arcs
 /_Arc0 {%  (curr.pt) if_arrow tau length  --> new_Tau (= tau)
    %/_Arc0: 3 Args
-    2 copy exch Polar 3 -1 roll                   % if_arr tau dx dy len   
+    2 copy exch Polar 3 -1 roll                   % if_arr tau dx dy len
     0. ge
     {4 -1 roll  {rl^} {rlineto} ifelse}           % tau
     {% line through infinity
      currentpoint 3 -1 roll add 3 1 roll add exch % if_arr tau xdest ydest
      KdrawLength 3 index Polar 2 copy rlineto     % if_arr tau xdest ydest DX DY
-     -2 mul exch -2 mul exch rmoveto              % if_arr tau xdest ydest  
+     -2 mul exch -2 mul exch rmoveto              % if_arr tau xdest ydest
      4 -1 roll  {l^} {lineto} ifelse
-    } ifelse  
-} bind 
+    } ifelse
+} bind
 
 /_Arc90 {%  (curr.pt) tau k rot_or_length(if k=0) arrow  --> new_Tau
    %/Arc90: 4 Args
    % rotation =< 90, sign correct
     4 1 roll
-    1 index 0. eq                             % arr tau k rot/s  k=0 
-    {exch pop _Arc0} 
-    {                                         % arr tau k rot  
+    1 index 0. eq                             % arr tau k rot/s  k=0
+    {exch pop _Arc0}
+    {                                         % arr tau k rot
      %(tau k r) == pstack
-     dup 3 index add 4 1 roll                 % arr tau k rot  
+     dup 3 index add 4 1 roll                 % arr tau k rot
      2 div dup 3 index add 3 1 roll           % arr tau' tau mu k r/2
      dup 3 1 roll sin exch div abs 2 mul      % arr tau' tau mu r/2 2c
-     dup 4 -1 roll Polar 5 2 roll              % arr tau' x3 y3 tau r/2 2c 
+     dup 4 -1 roll Polar 5 2 roll              % arr tau' x3 y3 tau r/2 2c
      exch cos 1 add 3 mul div 2 mul dup        % arr tau' x3 y3 tau p p (p=4c/3/(1+cos))
-     3 -1 roll Polar 5 2 roll                  % arr tau' x1 y1 x3 y3 p 
-     5 index 180 sub Polar                     % arr tau' x1 y1 x3 y3 dx2 dy2 
-     2 index add 4 1 roll                      % arr tau' x1 y1 y2  x3 y3 dx2   
+     3 -1 roll Polar 5 2 roll                  % arr tau' x1 y1 x3 y3 p
+     5 index 180 sub Polar                     % arr tau' x1 y1 x3 y3 dx2 dy2
+     2 index add 4 1 roll                      % arr tau' x1 y1 y2  x3 y3 dx2
      2 index add 4 1 roll                      % arr tau' x1 y1 x2 y2 x3 y3
      8 -1 roll {rcrv^} {rcurveto} ifelse
     } ifelse
     %(Arc90 OK) ==
-} bind 
+} bind
 
 /_Arc {%  (curr.pt) bool_arrow tau k len/rot --> new Tau
    %/_Arc 4 Args
-   1 index 0. eq 
+   1 index 0. eq
    {exch pop _Arc0}
-   { % update sign of rotation  
+   { % update sign of rotation
      2 copy mul 0. lt {neg} if                         % bool tau k rot
-     dup abs 90 div ceiling dup cvi 3 1 roll div exch  % bool tau k rot/N N 
+     dup abs 90 div ceiling dup cvi 3 1 roll div exch  % bool tau k rot/N N
      1 sub
-     {                                                 % bool tau  k d_rot  
+     {                                                 % bool tau  k d_rot
         3 copy false _Arc90 4 -1 roll pop 3 1 roll     % bool tau' k d_rot
-     } repeat 
+     } repeat
      4 -1 roll _Arc90
-   } ifelse 
+   } ifelse
    %(Arc OK) == %pstack
-} bind 
+} bind
 
 /Arc {%  (curr.pt) tau k len/rot --> new_Tau
    false 4 1 roll _Arc
@@ -488,15 +489,15 @@ product 0 5 getinterval (DView) eq not {%
 /Kload {%  [x y t k ...]  N_to_keep  --> x y t ... (Poss. nulls added)
          exch aload length dup 2 add -1 roll
          sub dup 0 ge {{pop}} {neg {null}} ifelse repeat
-} bind 
+} bind
 
 /_Kdraw {% [x y t k l/rho ...]  ---> (curr_pt) t k l/rh
          % Prepare curr. point and args for Arc or Arc^
   5 Kload 5 -2 roll moveto                      % t k len/rho
   %  allow l/rh=0/null
-  dup dup null eq exch 0. eq or 
+  dup dup null eq exch 0. eq or
   { % to be corrected
-    pop dup 0. eq {KdrawLength} {360} ifelse    % t k l/rh  
+    pop dup 0. eq {KdrawLength} {360} ifelse    % t k l/rh
   } if
 } bind
 
@@ -505,13 +506,13 @@ product 0 5 getinterval (DView) eq not {%
 } bind
 >> def
 
-/FigDict <<  %--------------- Start Loading FigDict ----------------------       
+/FigDict <<  %--------------- Start Loading FigDict ----------------------
 
 /GrayLevel 0.95
 
-/ArrowDict << /Lback 2  /Lforw 6  /Lwid 3 
+/ArrowDict << /Lback 2  /Lforw 6  /Lwid 3
    /ArrowType 2    % 0: no arrow; 1: normal arrow: 2: curvilinear arrow (Moebius)
-   /ArrowCrv  0    % basic curvature (for Moebius)   
+   /ArrowCrv  0    % basic curvature (for Moebius)
 >>
 
 /ArrowSet {%  [Lback Lforw Lwid] or [] to set defaults
@@ -525,25 +526,25 @@ product 0 5 getinterval (DView) eq not {%
 
 /PicScale {% scalefactor
   PicDict begin
-    1. PicScal div dup scale 
+    1. PicScal div dup scale
     dup 0 le {pop}{dup dup scale dup /PicScal ED 1. exch div setlinewidth} ifelse
   end
 } bind
 
 /PicLW {% LineWidth
-  PicDict /PicScal get div setlinewidth 
+  PicDict /PicScal get div setlinewidth
 } bind
 
-/Picmm {% N 
+/Picmm {% N
   595 mul 210 div PicDict /PicScal get div
 } bind
 
-/PicBegin {% [x1 y1 x2 y2] scale 
+/PicBegin {% [x1 y1 x2 y2] scale
    dup 0 gt {PicScale} {pop} ifelse
    PicDict begin
      aload length 0 gt {
       [/PicY2 /PicX2 /PicY1 /PicX1] {exch def} forall
-      /PicW PicX2 PicX1 sub def  
+      /PicW PicX2 PicX1 sub def
       /PicH PicY2 PicY1 sub def
      } if
      PicX1 neg PicY1 neg translate
@@ -555,11 +556,11 @@ product 0 5 getinterval (DView) eq not {%
 } bind
 
 /PicFont {%  /FontName scale
-   exch 
+   exch
    << /T /Times-Roman /TI /Times-Italic                % My abbreviations
       /H /Helvetica   /HB /Helvetica-Bold /S /Symbol
       /C /Cyr-abc  % (for Cyrillic-Italic_abv...) --- to mark sub_pictures only
-   >> 1 index 2 copy known {get exch pop}{pop pop} ifelse   
+   >> 1 index 2 copy known {get exch pop}{pop pop} ifelse
    findfont exch PicDict /PicScal get div scalefont setfont
    PicDict /PicMinus currentfont /FontName get /Symbol eq {(\055)}{(\261)} ifelse put
 } bind
@@ -573,18 +574,18 @@ product 0 5 getinterval (DView) eq not {%
   ArrowDict begin
     dup (-) eq
     {pop pop pop}
-    {%                                  % (Xtxt) x1 x2 y2 y1 (Ytxt) 
-     3 1 roll 0. exch moveto 0. exch l^ 
+    {%                                  % (Xtxt) x1 x2 y2 y1 (Ytxt)
+     3 1 roll 0. exch moveto 0. exch l^
      dup length 0 eq
      {pop}
      {Lwid currentlinewidth mul 1.2 mul exch       % |dx| (Ytext)
       (.) search {pop pop exch neg 0 rmoveto 1.}{exch 0 rmoveto 0.} ifelse
       1. set_text show
-     }ifelse 
+     }ifelse
     }ifelse                             % (Xtxt) x1 x2
     2 index (-) eq
     {pop pop pop}
-    {exch 0. moveto 0. l^ 
+    {exch 0. moveto 0. l^
      dup length 0 eq
      {pop}
      {0 Lwid currentlinewidth mul 1.2 mul 3 -1 roll       % 0 |dY| (Xtext)
@@ -596,20 +597,20 @@ product 0 5 getinterval (DView) eq not {%
 } bind
 
 /PicPath {%  output clipping path
-   PicDict begin 
+   PicDict begin
      newpath
      PicX1 PicY1 moveto PicW 0 rlineto 0 PicH rlineto PicW neg 0 rlineto
-     PicX1 PicY1 lineto       
+     PicX1 PicY1 lineto
    end
 } bind
 
 /ArrowHead {% (curr.pt.context) Lback Lforw Lwid dir
-%                                2  6  3  
-%     draw arrow head from current point in given direction 
+%                                2  6  3
+%     draw arrow head from current point in given direction
 
 %  gsave Red 3 PicLW currentpoint newpath moveto 3 copy exch pop Polar rlineto 5 Rpoint stroke grestore
   gsave currentpoint newpath 0 setlinecap 0 setlinejoin
-    translate 
+    translate
        rotate
        0 0 moveto                                      % Lback Lforw Lwid
        3 -1 roll neg exch 2 copy lineto                % Lforw -Lback Lwid
@@ -619,29 +620,29 @@ product 0 5 getinterval (DView) eq not {%
 } bind
 
 /rl^ {% dx dy [optional_arrow_descr] :  rlineto-arrow
-%                                          2  6  3  
+%                                          2  6  3
   dup type /arraytype ne {ArrowDict begin Lback Lforw Lwid end}
-                         {aload pop} ifelse          % dx dy Lback Lforw Lwid 
+                         {aload pop} ifelse          % dx dy Lback Lforw Lwid
   3 {currentlinewidth mul 5 1 roll} repeat           % Lback Lforw Lwid dx dy
   gsave 2 copy rmoveto currentpoint 7 2 roll grestore% x y Lback Lforw Lwid dx dy
   exch 2 copy dup mul exch dup mul add sqrt          % x y Lback Lforw Lwid dy dx dl
-  3 1 roll atan exch                                 % x y Lback Lforw Lwid fi dl 
+  3 1 roll atan exch                                 % x y Lback Lforw Lwid fi dl
   3 index sub dup 0 lt {pop 0} if                    % x y Lback Lforw Lwid fi dl'
-  1 index 2 copy cos mul 3 1 roll sin mul rlineto    % x y Lback Lforw Lwid fi       
-      ArrowHead 
+  1 index 2 copy cos mul 3 1 roll sin mul rlineto    % x y Lback Lforw Lwid fi
+      ArrowHead
   moveto   % restore user_expected current point
 } bind
 
 /l^ %%%% def   lineto-arrow
 {%
-   	currentpoint 3 -1 roll sub neg 
+   	currentpoint 3 -1 roll sub neg
         3 1 roll sub exch rl^
 } bind
 
-/Rpoint {%  Radius  (R<0 --- fill with white)  (curr.point) 
-    gsave currentpoint newpath [] 0 setdash translate dup 0 ge 
+/Rpoint {%  Radius  (R<0 --- fill with white)  (curr.point)
+    gsave currentpoint newpath [] 0 setdash translate dup 0 ge
       {PicLW 1 setlinecap 0 0 moveto 0 0 rlineto}
-      {-2 div PicDict /PicScal get div 0 0 3 -1 roll 0 360 arc closepath clip 
+      {-2 div PicDict /PicScal get div 0 0 3 -1 roll 0 360 arc closepath clip
              gsave 1 setgray fill grestore
       } ifelse stroke
     grestore
@@ -649,59 +650,59 @@ product 0 5 getinterval (DView) eq not {%
 
 /Rcross {% R >< 0
 %  Picmm
-  gsave currentpoint translate newpath [] 0 setdash  
+  gsave currentpoint translate newpath [] 0 setdash
      dup 0 lt {45 rotate abs} if
-     dup PicDict /PicScal get 
+     dup PicDict /PicScal get
      div dup scale  % now as if "|size| dup scale"
      currentlinewidth exch div setlinewidth
-     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke                   
-  grestore     
+     -1 0 moveto 1 0 lineto 0 -1 moveto 0 1 lineto stroke
+  grestore
 } bind
->> def % --------------- End Loading FigDict ----------------------       
+>> def % --------------- End Loading FigDict ----------------------
 
 /GenSecDict GenSec def
 
 /MobiusDict <<
-   /INFflt 1024 /Lamflt 0 /Expflt 1 
+   /INFflt 1024 /Lamflt 0 /Expflt 1
    /Yflt0 0 /Xflt0 0 /Xflt1 0 /Xflt2 0
    /Xmob 0 /Ymob 0 /Xinv 0 /Yinv 0
-   /Focus 1 
+   /Focus 1
 >> def
 % --------------------------------------------------------- GenSec.ps end
 
-%(FresnelDict.ps) runlibfile 
+%(FresnelDict.ps) runlibfile
 /FresnelDict
 %      SUBROUTINE SF45R(arg,C,S)
 %      DIMENSION A(52),RK(13),RL(13)
 %      INTEGER K,L,I
 %      REAL X,C,S,A,RK,RL,Z,H,Y,F,D,E,B,R,T,SYS035
-<< /A [ 
-           .1E-10      -.366E-9      .10898E-7   -.267681E-6  .527608E-5 
-          -.8105684E-4  .9339901E-3 -.7651297E-2  .0411409E0 -.1271339E0 
-           .1743607E0  -.0808111E0   .5479103E0   .4E-11     -.128E-9 
-           .4206E-8    -.11507E-6    .2562196E-5 -.4532192E-4 .6174202E-3 
-          -.6220184E-2  .0438681E0  -.2007174E0   .5386666E0  -.7996168E0 
-          1.053859E0    .1E-11      -.4E-11       .14E-10     -.54E-10 
-           .239E-9     -.1176E-8     .6545E-8    -.42829E-7    .347441E-6  
+<< /A [
+           .1E-10      -.366E-9      .10898E-7   -.267681E-6  .527608E-5
+          -.8105684E-4  .9339901E-3 -.7651297E-2  .0411409E0 -.1271339E0
+           .1743607E0  -.0808111E0   .5479103E0   .4E-11     -.128E-9
+           .4206E-8    -.11507E-6    .2562196E-5 -.4532192E-4 .6174202E-3
+          -.6220184E-2  .0438681E0  -.2007174E0   .5386666E0  -.7996168E0
+          1.053859E0    .1E-11      -.4E-11       .14E-10     -.54E-10
+           .239E-9     -.1176E-8     .6545E-8    -.42829E-7    .347441E-6
           -.3810219E-5  .6627508E-4 -.2617529E-2  .9945488E0   .2E-11
-          -.6E-11       .18E-10     -.72E-10      .298E-9     -.1346E-8 
+          -.6E-11       .18E-10     -.72E-10      .298E-9     -.1346E-8
            .6798E-8    -.39518E-7    .275996E-6  -.2475448E-5  .3202967E-4
           -.7552029E-3  .0608819E0
-     ] 
+     ]
 
 %   /SYS035  0.3989422
-   /RK 13 array 
-   /RL 13 array 
+   /RK 13 array
+   /RL 13 array
    /K null /L null /I null
-   /X null /C null /S null /Z null /H null /Y null /F null 
+   /X null /C null /S null /Z null /H null /Y null /F null
    /D null /E null /B null /R null /T null
 
 /Fresnel % s_arg  --> C S  (x,y)
 {        %
          %   k=s/2, tau=s^2/4, ...  x,y(inf)=sqrt(Pi/2)
-         % 
-  FresnelDict begin 
-      dup 
+         %
+  FresnelDict begin
+      dup
 %      abs /Z exch def
        abs 2. div dup mul /Z exch def
       Z 8. lt {/H Z  8. div def /K 0 def}
@@ -736,18 +737,18 @@ product 0 5 getinterval (DView) eq not {%
 %      T=COS(Z)
 %      C=.5+(D*R-E*T)/B
 %      S=.5-(E*R+D*T)/B
-      Z 8. lt 
+      Z 8. lt
       {D B mul E B mul}
       {Z 57.29577950 mul dup
         sin /R exch def cos /T exch def
-       .5 D R mul E T mul sub B div add  
-       .5 E R mul D T mul add B div sub} ifelse 
+       .5 D R mul E T mul sub B div add
+       .5 E R mul D T mul add B div sub} ifelse
 
 %     3 -1 roll 0. lt {neg exch neg exch} if
       2.506628274 4 -1 roll   % C S sqrt(2Pi) arg
       0 lt {neg} if dup
-      4 -1 roll mul 3 1 roll mul    
- 
+      4 -1 roll mul 3 1 roll mul
+
 %    7 RETURN
 %      END
   end
@@ -757,7 +758,7 @@ product 0 5 getinterval (DView) eq not {%
 %(BiarcDict.ps)  runlibfile
 %!
 /BiarcData <<
-   /Alpha 0 /Beta 0 /Gamma 0 /Omega 0 /Bpar 0 
+   /Alpha 0 /Beta 0 /Gamma 0 /Omega 0 /Bpar 0
    /Acum  0 /Bcum 0 /Sigma 0 /Rho1 0 /Rho2 0
    /XJ 0    /YJ 0   /TauJ  0 /Len1 0  /Len2 0
    /Ninf 0   % 0, 1, 2
@@ -773,7 +774,7 @@ product 0 5 getinterval (DView) eq not {%
 /BiarcInitXY {% [X1 Y1 X2 Y2]
  BiarcData begin
    aload length 4 eq {%
-     LocalXY   /Y0 ED /X0 ED 
+     LocalXY   /Y0 ED /X0 ED
      /Mu ED /HalfChord ED                                      % Check Mu undefined
      /BiMatrix [Mu cos HalfChord div
             Mu sin HalfChord div dup neg exch 2 index          % cos -sin sin cos
@@ -784,37 +785,37 @@ product 0 5 getinterval (DView) eq not {%
      /HalfChord 1 def /Mu 0 def /BiMatrix matrix identmatrix def /X0 0 def /Y0 0 def
    } ifelse
  end
-} 
+}
 
  %%%%%%%%%%%%  Returns incorrect XJ, YJ, ... in the case of BiarcInitXY
-/MakeBiarc {% Alpha Beta par type  -->  (fill dict) 
+/MakeBiarc {% Alpha Beta par type  -->  (fill dict)
             %  -1: discontinuous biarc
             %   0: p-parameter
             % 1,2: first or second curvature
-            %   3: tau_J  
+            %   3: tau_J
             %  90: Ang, p=tan(Ang)  ???
   BiarcData begin % currentdict dup /kn1 undef /kn2 undef
 %  /MakeBia 4 Args [/c HalfChord /Mu Mu /MX BiMatrix aload pop] ==
      4 2 roll Mu sub exch Mu sub exch     % par type A B
-     2 copy add 2. div sin /SinOmg ED     % par type A B          % store original sin(omega)   
+     2 copy add 2. div sin /SinOmg ED     % par type A B          % store original sin(omega)
               2 copy exch                 % par type A B  B A
      abs 180 eq {%
          Upd180 exch pop                  % par type A B'
      } {%                                 % par type A B B
-         abs 180 eq {%                    
-            exch Upd180 exch              % par type A' B 
-         } {%  general case               % par type A  B 
+         abs 180 eq {%
+            exch Upd180 exch              % par type A' B
+         } {%  general case               % par type A  B
             Upd180 exch Upd180 exch       % par type A' B'
-         } ifelse  
-     } ifelse                             % par type A' B'   
+         } ifelse
+     } ifelse                             % par type A' B'
      2 copy add 2. div dup /Omega ED sin  % par type A' B' sin(o)
-%    dup SinOmg mul 0 lt /Modified exch def    % par type A' B' sin(o) 
+%    dup SinOmg mul 0 lt /Modified exch def    % par type A' B' sin(o)
      /SinOmg ED
      2 copy sub 2 div /Gamma ED
      dup sin /SinB ED /Beta ED  dup sin /SinA ED /Alpha ED
      _MakeBiarc
-%   currentdict Pdict 
-  end 
+%   currentdict Pdict
+  end
 }
 
 /_K5XY {% xn yn taun kn Ln
@@ -825,13 +826,13 @@ product 0 5 getinterval (DView) eq not {%
    dup abs 0.0001 lt {pop 0.} if
 }
 
-/_MakeBiarc {%     par type  -->  (fill dict) 
-             % 
+/_MakeBiarc {%     par type  -->  (fill dict)
+             %
  /Ninf 0 def
  dup -1 eq {%
     pop pop
     Alpha cos Beta cos le {0 1}{0 2} ifelse dup /Ninf exch def
- } if 
+ } if
 
  dup 8 eq {pop 7} if	
  dup 7 eq {DeprecatedBiarcPar} if	
@@ -840,39 +841,39 @@ product 0 5 getinterval (DView) eq not {%
  dup 3 eq {%  tauJ is given;  p = -sin(t/2+b/2)/sin(t/2+a/2)
     pop dup
     Beta  add 2 div sin neg exch
-    Alpha add 2 div sin div         0 
+    Alpha add 2 div sin div         0
  } if
 
  dup 0 eq {%
     1 index dup /Bpar ED                            % par typ=0 par
     dup SinOmg mul SinB add      _CrvCheck /kn2 ED  % par typ=0 par
     SinOmg neg exch div SinA sub _CrvCheck /kn1 ED
- } if 
+ } if
 
  dup 1 eq {%
     1 index HalfChord mul dup /kn1 ED                % par typ=1 kn1
     SinA add neg SinOmg exch div dup /Bpar ED        % par typ   Bpar
     SinOmg mul SinB add _CrvCheck /kn2 ED
- } if 
+ } if
 
  dup 2 eq {%
     1 index HalfChord mul dup /kn2 ED                % par typ=2 kn2
     SinB sub SinOmg div dup /Bpar ED                 % par typ   Bpar
     SinOmg neg exch div SinA sub _CrvCheck /kn1 ED
- } if 
+ } if
  pop pop
 
- Alpha cos Beta cos 2 copy  
+ Alpha cos Beta cos 2 copy
     le kn1 0 eq and {/Ninf 1 def} if
     ge kn2 0 eq and {/Ninf 2 def} if
 
 	% Check data
- 0                                                   % ierror  
+ 0                                                   % ierror
  Omega abs 180 ge                        {1 add} if
 	Omega Bpar mul  kn2 kn1 sub mul 0 lt   {10 add} if  % bool1 bool2
 	Beta abs 180 gt Alpha abs 180 gt  or  {100 add} if
  SinOmg 0 eq                          {1000 add} if
- Alpha abs 180 eq 
+ Alpha abs 180 eq
  Beta  abs 180 eq or Ninf 0 gt and   {10000 add} if
  dup 0 gt {== currentdict Pdict BadAngles}{pop} ifelse
 	
@@ -908,23 +909,23 @@ product 0 5 getinterval (DView) eq not {%
 		     /Bcum Beta  def /TauJ Bcum Rho2 sub def /Acum TauJ Rho1 sub def
     } ifelse
 		  Ninf 0 gt {/Acum Alpha def /Bcum Beta def} if
- } ifelse	 
+ } ifelse	
  /Acum Acum Alpha sub round Alpha add def   % rounding to +-360 or 0
  /Bcum Bcum Beta  sub round Beta  add def
-	 
-	/Sigma Ninf 0 gt {Omega 2 mul dup 0 gt {360 sub}{360 add} ifelse} {Acum Bcum add} ifelse def 
+	
+	/Sigma Ninf 0 gt {Omega 2 mul dup 0 gt {360 sub}{360 add} ifelse} {Acum Bcum add} ifelse def
 	kn2 kn1 sub Sigma mul 0 lt {currentdict Pdict VogtFailure} if
 
  /K1 [-1 0 Alpha kn1 dup 0 eq {%
      Ninf 0 gt {Ldiscont} {Len1} ifelse
- }{Rho1 abs} ifelse 
+ }{Rho1 abs} ifelse
   _K5XY] def
 
  /K2 [ XJ YJ TauJ kn2 Rho2 abs 1 index 0 eq {%
      pop                              %  /K2 [ XB YB TauB 0
      Ninf 0 gt {pop pop pop pop 1 0 Ldiscont Beta Polar XYsub Beta 0 Ldiscont} {Len2}  ifelse
  } if
-  _K5XY] def  
+  _K5XY] def
 
 /Kinf [
 %    Ninf 2 eq {XJ YJ Ldiscont Beta  Polar XYadd Beta  0. Ldiscont _K5XY} if
@@ -934,22 +935,22 @@ product 0 5 getinterval (DView) eq not {%
  /Len1 Len1 HalfChord mul def /Len2 Len2 HalfChord mul def
   Len1 0 lt Len2 0 lt or {[Len1 Len2] == BadLengthes} if
 % [K1 Kinf K2] ==
-} 
+}
 
 /BiarcDraw {%  dict
    begin
-    Ninf 0 gt {% 
+    Ninf 0 gt {%
         Kinf length 0 eq {%
 		   K1 Kdraw K2 Kdraw
 		}{
            kn1 0 eq {K1 Kdraw Kinf Kdraw}{K1 Kdraw Kinf Kdraw} ifelse K2 Kdraw
-        } ifelse		   
+        } ifelse		
     }{%
 		K1 Kdraw K2 Kdraw
-    } ifelse 
+    } ifelse
    end
-} 
->> def      % end loading BiarcDict       
+}
+>> def      % end loading BiarcDict
 
 /G2HermiteDict <<
 
@@ -957,8 +958,8 @@ product 0 5 getinterval (DView) eq not {%
 %/t 1 Args
     dup dup mul 2 copy 2 copy           % t tt t tt t tt
     CoeffDict begin                     % ...  ...  ...
-      CX0 CX1 CX2 9 3 roll              % t tt cx0 cx1 cx2 t tt t tt t tt 
-      CY0 CY1 CY2 7 3 roll              % 
+      CX0 CX1 CX2 9 3 roll              % t tt cx0 cx1 cx2 t tt t tt t tt
+      CY0 CY1 CY2 7 3 roll              %
       CW0 CW1 CW2 5 3 roll              % cx0 cx1 cx2 t tt cy0,1,2 t tt cw0,1,2 t tt
 %      /X2 CX0 /Y2 CY0 /W2 CW0
     end
@@ -967,18 +968,18 @@ product 0 5 getinterval (DView) eq not {%
     2 index mul 5 -1 roll add        % ... c1 c2 t c2*t^2+c0
     3 index 2 index mul add /W ED    % ... c1 c2 t
     exch 2. mul dup /W2 ED           % ... c1 t 2*c2
-    mul add /W1  ED                  % ... 
+    mul add /W1  ED                  % ...
 
     2 index mul 5 -1 roll add        % ... c1 c2 t c2*t^2+c0
     3 index 2 index mul add /Y ED    % ... c1 c2 t
     exch 2. mul dup /Y2 ED           % ... c1 t 2*c2
-    mul add /Y1  ED                  % ... 
+    mul add /Y1  ED                  % ...
 
     2 index mul 5 -1 roll add        % ... c1 c2 t c2*t^2+c0
     3 index 2 index mul add /X ED    % ... c1 c2 t
     exch 2. mul dup /X2 ED           % ... c1 t 2*c2
-    mul add /X1  ED                  % ... 
-    % u+iv=(mW+nZ)/(nW+mZ); n^2-m^2=4*RB0*exp(iLB0); 
+    mul add /X1  ED                  % ...
+    % u+iv=(mW+nZ)/(nW+mZ); n^2-m^2=4*RB0*exp(iLB0);
     % dtmp=WZ'-W'Z;  denom=(nW+mZ); rtmp=(n^2-m^2)/denom^2
     % u'+iv'=rtmp*dtmp;
     % u''+iv''=rtmp * [ WZ''-W''Z-2*dtmp*(nW'+mZ')/denom]
@@ -994,7 +995,7 @@ product 0 5 getinterval (DView) eq not {%
     X1 W mul Y1 W mul  X W1 mul Y W1 mul XYsub 2 copy  % U V denom rtmp rtmp dtmp dtmp
     6 -2 roll XYmul 2 copy                             % U V denom rtmp dtmp U' V' U' V'
 %2 copy exch atan Upd180 /Tau 1 Args pop
-    dup mul exch dup mul add dup sqrt exch 10 4 roll   % U V U' V' G GG denom rtmp dtmp 
+    dup mul exch dup mul add dup sqrt exch 10 4 roll   % U V U' V' G GG denom rtmp dtmp
     -2. mul exch -2. mul exch 6 -2 roll XYdiv          % U V  U' V' G GG rtmp term2
     Xflt2 W1 mul Yflt0 W1 mul Xflt1 Yflt0 X1 Y1 XYmul XYadd  % ... denom'
     XYmul
@@ -1018,7 +1019,7 @@ MobiusDict begin
   Xflt1 dup mul Yflt0 dup mul add dup  % X1^2+Y0^2 dup
  INFflt dup mul mul
   Xflt2 dup mul Yflt0 dup mul add lt   % X1^2+Y0^2 bool
-  {pop INFflt dup} 
+  {pop INFflt dup}
   {1. Xflt0 2 copy sub 3 1 roll add mul Yflt0 dup mul sub 1 index div
    Yflt0 2. mul 3 -1 roll div} ifelse
    /Yinv exch def /Xinv exch def
@@ -1033,22 +1034,22 @@ end
    /_TestDT {%  x y s g k t dt t2 x2 y2 g2 k2  --> .... OK
 %/Test 12 Args
       %      --- Test 1: dt<dtmin
-      5 index dtmin lt 
+      5 index dtmin lt
       {true}
       {%     --- Test 2: dk/dt
        dup 8 index sub abs dkmin le         % x y s g k t dt t2 x2 y2 g2 k2 OK1
        %     --- Test 3: Precision?
-         { dup abs 8 index abs 2 copy lt {exch} if pop        %... dt t2 x2 y2 g2 k2 kmax     
+         { dup abs 8 index abs 2 copy lt {exch} if pop        %... dt t2 x2 y2 g2 k2 kmax
            13 -2 roll 2 copy 15 2 roll                        %      ... x2 y2 g2 k2 kmax x y
            6 index 6 index XYsub dup mul exch dup mul add sqrt 2. div      % ... kmax h/2
-           dup 3 1 roll mul                                                %     c k*c   
+           dup 3 1 roll mul                                                %     c k*c
            % check small angle: HalfChord < Radius/2 (ang < 60, sin(ang/2)< .5 )
            dup .5 lt
            { mul 2 div dup dup mul 2 div add precision lt}
            {pop pop false} ifelse
          }
          {false} ifelse                % x y s g k t dt t2 x2 y2 g2 k2 OK12
-      } ifelse 
+      } ifelse
    } bind def
 
 %   RB0 LB0 SetMobius
@@ -1057,9 +1058,9 @@ end
 [  0. G2Make_uvgk dup /ka ED           % [x y g k
    dup kb sub abs 5. div  /dkmin ED
    0. 3 1 roll 0. 1. 1024. div         % [x y s g k t dt
- 
+
    % Loop:
-  {%                                   % [... x y s g k t dt(recommended)  
+  {%                                   % [... x y s g k t dt(recommended)
 %/tdt 2 Args
     2 copy add dup 1. ge               % [... x y s g k t dt t2 t2>=1
     {pop pop 1. 1 index sub 1.} if     % [... x y s g k t dt t2
@@ -1081,11 +1082,11 @@ end
      8 -1 roll 4 index add 2 div mul   % [... x y s t2 x2 y2 g2 k2 dt_rec ds
      8 -2 roll                         % [... x y x2 y2 g2 k2 dt_rec ds s t2
      4  1 roll add                     % [... x y x2 y2 g2 k2 t2 dt_rec s2
-     5  1 roll                         % [... ... x2 y2 s2 g2 k2 t2 dt_rec 
+     5  1 roll                         % [... ... x2 y2 s2 g2 k2 t2 dt_rec
 
-     4 index LimitCrvLength gt {counttomark {pop} repeat 0 exit} if     
-     1 index             1. ge {pop pop pop pop exit} if     
-%     true {pop pop pop pop exit} if     
+     4 index MaxLength gt {counttomark {pop} repeat 0 exit} if
+     1 index        1. ge {pop pop pop pop exit} if
+%     true {pop pop pop pop exit} if
    } loop
    /crvlen exch def] crvlen
 end
@@ -1098,33 +1099,33 @@ end
 
    /_TestDT {%  x y s g k t dt t2 x2 y2 g2 k2  --> .... OK
       %      --- Test 1: dt<dtmin
-      5 index dtmin lt 
+      5 index dtmin lt
       {true}
       {%     --- Test 2: dk/dt
         dup 8 index sub abs dkmin lt         % x y s g k t dt t2 x2 y2 g2 k2 OK1
        %     --- Test 3: Precision?
-        { dup abs 8 index abs 2 copy lt {exch} if pop        %... dt t2 x2 y2 g2 k2 kmax     
+        { dup abs 8 index abs 2 copy lt {exch} if pop        %... dt t2 x2 y2 g2 k2 kmax
           13 -2 roll 2 copy 15 2 roll                        %      ... x2 y2 g2 k2 kmax x y
           6 index 6 index XYsub dup mul exch dup mul add sqrt 2. div      % ... kmax h/2
-          dup 3 1 roll mul                                                    %     c k*c   
+          dup 3 1 roll mul                                                    %     c k*c
           % check smalll angle: HalfChord < Radius/2 (ang < 60, sin(ang/2)< .5 )
           dup .5 lt
           { mul 2 div dup dup mul 2 div add CrvPrecision lt}
           {pop pop false} ifelse
         }
         {false} ifelse                  % x y s g k t dt t2 x2 y2 g2 k2 OK12
-      } ifelse  
+      } ifelse
    } bind def
 
 %    RB0 LB0 SetMobius
    1. G2Make_uvgk /kb ED pop pop pop
- 
+
 [  0. G2Make_uvgk dup /ka ED           % [x y g k
    dup kb sub abs 64. div  /dkmin ED
    0. 3 1 roll 0. 1. 512. div          % [x y s g k t dt
- 
+
    % Loop:
-  {%                                   % [... x y s g k t dt(recommended)  
+  {%                                   % [... x y s g k t dt(recommended)
 %/tdt 2 Args
     2 copy add dup 1. ge               % [... x y s g k t dt t2 t2>=1
     {pop pop 1. 1 index sub 1.} if     % [... x y s g k t dt t2
@@ -1139,37 +1140,37 @@ end
        } repeat false                  % [... x y s g k t dt t2 x2 y2 g2 k2 1st_attempt_OK
      } ifelse
      13 -2 roll pop pop 8 -1 roll pop  % [... s1 g1 k1 dt t2 x2 y2 g2 k2 1st_attempt_OK
-      7 -1 roll dup 3 -1 roll          % [... s1 g1 k1 t2 x2 y2 g2 k2 dt dt 1st_attempt_OK 
-     {2.000 mul} if exch               % [... s1 g1 k1 t2 x2 y2 g2 k2 dt_rec dt 
+      7 -1 roll dup 3 -1 roll          % [... s1 g1 k1 t2 x2 y2 g2 k2 dt dt 1st_attempt_OK
+     {2.000 mul} if exch               % [... s1 g1 k1 t2 x2 y2 g2 k2 dt_rec dt
 
      9 -1 roll 4 index add 2 div mul   % [... s1 k1 t2 x2 y2 g2 k2 dt_rec ds
      8 index add                       % [... s1 k1 t2 x2 y2 g2 k2 dt_rec dt g1 snew
-     4  1 roll                         % [... s1 k1 t2 x2 y2 s2 g2 k2 dt_rec 
-     7 -1 roll exch                    % [... s1 k1 x y s g k t dt_recomended 
+     4  1 roll                         % [... s1 k1 t2 x2 y2 s2 g2 k2 dt_rec
+     7 -1 roll exch                    % [... s1 k1 x y s g k t dt_recomended
      1 index 1. ge {%
        pop pop exch pop                % [... s1 k1 x y s k
        4 2 roll pop pop exit
-     } if     
+     } if
    } loop
- end 
- ] 
-% dup length /KSarrayLen 1 Args pop 
+ end
+ ]
+% dup length /KSarrayLen 1 Args pop
 }
 
 /G2CheckSpiral {%  --> bool
    JJ 1 eq {%
       NN 2 mul SinPhi dup mul mul 1 gt {%
-      NN 2 mul Sin1 mul SinPhi mul Omega Nu sub cos sub        
+      NN 2 mul Sin1 mul SinPhi mul Omega Nu sub cos sub
       NN 2 mul Sin2 mul SinPhi mul Omega Nu add cos add
-      2 copy exch  2 mul Sin1 mul SinPhi div 
-             exch  2 mul Sin2 mul SinPhi div 
+      2 copy exch  2 mul Sin1 mul SinPhi div
+             exch  2 mul Sin2 mul SinPhi div
      [/TestSp1 4 2 roll] pop %==
       mul 0 ge
       } {false} ifelse
    }{
       NN 2 mul Omega Nu abs sub sin mul SinPhi abs mul Omega Nu abs add cos sub
 %         /TestSp2 1 Args
-      0 le 
+      0 le
    } ifelse
 }
 
@@ -1180,13 +1181,13 @@ end
 %    CosSig CosPhi sub neg SinPhi mul SinSig SinPhi mul Atan180
      dup sin dup 0 ne {exch cos CosSig sub 1 index mul exch SinSig mul Atan180}
      {pop Omega exch 0 lt {90 add}{90 sub} ifelse         %  ???????????
-     } ifelse 
+     } ifelse
   } ifelse
 }
 
 %/G2SolveAll {pop /Solutions [] def} def
 
-/G2SolveAll {% [phi array] ---> Fill solutions_array [ <<sol0>> <<sol1>> ] 
+/G2SolveAll {% [phi array] ---> Fill solutions_array [ <<sol0>> <<sol1>> ]
    [exch {%
       dup /NextPhi 1 Args
       % avoid Phi = +- Sigma
@@ -1199,7 +1200,7 @@ end
    } forall] % /Solutions 1 Args
    G2DataDict begin
      /Solutions ED
-     /MaxCrvLen 2 
+     /MaxCrvLen 2
      Solutions {%
        /CrvLen get MAX
      } forall def
@@ -1209,7 +1210,7 @@ end
 /G2SolvePhi{% phi --> may_be_dict1 may_be_dict2   dict_count: 0,1,2
 20 dict begin
    dup abs Sigma lt {-1}{1} ifelse /JJ ED
-   /SW 1 index 0 ge JJ -1 eq and {-1}{1} ifelse def   
+   /SW 1 index 0 ge JJ -1 eq and {-1}{1} ifelse def
    dup sin /SinPhi ED dup cos /CosPhi ED
    dup 2 div /Nu ED
    dup 0 lt {/Sgn -1 def} if
@@ -1222,31 +1223,31 @@ end
    /D0 Phi Theta0 eq  Phi Theta0 neg eq or
     {0} {SinPhi SinSig mul dup mul 2 D2 mul gA mul gB mul add} ifelse def
    [D0 0 lt {%
-     [(D1230, j) D1 D2 D3 D0 JJ] == 
+     [(D1230, j) D1 D2 D3 D0 JJ] ==
      (Discriminant!) ==
    }{
      /DD0 D0 sqrt def
-     D1 DD0 add JJ mul D2 D3 mul 2 mul div      % [N=N3 
-     dup 0 le {== (N3negative) == stop} if  
-     [ exch D0 0 eq {0}{-1} ifelse]             % [ [N3 Ntype] 
+     D1 DD0 add JJ mul D2 D3 mul 2 mul div      % [N=N3
+     dup 0 le {== (N3negative) == stop} if
+     [ exch D0 0 eq {0}{-1} ifelse]             % [ [N3 Ntype]
      JJ 1 eq D0 0 ne and {%
         .5 D1 DD0 add div                       % [N Ntype N1
         dup 0 le {== (N1negative) == stop} if
         [exch 1]
      } if
-   } ifelse]                                    % [[N Ntype] [N Ntype]] 
+   } ifelse]                                    % [[N Ntype] [N Ntype]]
 %  /Narray 1 Args
    /count 0 def
-   {%                                           % next_N 
+   {%                                           % next_N
       aload pop /Ntype ED dup /NN ED
       dup SinPhi dup mul mul dup 0. gt {.5 JJ mul exch div} if /Rw ED
       sqrt dup SinPhi mul JJ -1 eq {neg}{abs} ifelse  % sqrt(N) w
-      dup 0. eq {pop 0.} if                           % because WW 20 string cvs yields (-0.0)  
+      dup 0. eq {pop 0.} if                           % because WW 20 string cvs yields (-0.0)
       /WW ED
       dup SinSig mul  JJ -1 eq {neg}{Sgn mul} ifelse /PW ED
           D2     mul  JJ +1 eq {neg  Sgn mul} if     /QW ED
       /IsSpiral G2CheckSpiral def
-      
+
       %   Create dict if either it_is_spiral, or check_for_spirality_is_not_required
       CheckSpiral not IsSpiral or {%
         (Accepted) ==
@@ -1256,7 +1257,7 @@ end
             /IsSpiral IsSpiral /Ntype Ntype /DBL count 2 eq  >>  %dup Pdict
       } {
         (Rejected) ==
-      } ifelse       % if IsSpiral        
+      } ifelse       % if IsSpiral
    } forall
    count
    dup 2 eq {(Double solution) ==} if
@@ -1273,21 +1274,21 @@ dup begin
         Sin2 Sin1 div mul
         NN 4 mul Sin1 dup mul mul JJ sub mul
         NN 4 mul Sin2 dup mul mul JJ sub div
-        dup 0 le { /R0negative 1 Args pop 0 } if 
+        dup 0 le { /R0negative 1 Args pop 0 } if
         sqrt Sin2 mul Sin1 div abs def
    /CoeffDict <<
       /CX0 -1. /CX1 1 PW add 2 mul /CX2 JJ 1 sub PW 2 mul sub
-      /CY0  0. /CY1 2 QW mul       /CY2 1 index neg 
+      /CY0  0. /CY1 2 QW mul       /CY2 1 index neg
       /CW0  1. /CW1 WW 1 sub 2 mul /CW2 1 JJ add -2 WW mul add
    >> def
    /Xi Phi G2Phi2Xi def
-   
+
    RB0 LB0 SetMobius
    /Spiral4 G2MakeCurve4 /CrvLen exch def def
 
 %   /MaxPol Spiral4 aload 1. exch length 2 idiv{% [x1 y1 ... xN yN MaxPol^2
 %      3 1 roll dup mul exch dup mul add MAX
-%   } repeat sqrt def 
+%   } repeat sqrt def
 
    %JJ -1 eq RB0 1. eq and LB0 0 eq and { reject} if
    /ID Nsol 4 string cvs DBL {(*) AppStr} if def
@@ -1295,12 +1296,12 @@ dup begin
    CrvLen 0 le {%
       %pop  --- DO NOT reject Solution dict   ? why ?
       G2DataDict begin /Nrejected Nrejected 1 add def end
-   }{        
+   }{
 %     /CrvPlot G2MakeKS
       /CrvPlot {G2MakeKS} stopped {counttomark {pop} repeat [0 CrvA 2 CrvB] } if def
-   } ifelse   
+   } ifelse
 end
-} def   
+} def
 
 /G2_XYW {% t --> X Y W
    1. 1 index sub 2 copy dup mul 4 1 roll dup mul JJ mul 3 1 roll mul 2 mul %(1-t)^2 jt^2 2t(1-t)
@@ -1317,7 +1318,7 @@ end
 /G2_xyg {% t --> x y g
    dup G2_XYW dup 5 1 roll                               % W t X Y W
 %   /WtXYW 5 Args
-   div 4 1 roll 2 index div 4 1 roll                     % x y W t  
+   div 4 1 roll 2 index div 4 1 roll                     % x y W t
    JJ 1 sub PW 2 mul sub 1 index mul 1 add PW add 2 mul  % x y W t X'
    2 index div 3 1 roll                                  % x y  X'/W  W t
    1. 1 index 2. mul sub QW mul 2 mul                    % x y  X'/W  W t Y'
@@ -1325,10 +1326,10 @@ end
    JJ 1 add WW 2 mul sub mul WW 1 sub add 2 mul exch div % x y  X'/W  Y'/W  W'/W
    dup 3 1 roll 4 index mul sub 3 1 roll                 % x y  y'  X'/W  W'/W
                 4 index mul sub                          % x y  y' x'
-   dup mul exch dup mul add sqrt            
+   dup mul exch dup mul add sqrt
 } bind
 
-/G2SetBoxes {% 
+/G2SetBoxes {%
   %  define /GivenBox and /NormBox entries in main dict
  G2DataDict begin GivenBox length 0 eq {%
   [[0   0 % include origin
@@ -1339,67 +1340,68 @@ end
     GivenCurve aload pop
     Solutions length dup 0 eq {pop} {
        2 idiv Solutions exch get /Spiral4 get
-       aload length dup /_N ED 2 idiv  {%  ... xN yN 
+       aload length dup /_N ED 2 idiv  {%  ... xN yN
           G2neg Matrix itransform  _N 2 roll
        } repeat
     } ifelse
-   ] MinMaxXY] dup == G2SqBox /GivenBox exch def
- } if  
+   ] MinMaxXY] G2SqBox /GivenBox exch def
+ } if
  [/GivenBox GivenBox] ==
 
  %  define /NormBox
-NormBox length 0 eq {%
+NormBox length 4 lt {%
     gsave newpath
 %       BiarcData1 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
 %       BiarcData2 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
-%       0.05 setflat flattenpath  
+%       0.05 setflat flattenpath
 %       [[[{} {} {} {} pathforall]
-       [[[Solutions {/Spiral4 get aload pop} forall]
-       MinMaxXY 
+       [[[ 1.2 -.5 1.2 .5
+       Solutions {/Spiral4 get aload pop} forall]
+       MinMaxXY
+Pstack
          GivenCurve aload length 2 idiv {%
             Matrix transform G2neg counttomark 2 roll
          } repeat
-         -1.2 -.5 1.2 .5
          -1 0 .5 Alpha Polar XYadd 1 0 .5 Beta Polar XYadd % to see unit tangents
         ] MinMaxXY
-       ] G2SqBox 
+       ] G2SqBox
        /NormBox exch def
     grestore
   } if
  [/NormBox NormBox] ==
-end  
+end
 }
 
 /G2SqBox {% Square given rectangular box (add 2%) --> [x1 y1 x2 y2]
- [ exch aload pop 4 copy 4 2 roll XYsub             % [x1 y1 x2 y2 x2-x1 y2-y1   
+ [ exch aload pop 4 copy 4 2 roll XYsub             % [x1 y1 x2 y2 x2-x1 y2-y1
    2 copy lt {exch} if pop 1.02 mul 2 div 5 1 roll  % [dd x1 y1 x2 y2
    XYadd 2 div dup 3 index add 4 1 roll             % [y2' dd 2x0 y0
                    2 index sub 4 1 roll 2 div exch  % [y1' y2' x0 dd
-                   2 copy sub  5 1 roll             % [x1' y1' y2' x0 dd  
+                   2 copy sub  5 1 roll             % [x1' y1' y2' x0 dd
                    add exch]
 }
 
 /Ashow {% [... str1 str_with_ind ifgreek]
-%/Ash 1 Args 
-gsave  
+%/Ash 1 Args
+gsave
   [exch aload pop
   {/Symbol findfont 14 scalefont setfont} if
   Ishow
   counttomark {show} repeat pop
   currentpoint
 grestore moveto
-} bind 
+} bind
 
 /G2show {% (string)/[array]  (currentpoint context)
 %/G2show1 1 Args
   dup type /stringtype eq {show}{Ashow} ifelse
-} 
+}
 
 /G2show1 {% (string)/[array]
 %/G2show1 1 Args
   G2DataDict /Ytext Ytext BaseLineSkip sub put
   Indent Ytext moveto G2show
-} 
+}
 
 /G2show2 {% (string)
 %/G2show2 1 Args
@@ -1417,7 +1419,7 @@ grestore moveto
 /G2Kdraw {% [x y tau k]
    dup 3 get abs 800 Picmm mul 1 lt {
       %  R > 800 mm
-      [exch 4 Kload 100 Picmm 1 index mul abs Radian mul dup 0 eq {pop pop 0 100 Picmm} if] 
+      [exch 4 Kload 100 Picmm 1 index mul abs Radian mul dup 0 eq {pop pop 0 100 Picmm} if]
    } if Kdraw
 } bind
 
@@ -1427,15 +1429,15 @@ grestore moveto
  G2DataDict begin
    /ThisPage ThisPage 1 add def
    /Ytext YpageMax BaseLineSkip sub def
-   Margin dup translate 0 setlinewidth 
+   Margin dup translate 0 setlinewidth
    Indent Ytext moveto show
    (Page ) ThisPage 4 string cvs AppStr ( / ) AppStr TotalPages  4 string cvs AppStr
-   XpageMax Indent sub Ytext moveto 
+   XpageMax Indent sub Ytext moveto
    1 0 set_text show %Tclean show
    () G2show2
    0 0 XpageMax YpageMax 4 copy rectstroke rectclip newpath
- end   
-} bind 
+ end
+} bind
 
 /GivenDataPic {%
  BeginFig
@@ -1448,7 +1450,7 @@ grestore moveto
    .8 PicLW X1 Y1 moveto X0 Y0 l^ X2 Y2 lineto stroke
    X1 Y1 2 copy moveto 4 Rpoint 20 Picmm Tau1 Polar rl^
    moveto 3 Picmm Tau1 90 Crv1 0. le {neg} if add Polar rmoveto (A) .5 .5 set_text show
-   X2 Y2 2 copy moveto 4 Rpoint 20 Picmm Tau2 Polar rl^ 
+   X2 Y2 2 copy moveto 4 Rpoint 20 Picmm Tau2 Polar rl^
    moveto 3 Picmm Tau2 90 Crv2 0. le {neg} if add Polar rmoveto (B) .5 .5 set_text show
    stroke
    % No dash for circles of too small radius (R < 2 Picmm):
@@ -1459,15 +1461,15 @@ grestore moveto
    [] 0 setdash
 
    gsave
-      1.2 PicLW 
+      1.2 PicLW
       Solutions {%
-         begin  
+         begin
            Phi 0 eq {Red2 .4 PicLW} {Green .2 PicLW} ifelse
            CrvLen 0 gt {%
              Spiral4 aload length 2 idiv 1 sub 3 1 roll
                  G2neg Matrix itransform moveto
-                {G2neg Matrix itransform lineto} repeat stroke 
-           } if 
+                {G2neg Matrix itransform lineto} repeat stroke
+           } if
          end
       } forall
    grestore
@@ -1475,7 +1477,7 @@ grestore moveto
    GivenCurve length 0 gt {%
       Red2 .4 PicLW %3 PicLW 4 Dotted GivenCurve XYdraw stroke
       GivenCurve aload length 2 idiv {moveto -3.6 Rpoint} repeat
-   } if 
+   } if
 
  EndFig
 }
@@ -1487,7 +1489,7 @@ grestore moveto
    Solutions {%
       begin %------------
       OutputFile (\n\% Phi: ) Phi 10 string cvs AppStr
-                 (  Length: ) AppStr CrvLen OutputN not {HalfChord mul} if 
+                 (  Length: ) AppStr CrvLen OutputN not {HalfChord mul} if
                  12 string cvs AppStr writestring
 
       OutputFile dup (\n[) writestring 0     % file count
@@ -1497,11 +1499,11 @@ grestore moveto
             2 index (\n) writestring
          } if
          Spiral4 exch 2 copy get 3 1 roll 1 add get             % file count x y
-         OutputN not {G2neg Matrix itransform} if  exch         % file count y x 
+         OutputN not {G2neg Matrix itransform} if  exch         % file count y x
          3 index exch 12 string cvs ( ) exch AppStr writestring % file count y
          2 index exch 12 string cvs ( ) exch AppStr writestring % file count
       } for
-      pop (\n]\n) writestring                % 
+      pop (\n]\n) writestring                %
       end    %------------
    } forall
    OutputFile closefile
@@ -1514,46 +1516,45 @@ grestore moveto
      GivenDataString  PageStart
    } {
      Title PageStart  GivenDataString G2show1
-} ifelse 
+} ifelse
 
    Black
-   Comment length 0 gt {Comment G2show1} if  
+   Comment length 0 gt {Comment G2show1} if
    (X1) X1 G2Code G2show1 (,  ) show (Y1) Y1 G2Code G2show
    (t1) Tau1 G2CodeDeg G2show2 (,  ) show
-   (k1) Crv1 G2Code G2show  ( // ) G2show (g1) gA G2Code G2show
+   (k1) Crv1 G2Code G2show  % ( // ) G2show (g1) gA G2Code G2show
 
    (X2) X2 G2Code G2show1 (,  ) show (Y2) Y2 G2Code G2show (,  ) show
-   (t2) Tau2 G2CodeDeg G2show2 (,  ) show 
-   (k2) Crv2 G2Code G2show  ( // ) G2show (g2) gB G2Code G2show
-   (c) HalfChord G2Code G2show1 (,   ) show 
-   Q 0 ge {Red} if 
-   (Q)   Q  G2Code G2show Black (,   ) show 
+   (t2) Tau2 G2CodeDeg G2show2 (,  ) show
+   (k2) Crv2 G2Code G2show  % ( // ) G2show (g2) gB G2Code G2show
+   Q 0 ge {Red} if
+   (Q)   Q  G2Code G2show1 Black (,   ) show
    Sigma abs 180 gt {Red}{Black} ifelse (s) Sigma G2CodeDeg G2show
-   Black (;   ) show 
+   Black (;   ) show
+   (c) HalfChord G2Code G2show (,   ) show
+   (F) PhiMin  G2CodeDeg G2show
+
    Solutions length 3 string cvs ( / ) AppStr
-   Ngiven 4 string cvs AppStr    ( solutions found) AppStr show
-   (F) PhiMin  G2CodeDeg G2show1
-%/G2RJtext %  --> (text)
+   Ngiven 4 string cvs AppStr    ( solutions found) AppStr G2show1
    Nrejected 0 gt {
-      Red2
-      Nrejected dup 5 string cvs ( solution) AppStr exch 1 ne {(s) AppStr} if
-      ( rejected: curve length > ) AppStr LimitCrvLength 20 string cvs AppStr
-      G2show1  
-   } if 
-   CheckSpiral not {Blue (No spirality test!) G2show1} if
-   Fname      length 0 gt {(Input from: ) G2show1 Fname G2show   } if  
-   OutputFile length 0 gt { (Output to: ) G2show1 OutputFile G2show } if  
+      Blue (,  )
+      Nrejected 5 string cvs AppStr
+      ( rejected: normalized curve length > ) AppStr MaxLength 20 string cvs AppStr G2show
+   } if
+%  CheckSpiral not {Blue (No spirality test!) G2show1} if
+   Fname      length 0 gt {(Input from: ) G2show1 Fname G2show   } if
+   OutputFile length 0 gt { (Output to: ) G2show1 OutputFile G2show } if
 
    Black
    G2SetBoxes
-   GivenDataPic 
+   GivenDataPic
    OutputFile length 0 gt {G2Output} if
  grestore
 }
 
 /G2ErrorPage {%   // using  GivenDataString  from WorkDict
  gsave
-   Red 
+   Red
 %   (Error ) ErrCode 5 string cvs AppStr  PageStart
    (Error )  PageStart
    GivenDataString G2show1
@@ -1567,14 +1568,14 @@ grestore moveto
    GivenCurve aload length 2 idiv {%
          Matrix transform G2neg moveto -3.6 Rpoint
    } repeat
- grestore  
+ grestore
 }
 
 /G2GivenCrvPlot {% Show given curvature plot (normalized)
-                 % Kmag is set in outer dictionary 
-   gsave Blue .4 PicLW 
+                 % Kmag is set in outer dictionary
+   gsave Blue .4 PicLW
      GivenCrvPlot aload length 2 idiv {Kmag mul G2neg moveto -3.4 Rpoint} repeat
-   grestore  
+   grestore
 }
 
 /NormalDataShow {
@@ -1583,9 +1584,9 @@ grestore moveto
    (s) Sigma G2CodeDeg G2show  (;  ) show
    (a) CrvA  G2Code    G2show2 (,  ) show
    (b) CrvB  G2Code    G2show  (,  ) show
-   (Q) Q     G2Code    G2show 
+   (Q) Q     G2Code    G2show
 }
-  
+
 /G2DrawNorm {
    -1 0 moveto 3 Rpoint 1 0 moveto 3 Rpoint
    gsave Blue
@@ -1603,8 +1604,8 @@ grestore moveto
 
 /G2Locus {%
     Sigma 179.9 lt {%
-    gsave Brown       
-      0 0 moveto 2 Sigma 2 div Polar rl^ stroke 
+    gsave Brown
+      0 0 moveto 2 Sigma 2 div Polar rl^ stroke
       SinSig 25 div Radian mul 2 div        % 2eps=  Asin (SinSig/R^2)
       [ exch dup Omega 90 sub add exch      % [ Xi1 eps
        Omega exch sub 40 forfor {%
@@ -1619,7 +1620,7 @@ grestore moveto
 /ConicDataPic {%
    gsave PicPath clip newpath .9 setgray
       0 0 moveto 0 0 2 Omega Theta0 G2Phi2Xi arcn 0 0 lineto closepath fill
-   grestore 
+   grestore
    /T 12 PicFont
    .6 PicLW (x) (y) PicAxes
 % ? (forgotten...)
@@ -1644,13 +1645,13 @@ grestore moveto
            %[IsSpiral not {1 Picmm dup} if] 0 setdash
            0 PicLW
            0 0 moveto WW 0 eq {PW neg QW neg} {PW WW div QW WW div} ifelse
-               lineto currentpoint stroke              
-           .6 PicLW [] 0 setdash           
+               lineto currentpoint stroke
+           .6 PicLW [] 0 setdash
            Ntype currentlinewidth mul Xi Polar XYadd moveto   % ???
            4 Rpoint  % debug: 4 IsSpiral not {neg} if Rpoint
          end
       } forall
-   grestore 
+   grestore
 }
 
 /ConicDataPage {%
@@ -1673,10 +1674,10 @@ grestore moveto
     % centering NormalBox for the picture with Locus:
 %     4 copy XYadd 2. 0. XYdiv      % [ X1 Y1 X2 Y2 dx dy
 %     2 copy 6 2 roll XYsub 6 2 roll XYsub 4 2 roll
-   ] /ConicBox 1 Args 
+   ] /ConicBox 1 Args
    dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
    0 PicLW PicPath stroke
-   ConicDataPic 
+   ConicDataPic
    EndFig
  grestore
 }
@@ -1702,15 +1703,15 @@ grestore moveto
 
    BeginFig
    NormBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
-   NormalDataPic 
+   NormalDataPic
    EndFig
  grestore
 }
 
-/G2CrvProfile {% 
+/G2CrvProfile {%
   [CrvPlot dup 1 get exch GetLast CrvA CrvB 0] MinMax   % Kmin Kmax
   2 copy sub -10 div dup 3 1 roll add 3 1 roll sub      % Kmax Kmin
-  2 copy sub CrvLen 1.1 mul .25 mul exch div /Kmag ED 
+  2 copy sub CrvLen 1.1 mul .25 mul exch div /Kmag ED
   [CrvLen -.05 mul 3 -1 roll Kmag mul CrvLen 1.05 mul 5 -1 roll Kmag mul]
   XpageMax CrvLen 1.1 mul div
   PicBegin
@@ -1719,14 +1720,14 @@ grestore moveto
   .6 PicLW (s ) (.k) PicAxes
   CrvLen 0 moveto 1.2 Rpoint CrvLen -2 Format .5 -.2 set_text show
  .6 PicLW Phi 0 eq {Red2}{Brown} ifelse
-  CrvPlot aload length 2 idiv 1 sub 3 1 roll 
+  CrvPlot aload length 2 idiv 1 sub 3 1 roll
   Kmag mul moveto {Kmag mul lineto} repeat stroke
-  0 CrvA Kmag mul moveto 0 CrvB Kmag mul l^ stroke 
+  0 CrvA Kmag mul moveto 0 CrvB Kmag mul l^ stroke
   .4 PicLW [1 Picmm dup] 0 setdash
   0 CrvA Kmag mul moveto CrvLen 0 rlineto
   0 CrvB Kmag mul moveto CrvLen 0 rlineto stroke
   G2GivenCrvPlot       %  currentdict /Kmag undef
-} 
+}
 
 /G2ShowConic {%  bool
 gsave
@@ -1736,32 +1737,32 @@ gsave
    {/PW PW neg def /QW QW neg def /WW WW neg def
      {counttomark 2 idiv {moveto 2 Rpoint} repeat pop}
    } ifelse
-   /Draw exch def 
+   /Draw exch def
    Brown .2 PicLW
-   { -1 0 moveto  WW 0 eq 
+   { -1 0 moveto  WW 0 eq
         {99 Omega Polar lineto}
         {PW WW div QW WW div lineto 4 Rpoint } ifelse
      1 0 lineto stroke
-   } if  
+   } if
   /ds 2 Picmm def %10 PicDict /PicScal get div def
   /RR 1 NormBox {abs 2 copy le {exch} if pop} forall dup mul def
   1 PicLW Maroon
   JJ -1 eq {%
-     [ 0. {%                                                 % [ t 
+     [ 0. {%                                                 % [ t
        dup G2_xyg                                            % [ t x y g
-       3 copy 0.0000001 lt 3 1 roll dup mul exch dup mul add % [ t x y g bool x^2+y^2  
+       3 copy 0.0000001 lt 3 1 roll dup mul exch dup mul add % [ t x y g bool x^2+y^2
        RR gt or {pop 3 -1 roll pop exit} if
        4 -1 roll ds                              % [ x y x y ... x y g t ds
        3 -1 roll div add
    } loop Draw
-     [ 1. {%                                                 % [ t 
+     [ 1. {%                                                 % [ t
        dup G2_xyg                                            % [ t x y g
-       3 copy 0.0000001 lt 3 1 roll dup mul exch dup mul add % [ t x y g bool x^2+y^2  
+       3 copy 0.0000001 lt 3 1 roll dup mul exch dup mul add % [ t x y g bool x^2+y^2
        RR gt or {pop 3 -1 roll pop exit} if
        4 -1 roll ds                              % [ x y x y ... x y g t ds
        3 -1 roll div sub
    } loop Draw
-  }{%  JJ = 1   
+  }{%  JJ = 1
       [0. 1. 20 forfor {G2_xy} for 1 0 Draw
   } ifelse
 %     1 PicLW
@@ -1778,7 +1779,7 @@ end
     1 0 moveto  (1) .5 Beta  0 ge {-.15}{1.15} ifelse set_text show
 
 %  G2DrawNorm
-   ShowConic { 
+   ShowConic {
       Red2
       Rw 1 gt {Red 0 0 1 0 360 arc stroke} if
       Rw   1 le Rw 0 gt and
@@ -1787,7 +1788,7 @@ end
       } if
       true   G2ShowConic
       false  G2ShowConic
-   } if   
+   } if
    .6 PicLW Phi 0 eq {Red2}{Brown} ifelse
    CrvLen 0 gt {%
       Spiral4 dup XYdraw stroke
@@ -1798,20 +1799,20 @@ end
 
 /SolutionPage {%    Solution dictionary is loaded
  RB0 LB0 SetMobius
- gsave        
+ gsave
    (Solution ) ID AppStr IsSpiral not {(   (not spiral)) AppStr} if
    PageStart
    NormalDataShow
    (j) Phi G2CodeDeg   G2show1 ( / ) show (x) Xi G2CodeDeg G2show
    (/,  ) show (w) WW G2Code G2show (,  ) show
    Rw 0 ne {(rw) Rw G2Code G2show (,  ) show} if
-   WW 0 ne {(p) PW WW div G2Code G2show (,  ) show (q) QW WW div G2Code G2show } if    
+   WW 0 ne {(p) PW WW div G2Code G2show (,  ) show (q) QW WW div G2Code G2show } if
    (r0) RB0 G2Code G2show1 (l0) (,  ) show LB0 G2CodeDeg G2show
    CrvLen 0 gt {%
       (L) CrvLen G2Code G2show2 ( * ) show HalfChord 12 string cvs show ( = ) show
       CrvLen HalfChord mul 12 string cvs show
    }{(Curve too long!) G2show2} ifelse
-%   IsSpiral not {(Not a spiral!) G2show1 () G2show2} if 
+%   IsSpiral not {(Not a spiral!) G2show1 () G2show2} if
    BeginFig
    gsave
       [[NormBox aload pop -1.1 dup 1.1 dup   % because NormBox may be empty
@@ -1819,13 +1820,13 @@ end
       ] MinMaxXY ] G2SqBox
       % NormBox
       /NewBox 1 Args
-      dup dup 2 get exch 0 get sub XpageMax exch div PicBegin 
+      dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
       PicPath  clip newpath
       SolutionPic
-      Red Xinv Yinv moveto -5 Rcross %10 Rpoint 
-   grestore   
+      Red Xinv Yinv moveto -5 Rcross %10 Rpoint
+   grestore
    EndFig
-   
+
    0 XpageMax translate
    BeginFig
      CrvLen 0 gt {G2CrvProfile} if
@@ -1836,12 +1837,13 @@ end
 /AllSolutionsPage {%
  gsave
    (All Solutions) ( \() AppStr Solutions length 4 string cvs AppStr
+   Nrejected 0 gt {Nrejected neg  5 string cvs AppStr} if
    (\),  normalized) AppStr
-   WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr 
+   WasDecreasing {(  (converted to incr. curvature):)}{(:)} ifelse AppStr
    PageStart
    NormalDataShow
 
-   CheckSpiral not {Blue (No spirality test!) G2show1} if
+%  CheckSpiral not {Blue (No spirality test!) G2show1} if
    BeginFig
    gsave
       NormBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
@@ -1859,23 +1861,25 @@ end
       newpath
 %    gsave 0 .2 .2 setrgbcolor closepath fill grestore
      %stroke
-      1.2 PicLW 
+      1.2 PicLW
       % move "universal solution" to the end of stack:
-      [Solutions {dup /Phi get 0 eq {counttomark 1 roll} if} forall counttomark -1 roll] {%
-         begin  
+      [Solutions aload length {%
+         dup /Phi get 0 eq {exit}{counttomark 1 roll} ifelse
+      } repeat] {%
+         begin
            Phi 0 eq {Red2 .4 PicLW} {Brown .2 PicLW} ifelse
-           CrvLen 0 gt {Spiral4 XYdraw stroke} if 
+           CrvLen 0 gt {Spiral4 XYdraw stroke} if
          end
       } forall
       G2ShowGivenCurve
-   grestore   
+   grestore
    EndFig
    0 XpageMax 1 mul translate
    BeginFig
 
    [CrvA CrvB 0] MinMax   % Kmin Kmax
    2 copy sub -10 div dup 3 1 roll add 3 1 roll sub      % Kmax Kmin
-   2 copy sub MaxCrvLen 1.1 mul .25 mul exch div /Kmag ED 
+   2 copy sub MaxCrvLen 1.1 mul .25 mul exch div /Kmag ED
    [MaxCrvLen -.05 mul 3 -1 roll Kmag mul MaxCrvLen 1.05 mul 5 -1 roll Kmag mul]
    XpageMax MaxCrvLen 1.1 mul div  PicBegin
     /T 12 PicFont
@@ -1887,11 +1891,11 @@ end
       begin
         Phi 0 eq {Red2 .8 PicLW} {Brown .4 PicLW} ifelse
         CrvLen 0 gt {%
-        CrvPlot aload length 2 idiv 1 sub 3 1 roll 
+        CrvPlot aload length 2 idiv 1 sub 3 1 roll
         Kmag mul moveto {Kmag mul lineto} repeat stroke
-        } if   
+        } if
       end
-    } forall     
+    } forall
     G2GivenCrvPlot
     .6 PicLW [1 Picmm dup] 0 setdash Black
     0 CrvA Kmag mul moveto MaxCrvLen 0 rlineto
@@ -1911,7 +1915,7 @@ end
       %CubeRoot
       dup Fmin lt {dup /Fmin ED} if        %Xi_i F_i
       dup Fmax gt {dup /Fmax ED} if
-   } forall] def 
+   } forall] def
    /Mag Fmax Fmin abs 2 copy lt {exch} if pop 182 exch div def
    /XiRef Sigma 2 div def /Xi1 XiRef 180 sub def /Xi2 XiRef 180 add def
    BeginFig
@@ -1920,9 +1924,9 @@ end
    .6 PicLW ( ) (F) PicAxes
    XiF aload length 2 idiv {
       Mag mul exch dup Xi1 lt {360 add} if dup Xi2 gt {360 sub} if  exch moveto 2 Rpoint
-   } repeat 
+   } repeat
 
-   0.2 PicLW 
+   0.2 PicLW
    -180 90 190 {0 moveto 4 Rcross} for XiRef 0 moveto 6 Rcross
    EndFig
  grestore
@@ -1930,26 +1934,28 @@ end
 
 /G2pm180 {dup 0 le {180 add}{180 sub} ifelse} bind
 
-/G2Vogt {%                            working within G2DataDict
+/G2Vogt {%          working within G2DataDict
+         % uses X1, Y1, Tau1, Crv1,  X2, Y2, Tau2, Crv2,  Mu, HalfChord ...
+         % sets normalized data, invariants, etc.
    /WasDecreasing Crv1 Crv2 gt def
    /G2neg WasDecreasing {{neg}}{{}} ifelse bind def
    /CrvA Crv1 HalfChord mul G2neg dup abs 0.0001 lt {pop 0. /Crv1 0. def} if def
    /CrvB Crv2 HalfChord mul G2neg dup abs 0.0001 lt {pop 0. /Crv2 0. def} if def
-   /Alpha Tau1 Mu sub G2neg Upd180 def  
+   /Alpha Tau1 Mu sub G2neg Upd180 def
    /Beta  Tau2 Mu sub G2neg Upd180 def
    /Normalized X1 -1. eq Y1 0. eq and X2 1. eq and Y2 0. eq and def
 
    BiarcDict begin
-      Alpha Beta CrvA 1 MakeBiarc << BiarcData {} forall >> % dict1 
+      Alpha Beta CrvA 1 MakeBiarc << BiarcData {} forall >> % dict1
       Alpha Beta CrvB 2 MakeBiarc << BiarcData {} forall >> % dict2
    end               /BiarcData2 ED  /BiarcData1 ED
    Alpha Beta 2 copy sub 2 div 3 1 roll add dup 0 le {%  gamma A+B
      360 add exch G2pm180 exch
-   } if                                          % gamma sigma  
+   } if                                          % gamma sigma
    dup /Sigma ED 2 div /Omega ED /Gamma ED       % sin omega instead of /IsLong
    % corrected for Biarc, possibly wrong:
-   % /Alpha Omega Gamma add def  /Beta Omega Gamma sub def  
-   /SinSig Sigma sin def /CosSig Sigma cos def 
+   % /Alpha Omega Gamma add def  /Beta Omega Gamma sub def
+   /SinSig Sigma sin def /CosSig Sigma cos def
    CrvA Alpha sin add CrvB Beta sin sub 2 copy
    /gB ED /gA ED mul Omega sin dup mul add /Q ED
    [/SigmaQ: Sigma Q] ==
@@ -1962,12 +1968,12 @@ end
      /PhiMin Theta0 90 MIN 180 Sigma sub MIN Pdef
 }
 
-/G2StoreCrvPlot {% [s0 k0 s1 k1 ...], length > 0 
+/G2StoreCrvPlot {% [s0 k0 s1 k1 ...], length > 0
    dup length /_n0 exch def dup 0 get  /_s0 exch def
    [exch aload length 2 idiv {%
        HalfChord mul exch _s0 sub HalfChord div exch _n0 2 roll
    } repeat ] G2DataDict  /GivenCrvPlot 3 -1 roll put
-} 
+}
 
 /G2SetPhiArray {%  --> [phi-i]
 % old:
@@ -1980,16 +1986,16 @@ G2DataDict begin
   currentdict /UserPhiData known not {/UserPhiData [] def} if
 
   UserPhiData dup type 1 {% 1 is repeat count     % UserPhiData /type
-     dup /arraytype eq {% 
-        1 index length 0 gt {pop exit} if         
-        % otherwise continue, treat empty array  
+     dup /arraytype eq {%
+        1 index length 0 gt {pop exit} if
+        % otherwise continue, treat empty array
      } if
-     dup /arraytype eq {         %    // empty array 
-        pop pop 0                % 
-        PhiMin  0. gt {pop 1} if 
-        PhiMin  5. gt {pop 2} if 
-        PhiMin 15. ge {pop 4} if 
-        PhiMin 45. ge {pop 5} if % {pop PhiMin 5 div round cvi} if 
+     dup /arraytype eq {         %    // empty array
+        pop pop 0                %
+        PhiMin  0. gt {pop 1} if
+        PhiMin  5. gt {pop 2} if
+        PhiMin 15. ge {pop 4} if
+        PhiMin 45. ge {pop 5} if % {pop PhiMin 5 div round cvi} if
 /Npt 1 Args
         /integertype
      } if
@@ -1999,16 +2005,16 @@ G2DataDict begin
         /dphi ED                                   % N
         % Look for a proper step delta_phi (integer, half-integer, ... int/10)
         % such that d_phi = p/q, and there were integer p between
-        % q1=q*PhiNax/(N+1) and q2=q*PhiNax/N.    
+        % q1=q*PhiNax/(N+1) and q2=q*PhiNax/N.
         PhiMin 1 index 1 add div PhiMin 2 index div   % N Q1 Q2
         [1 2 4 5 10] {/q ED
            2 copy q mul floor exch q mul ceiling exch % N Q1 Q2 q*Q1 q*Q2
-           1 index ge  {                              % N Q1 Q2 q*Q1 //q*Q2=q*Q1 
+           1 index ge  {                              % N Q1 Q2 q*Q1 //q*Q2=q*Q1
               q div /dphi exch Pdef exit
            } {pop} ifelse
         } forall pop pop                           % N
         [PhiMin neg 3 -1 roll neg                  % [ -Th0 -N
-        1 1 index neg {dphi mul} for PhiMin]       % [ phi1 2 3 ... ]   
+        1 1 index neg {dphi mul} for PhiMin]       % [ phi1 2 3 ... ]
         exit
      } if
      dup /realtype eq {                            % step /type
@@ -2017,10 +2023,10 @@ G2DataDict begin
         [exch 1 1 index neg {dphi mul} for]
         exit
      } if
-     pop pop [0.] 
+     pop pop [0.]
      /Comment Comment (Incorrect /UserPhiData; show default data. ) AppStr def
    } repeat
-   /PhiArray 1 Args 
+   /PhiArray 1 Args
    [exch {%   replace special values +-999 by exactly +-PhiMin
        dup -999 eq {pop PhiMin neg} if dup 999 eq {pop PhiMin} if
        dup abs PhiMin gt {pop} if
@@ -2039,10 +2045,10 @@ end
 /G2InpDict <<
 
 % Every /Method: eats its arguments;
-%                returns 0 or positive ErrorCode
 %                calls XYTK8
 %                stores GiveCurve (if any)
-% ---------                                         NOT YET !!!     
+%                returns 0 or positive ErrorCode
+% ---------                                         NOT YET !!!
 
 /ABpp4 {%  private: alpha0 beta0 p1 p2
 5 dict begin
@@ -2053,36 +2059,37 @@ end
      Norm4
   } {101} ifelse
 end
-} 
+}
 
-/Conc2 {% r2 phi                               % Concentric 
-   [ 2 index abs dup 1 lt {pop 1.} if 1.1 mul dup dup neg dup 4 2 roll] 
+/Conc2 {% r2 phi                               % Concentric
+   [ 2 index abs dup 1. lt {pop 1.} if 1.1 mul dup dup neg dup 4 2 roll]
+                                               % [-1.1*rmax dup 1.1*rmax dup]
     G2DataDict /GivenBox 3 -1 roll put         % r2 phi
-   1. 0 90. 1.   6 -2 roll 2 copy Polar        % 1. 0 90. 1. r2 phi X2 y2  
-   4 2 roll 90 add 1. 3 -1 roll div
+   1. 0 90. 1.   6 -2 roll 2 copy Polar        % 1. 0 90. 1. r2 phi X2 y2
+   4 2 roll 90 add 1. 3 -1 roll div            % 1. 0 90. 1. X2 Y2 phi+90 k2
    XYTK8
 }
 
 /Ell2 {% a b                                    % ellipse
-5 dict begin /b ED /a ED                           % 
-     a 0 90 b 0 lt {neg} if      a b div b abs div 
+5 dict begin /b ED /a ED                           %
+     a 0 90 b 0 lt {neg} if      a b div b abs div
      0 b a 0 gt {180}{0} ifelse  b a div a abs div
      % TODO: step not properly selected ?
-     [0 5 90 {dup cos a mul exch sin b mul} for]     % [given curve] 
+     [0 5 90 {dup cos a mul exch sin b mul} for]     % [given curve]
      G2DataDict /GivenCurve 3 -1 roll put
 end
-XYTK8 
-} 
+XYTK8
+}
 
-/Parab3 {% a x1 x2,   y=sqrt(ax)                     % parabola
-9 dict begin /x2 ED /x1 ED dup /a ED sqrt /sa ED                  % 
-  x1 dup a mul sqrt a sqrt 2 index sqrt 2. mul Atan90 a sqrt -4 div a 4 div x1 add 1.5 exp div
-  x2 dup a mul sqrt a sqrt 2 index sqrt 2. mul Atan90 a sqrt -4 div a 4 div x2 add 1.5 exp div
-  XYTK8 
+/Parab3 {% a x1 x2,   % parabola y=sqrt(ax)
+9 dict begin /x2 ED /x1 ED dup /a ED sqrt /sa ED                  %
+  x1 dup a mul sqrt sa 2 index sqrt 2. mul Atan90 sa -4 div a 4 div x1 add 1.5 exp div
+  x2 dup a mul sqrt sa 2 index sqrt 2. mul Atan90 sa -4 div a 4 div x2 add 1.5 exp div
+  XYTK8
      % TODO: step not properly selected
   % s(x) = sqrt[x*(4x+a)]/2 +a[ln(a+8x+4sqrt[...])-ln(a)]/8
   % k(x) = -2sqrt(a)/(4x^1)^(3/2)
-     [x1 x2 13 forforall {dup a mul sqrt} forall]     % [given curve] 
+     [x1 x2 13 forforall {dup a mul sqrt} forall]     % [given curve]
      G2DataDict /GivenCurve 3 -1 roll put
      /s1 x1
        dup 4. mul a add sqrt /tmp ED sqrt /sx ED       % x  //tmp = sqrt(4x+a)
@@ -2094,20 +2101,20 @@ XYTK8
        s1 sub    -2 sa mul tmp div tmp div tmp div     % s-s1 k
      } forall] G2StoreCrvPlot
 end
-} 
+}
 
-/Cornu3 {% S1 S2 Mag:  Cornu,  k(s) = s/Mag 
+/Cornu3 {% S1 S2 Mag:  Cornu,  k(s) = s/Mag
 FresnelDict   begin
                                                 % s1 s2 Mag
-  pop /Mag 1 def   %%%% 2 div  /Mag ED          % because my Fresnel corresponds to k=s/2    
+  pop /Mag 1 def   %%%% 2 div  /Mag ED          % because my Fresnel corresponds to k=s/2
                                                 % TODO: step not properly selected
   2 copy
   [ 3 1 roll exch dup                           % s1 s2 [s2 s1 s1
-  Fresnel Mag mul 4 1 roll Mag mul 4 1 roll     % s1 s2 [x1 y1 s2 s1 
+  Fresnel Mag mul 4 1 roll Mag mul 4 1 roll     % s1 s2 [x1 y1 s2 s1
   2 div dup dup mul Radian mul 3 1 roll         % s1 s2 [x1 y1 Tau1 s2 s1/2
   Mag div exch                                  % s1 s2 [x1 y1 Tau1 k1 s2
   dup Fresnel Mag mul 3 1 roll Mag mul 3 1 roll % s1 s2 [x1 y1 Tau1 k1 x2 y2 s2
-  2 div dup dup mul Radian mul exch             % s1 s2 [x1 y1 Tau1 k1 x2 y2 Taus s2/2 
+  2 div dup dup mul Radian mul exch             % s1 s2 [x1 y1 Tau1 k1 x2 y2 Taus s2/2
   Mag div
   ] 3 1 roll                                    % [8] s1 s2
 
@@ -2116,9 +2123,9 @@ FresnelDict   begin
   G2DataDict /GivenCurve 3 -1 roll put
 end
 
-3 -1 roll aload pop XYTK8                      % s1 s2 
+3 -1 roll aload pop XYTK8                      % s1 s2
 [ 3 1 roll 30 forforall {dup 2 div} forall] G2StoreCrvPlot
-} 
+}
 
 /LogSpir2 {% nu phi                            % LogSpiral
 6 dict begin
@@ -2128,7 +2135,7 @@ end
       /S1 1.                         Cnu div def
       /S2 phi Radian div Cot mul Exp Cnu div def
       /Npt S2 S1 sub HalfChord div 10 mul round cvi def
-      1 0 nu Snu  
+      1 0 nu Snu
       phi Radian div Cot mul Exp dup phi Polar nu phi add  % x1 y1 t1 k1 r2 x2 y2 t2
       Snu 5 -1 roll div XYTK8
       G2DataDict /GivenCurve  [S1 S2 Npt forforall {%
@@ -2137,39 +2144,40 @@ end
       } forall] put
 
       [S1 S2 Npt forforall {%
-         dup S1 sub 1. 3 -1 roll div Cot div 
+         dup S1 sub 1. 3 -1 roll div Cot div
       } forall] G2StoreCrvPlot
-   } { 7} ifelse   
+   } { 7} ifelse
 end
 }
 
-/Norm4 {%  [/Norm4 alpha0 a beta0 b ]
+/Norm4 {%  alpha0 a beta0 b
 /Norm4 4 Args
  G2DataDict begin
     /X1 -1 def /Y1 0 def /X2 1 def /Y2 0 def
     /Normalized true def /HalfChord 1 def         % alpha a beta b
     4 copy /Crv2 ED /Tau2 ED /Crv1 ED /Tau1 ED
-           /CrvB ED /Beta ED /CrvA ED /Alpha ED 
+           /CrvB ED /Beta ED /CrvA ED /Alpha ED
     /Matrix [1 0 0 1 0 0] def
     G2Vogt
- end 
-} 
+ end
+}
 
 /XYTK8 {%  Store G2 Hermite data in G2DataDict
  G2DataDict begin                                      % K1 K2
-   /Crv2 ED /Tau2 ED /Y2 ED /X2 ED 
+   /Crv2 ED /Tau2 ED /Y2 ED /X2 ED
    /Crv1 ED /Tau1 ED /Y1 ED /X1 ED
-   X1 Y1 X2 Y2 
-   4 copy XYsub abs exch abs MAX 0.0001 lt {
+   X1 Y1 X2 Y2
+   XYsub abs exch abs MAX 0.0001 lt {
       (P1 = P2) == Error_Not_Coded
    } {
-      LocalXY   /Y0 ED /X0 ED 
+      X1 Y1 X2 Y2
+      LocalXY   /Y0 ED /X0 ED
       /Mu ED /HalfChord ED                                % Check Mu undefined
       /Matrix [Mu cos HalfChord div
                Mu sin HalfChord div dup neg exch 2 index  % cos -sin sin cos
                4 copy X0 mul exch Y0 mul add neg 3 1 roll % ...              tx cos -sin
                       X0 mul exch Y0 mul add neg] def
-      %/Matrix 6 array identmatrix def                
+      %/Matrix 6 array identmatrix def
       G2Vogt
    } ifelse
  end  % pop G2DataDict
@@ -2185,44 +2193,44 @@ end
   /CheckSpiral    true          % test with false
   /BaseLineSkip   20
   /Indent         10
-  /DTminCrv       1. 1024. div 1024. div      
-  /CrvPrecision   0.002                  
+  /DTminCrv       1. 1024. div 1024. div
+  /CrvPrecision   0.002
   /FindCubic      false
   /ShowBilens     false
   /ShowChaque     true
-  /LimitCrvLength 5000. 
+  /MaxLength 1000.
 >> def
 
 %---------------------------------------------------------------
 /G2DataDict <<
   /XpageMax 595 /YpageMax 842 /Ytext 0         /ThisPage 0
   /Ngiven 0 /Nrejected 0
-  /X1 -1. /Y1 0.  /X2 1. /Y2 0. /HalfChord 1.  
+  /X1 -1. /Y1 0.  /X2 1. /Y2 0. /HalfChord 1.
   /WasDecreasing false    /Normalized false
   [/Tau1 /Crv1 /Tau2 /Crv2
    /X0 /Y0 /Mu
    /Alpha /Beta /CrvA /CrvB
    /Omega /Gamma /Sigma /SinSig /CosSig
    /Q /gA /gB
-  ] {0.} forall 
+  ] {0.} forall
    /Theta0 -999.  /PhiMin -999
    /Matrix matrix
    /MaxCrvLen 99999 /Infinity 1024 %dup mul
    /Solutions [] /XIs [] /GivenCurve [] /GivenCrvPlot []
    /GivenBox  [] /NormBox []  %[-1.8 dup dup neg dup]
    /PhiArray []
-   /BiarcData1 null   /BiarcData2 null 
-   /G2neg {}          
+   /BiarcData1 null   /BiarcData2 null
+   /G2neg {}
    /Comment ()
    /OutputFile ()
-   G2Options {} forall 
+   G2Options {} forall
 >> def
 %[/G2DataDict G2DataDict length] ==
 %---------------------------------------------------------------
 % Solution dictionary:
-% /ID /Phi /Xi /Rw /WW /JJ /PW /QW /PP /QQ /HH1 /HH2 
+% /ID /Phi /Xi /Rw /WW /JJ /PW /QW /PP /QQ /HH1 /HH2
 % /IsSpiral (bool) /DBL (bool)
-% RB0 LB0 
+% RB0 LB0
 % /Acon /Bcon                      % for debug
 % /Spiral4 [] /CrvPlot [] Length
 %---------------------------------------------------------------
@@ -2231,7 +2239,7 @@ end
 
 /Times-Roman findfont 14 scalefont setfont
 
-GenSecDict    begin 
+GenSecDict    begin
 FigDict       begin
 G2HermiteDict begin
 G2DataDict    begin
@@ -2247,9 +2255,9 @@ count 1 eq {%
 %                            % << dict ?>> ErrCode
 dup 0 eq {%
    1 index /Input 1 Args
-   type /dicttype ne {% any 
+   type /dicttype ne {% any
        /GivenDataString (Incorrect given data type.) def
-      pop 2 
+      pop 2
    } if
 } if
 %                            % << dict ?>> ErrCode
@@ -2280,12 +2288,12 @@ dup 0 eq {%
                              % ErrCode
 dup 0 eq {%
    pop
-   /GivenDataString (UserData: [ ) 
+   /GivenDataString (UserData: [ )
    UserG2Data 0 get type /nametype eq {(/) AppStr} if
    UserG2Data {%
       20 string cvs AppStr ( ) AppStr
-   } forall (]) AppStr Pdef                     %  
-   G2DataDict /UserG2Data get                   % [/key ...] 
+   } forall (]) AppStr Pdef                     %
+   G2DataDict /UserG2Data get                   % [/key ...]
    dup length 0 gt {dup 0 get}{/Empty} ifelse   % [/key ...] /key
    dup dup length string cvs 3 1 roll           % (key) [/key ...] /key
    G2InpDict exch known not {%                  % (key) [/key ...]
@@ -2324,7 +2332,7 @@ end end
 G2DataDict begin
 G2SetPhiArray dup /PhiArray exch def
 G2SolveAll
-  
+
 (G2SolveAll OK) ==
 %Solutions {Pdict (EndSolDict-------------------) == exit}  forall
 
@@ -2333,7 +2341,7 @@ G2SolveAll
 /TotalPages 2                 % Given + Conic
    Nsols 0 eq {1 add} if      % NormalDataPage
    Nsols 1 gt {1 add} if      % AllSolutionsPage (with NormalData)
-   ShowChaque    {Nsols add} if
+   ShowChaque    {Nsols add Nrejected sub} if
 def
 
 GivenDataPage  save showpage restore
@@ -2342,14 +2350,14 @@ Nsols 0 eq {NormalDataPage    save showpage restore} if
 Nsols 1 gt {AllSolutionsPage  save showpage restore} if
 
 ShowChaque {
-   Solutions {begin SolutionPage end save showpage restore} forall
+   Solutions {begin CrvLen 0 gt {SolutionPage save showpage restore end} if} forall
 } if
 
 ConicDataPage save showpage restore
 
-%G2DataDict Pdict   
+%G2DataDict Pdict
 
-%CubicPage      save showpage restore 
+%CubicPage      save showpage restore
 end
 cleardictstack
 
