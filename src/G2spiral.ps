@@ -9,22 +9,25 @@
 % gs       -sFname=InputData.ps   G2spiral.ps &
 % gv -arg="-sFname=InputData.ps"  G2spiral.ps &
 %
-% You can convert this script to PDF format by various converters, e.g., ImageMagic's convert.exe
+% You can convert this script to PDF by various converters, e.g., ImageMagic's convert.exe
 
 (Start) ==
 
+userdict /WorkData known not {
+  /WorkData <<
+%   ------------------- Edit below this line --------------------------
+%   /UserG2Data  [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
+    /UserG2Data  [/XYTK8 0   0  -105 -.4      1. 1.  -75  .3]
+    /UserPhiData 5.
+    /MaxLength 44  
+    /Title (Default demo data)
+%   ------------------- Edit above this line --------------------------
+  >> def
+} if
 %
-%  ------------------- Edit below this line --------------------------
-<<
-%  /UserG2Data [/XYTK8 -82.64 -20. 300 0.025  48.55 23.5 -20.0 -0.04 ]
-   /UserG2Data  [/XYTK8 0   0  -105 -.4      1. 1.  -75  0.3]
-   /UserPhiData 5.
-   /MaxLength 40   % 30 to test all rejected
->>
-%  ------------------- Edit above this line --------------------------
-%pop
 %  Error due to RMOB=1, LMOB=180 occurs for  (corrected)
 %  /UserG2Data  [/XYTK8 -1  0  89 -2      1. 0.  89 2]
+%
 %  Error:   Bad_Angles in Biarc
 %  /UserG2Data [/XYTK8 -1  0  90  -0.3333    1  0  -90   1.2 ] 
 
@@ -112,21 +115,6 @@ end
 } bind def
 
 % ========================================================= Colors (userdict)
-product 0 5 getinterval (DView) eq not {%
-%   /BlackWhite false def
-%   statusdict % is the printer color printer?
-%   begin /processcolors where {pop processcolors}{-1} ifelse
-%   end 0 le /BlackWhite exch def
-
-   /BlackWhite false def
-   %  GSview is "color printer":
-   product 0 3 getinterval (AFP) eq {/BlackWhite false def} if
-
-   /BW.setrgbcolor /setrgbcolor load def
-   BlackWhite {/setrgbcolor {pop pop pop 0 0 0 BW.setrgbcolor} bind def} if
-} if
-
-% systemdict /colorimage known {} {} ifelse
 
 %  ----------------------------------- Standard 16
 /White   {1.  1.   1.  setrgbcolor} bind def
@@ -2084,7 +2072,7 @@ end
 %                stores GivenCurve   (if any);
 %                stores GivenCrvPlot (if any);
 %                returns 0 or positive ErrorCode
-% ---------                                         NOT YET !!!
+% ---------
 
 /ABpp4 {%  private: alpha0 beta0 p1 p2
 5 dict begin
@@ -2114,8 +2102,7 @@ end
      % TODO: step not properly selected ?
      [0 5 90 {dup cos a mul exch sin b mul} for]     % [given curve]
      G2DataDict /GivenCurve 3 -1 roll put
-end
-G2Normalize 0
+end 0
 }
 
 /Parab3 {% a x1 x2,   % parabola y=sqrt(ax)
@@ -2208,7 +2195,7 @@ end
   /FindCubic      false
   /ShowBilens     false
   /ShowChaque     true
-  /MaxLength 1000.
+  /MaxLength      1000.
 >> def
 
 %---------------------------------------------------------------
@@ -2252,49 +2239,34 @@ end
 GenSecDict    begin
 FigDict       begin
 G2HermiteDict begin
-G2DataDict    begin  % required for, e.g.,  Title?
 MobiusDict    begin
-33 dict       begin   % working dict
+G2DataDict    begin  % required for, e.g.,  Title?
+   WorkData {def} forall
+userdict      begin
+
 /Ngiven 0 def         % ???
 %countdictstack ==
-0                            % << dict ?>> ErrCode
-count 1 eq {%
+0                            % ErrCode
+G2DataDict /UserG2Data known not {
    /GivenDataString (No given data!) def
    pop 1
 } if
-%                            % << dict ?>> ErrCode
+%                            % ErrCode
 dup 0 eq {%
-   1 index /Input 1 Args
-   type /dicttype ne {% any
-       /GivenDataString (Incorrect given data type.) def
+   UserG2Data type /arraytype ne {% any
+      /GivenDataString (Incorrect given data type.) def
+%     /GivenDataString (Incorrect /UserG2Data entry in dictionary (not an array)!) def
       pop 2
    } if
 } if
-%                            % << dict ?>> ErrCode
-G2DataDict begin
-   dup 0 eq {exch {Pdef} forall} if
 %                            % ErrCode
+G2DataDict begin
    Margin 0 lt Margin 200 gt or {/Margin 0 def} if
    Margin type /realtype eq {/Margin Margin 595 mul 210 div def} if % mm --> pt
    /XpageMax XpageMax Margin 2 mul sub def
    /YpageMax YpageMax Margin 2 mul sub def
 end
 %G2DataDict Pdict
-
-%                            % ErrCode
-dup 0 eq {%
-   G2DataDict /UserG2Data known not {
-      G2DataDict /GivenDataString (No /UserG2Data entry in input dictionary!) put
-      pop 3
-   } if
-} if
-                             % ErrCode
-dup 0 eq {%
-   G2DataDict /UserG2Data get type /arraytype ne {%
-      /GivenDataString (Incorrect /UserG2Data entry in dictionary (not an array)!) def
-      pop 4
-   } if
-} if
                              % ErrCode
 dup 0 eq {%
    pop
@@ -2309,7 +2281,7 @@ dup 0 eq {%
    G2InpDict exch known not {%                  % (key) [/key ...]
       pop
       [ (Methods: ) G2InpDict {pop} forall] ==  % (key)
-      /GivenDataString GivenDataString ( Unknown method) AppStr 3 -1 roll AppStr Pdef
+      /GivenDataString GivenDataString ( Unknown method ) AppStr 3 -1 roll AppStr Pdef
       5                                         % ErrCode
    } {%                                         % (key) [/key ...]
       exch dup length 1 sub get 48 sub 1 add    % [/key ...] n

@@ -1,7 +1,8 @@
+%!
 % gv           -arg="-sFname=DemoInp.txt"  G2spiral.ps &
 % gv -infoAll  -arg="-sFname=DemoInp.txt"  G2spiral.ps &
 
-<<
+/WorkData <<
    /UserPhiData [ 0  ]
    /OutputN false
 %  /OutputFile (/home/ak/tmp/VogtSpiral.txt) 
@@ -11,6 +12,5 @@
 
 %    To use radius instead of curvature, you can use the following PostScript syntax:
 %     -1. 3. div   % "div" operator replaces two preceeding operands by their quotient.
-  
->> 
+>> def
 
