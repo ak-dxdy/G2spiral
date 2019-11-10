@@ -1,15 +1,16 @@
-%!//PS-Adobe-3.0
-% //%BoundingBox: 0 0 595 842
+%!  //PS-Adobe-3.0
+%   //%BoundingBox: 0 0 595 842
 %
 %    This file does not meet Data Structuring Conventions (DSC)
 %    parce que pages are generated in loop,
 %    and DSC page numbering (like %%Page: 13) is not possible.
-%    So, navigation between pages (e.g., to previous page) is disabled.
+%    So, not possible is navigation between pages (e.g., to previous page).
 %
 % gs       -sFname=InputData.ps   G2spiral.ps &
 % gv -arg="-sFname=InputData.ps"  G2spiral.ps &
 %
-% You can convert this script to PDF by various converters, e.g., ImageMagic's convert.exe
+% You can convert this script to PDF by various converters,
+% e.g., ImageMagic's convert.exe, ps2pdf utility.
 
 (Start) ==
 
@@ -1090,7 +1091,7 @@ end
      4  1 roll add                     % [... x y x2 y2 g2 k2 t2 dt_rec s2
      5  1 roll                         % [... ... x2 y2 s2 g2 k2 t2 dt_rec
 
-     4 index MaxLength gt {counttomark {pop} repeat 0 exit} if
+     4 index MaxLength gt {counttomark {pop} repeat 0. exit} if
      1 index        1. ge {pop pop pop pop exit} if
 %     true {pop pop pop pop exit} if
    } loop
@@ -1204,11 +1205,10 @@ end
    [exch {
        G2FillSolution /Nsol Nsol 1 add def
    } forall] % /Solutions 1 Args
-     /Solutions ED
-     /MaxCrvLen 2
-     Solutions {%
-       /CrvLen get MAX
-     } forall def
+   /Solutions ED
+   /MaxCrvLen 2
+      Solutions {/CrvLen get MAX} forall
+   def
  end
 }
 
@@ -1332,26 +1332,31 @@ end
 } bind
 
 /G2SetBoxes {%
-  %  define /GivenBox and /NormBox entries in main dict
- G2DataDict begin GivenBox length 0 eq {%
+  %  define /UserBox and /NormBox entries in main dict
+ G2DataDict begin UserBox length 4 ne {%
   [[0   0 % include origin
     X1 X2 2 copy gt {exch} if Y1 Y2 2 copy gt {exch} if  % Xmin Xmax Ymin Ymax
     HalfChord 2 div dup dup dup                          % Xmin Xmax Ymin Ymax h h h h
     7 1 roll 5 1 roll 3 1 roll                           % Xmin h Xmax h Ymin h Ymax h
-    add 7 1 roll sub 6 1 roll add 4 1 roll sub 4 1 roll
-    GivenCurve aload pop
-    Solutions length dup 0 eq {pop} {
-       2 idiv Solutions exch get /Spiral4 get
-       aload length dup /_N ED 2 idiv  {%  ... xN yN
-          G2neg Matrix itransform  _N 2 roll
+    add 7 1 roll sub 6 1 roll add 4 1 roll sub 4 1 roll  % Xmin Ymin Xmax Ymax
+    GivenCurve aload length 0 eq Crv1 Crv2 mul 0 lt and {%
+        % add circles of curvature (solutions with k1*k2<0 are outside them)
+        % ...
+    } if
+    % selecting mid_solution may give bad box if it is length-rejected
+    Solutions length 0 ne {
+       Solutions 0 get   /Spiral4 get aload length        /_N ED
+       Solutions GetLast /Spiral4 get aload length _N add /_N ED
+       _N 2 idiv  {%  ... xN yN
+          G2neg Matrix itransform _N 2 roll
        } repeat
-    } ifelse
-   ] MinMaxXY] G2SqBox /GivenBox exch def
+    } if
+   ] MinMaxXY] G2SqBox /UserBox exch def
  } if
- [/GivenBox GivenBox] ==
+ [/UserBox UserBox] ==
 
  %  define /NormBox
-NormBox length 4 lt {%
+NormBox length 4 ne {%
     gsave newpath
 %       BiarcData1 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
 %       BiarcData2 begin K1 Kdraw K2 Kdraw Kinf length 0 gt {Kinf Kdraw} if end
@@ -1386,7 +1391,7 @@ end
 %/Ash 1 Args
 gsave
   [exch aload pop
-  {/Symbol findfont 14 scalefont setfont} if
+  {/Symbol findfont 12 scalefont setfont} if
   Ishow
   counttomark {show} repeat pop
   currentpoint
@@ -1442,8 +1447,8 @@ grestore moveto
 
 /GivenDataPic {%
  BeginFig
-   %GivenBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
-   GivenBox dup aload pop 4 2 roll XYsub 1.25 div 2 copy lt {exch} if pop XpageMax exch div
+   %UserBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
+   UserBox dup aload pop 4 2 roll XYsub 1.25 div 2 copy lt {exch} if pop XpageMax exch div
    PicBegin
    .4 PicLW  PicPath stroke PicPath clip newpath
    /T 12 PicFont
@@ -1479,7 +1484,6 @@ grestore moveto
       Red2 .4 PicLW %3 PicLW 4 Dotted GivenCurve XYdraw stroke
       GivenCurve aload length 2 idiv {moveto -3.6 Rpoint} repeat
    } if
-
  EndFig
 }
 
@@ -1792,13 +1796,16 @@ end
    .6 PicLW Phi 0 eq {Red2}{Brown} ifelse
    CrvLen 0 gt {%
       Spiral4 dup XYdraw stroke
-      aload length 2 idiv {moveto 3 Rpoint} repeat
+      dup length 2 div CrvLen exch div  % average dist
+      % do not show points if they are too dense
+      2 Picmm lt {pop} {aload length 2 idiv {moveto 3 Rpoint} repeat} ifelse
    } if
    G2ShowGivenCurve
 }
 
 /SolutionPage {%    Solution dictionary is loaded
  RB0 LB0 SetMobius
+NormBox ==
  gsave
    (Solution ) ID AppStr
    PageStart
@@ -1814,12 +1821,12 @@ end
    }{(Curve too long!) G2show2} ifelse
    BeginFig
    gsave
-      [[NormBox aload pop -1.1 dup 1.1 dup   % because NormBox may be empty
-      %  ShowConic --- add Xinv Yinv
-      ] MinMaxXY ] G2SqBox
+      NormBox length 4 ne {
+         /NormBox [-1.1 dup 1.1 dup] Pdef   % because NormBox may be empty
+      %  ShowConic --- add Xinv Yinv ...  ] MinMaxXY ] G2SqBox
+      } if
       % NormBox
-      /NewBox 1 Args
-      dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
+      NormBox dup dup 2 get exch 0 get sub XpageMax exch div PicBegin
       PicPath  clip newpath
       SolutionPic
       Red Xinv Yinv moveto -5 Rcross %10 Rpoint
@@ -1994,7 +2001,6 @@ G2DataDict begin
    G2NormCrvPlot
 currentdict Pdict
    Q Sigma HalfChord
-Pstack
 end
 }
 
@@ -2088,7 +2094,7 @@ end
 /Conc2 {% r2 phi                               % Concentric
    [ 2 index abs dup 1. lt {pop 1.} if 1.1 mul dup dup neg dup 4 2 roll]
                                                % [-1.1*rmax dup 1.1*rmax dup]
-    G2DataDict /GivenBox 3 -1 roll put         % r2 phi
+    G2DataDict /UserBox 3 -1 roll put         % r2 phi
    1. 0 90. 1.   6 -2 roll 2 copy Polar        % 1. 0 90. 1. r2 phi X2 y2
    4 2 roll 90 add 1. 3 -1 roll div            % 1. 0 90. 1. X2 Y2 phi+90 k2
    G2Normalize 0
@@ -2184,18 +2190,21 @@ end
 
 %  Some options (edit at your own risk):
 /G2Options <<
-  /Margin         30
+  /Margin         24
   /Title          ()
   /ShowConic      false
-  /BlackWhite     false        % not yet...
   /BaseLineSkip   20
   /Indent         10
   /DTminCrv       1. 1024. div 1024. div
   /CrvPrecision   0.002
+  /UserBox      []
+  /NormBox []  %[-1.8 dup dup neg dup]
   /FindCubic      false
   /ShowBilens     false
   /ShowChaque     true
   /MaxLength      1000.
+  /YpageMax       830        % 842, decreased for my monitor 
+  /OutputFile ()
 >> def
 
 %---------------------------------------------------------------
@@ -2214,13 +2223,10 @@ end
    /Matrix matrix
    /MaxCrvLen 99999 /Infinity 1024 %dup mul
    /Solutions [] /XIs [] /GivenCurve [] /GivenCrvPlot []
-   /GivenBox  [] /NormBox []  %[-1.8 dup dup neg dup]
    /PhiArray []
    /BiarcData1 null   /BiarcData2 null
    /G2neg {}
    /Comment ()
-   /OutputFile ()
-   G2Options {} forall  % ???
 >> def
 %[/G2DataDict G2DataDict length] ==
 %---------------------------------------------------------------
@@ -2241,7 +2247,8 @@ FigDict       begin
 G2HermiteDict begin
 MobiusDict    begin
 G2DataDict    begin  % required for, e.g.,  Title?
-   WorkData {def} forall
+   G2Options {def} forall
+   WorkData  {def} forall
 userdict      begin
 
 /Ngiven 0 def         % ???
