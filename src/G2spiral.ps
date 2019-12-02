@@ -28,9 +28,6 @@ userdict /WorkData known not {
 %
 %  Error due to RMOB=1, LMOB=180 occurs for  (corrected)
 %  /UserG2Data  [/XYTK8 -1  0  89 -2      1. 0.  89 2]
-%
-%  Error:   Bad_Angles in Biarc
-%  /UserG2Data [/XYTK8 -1  0  90  -0.3333    1  0  -90   1.2 ] 
 
 /Fname where {%
    pop Fname ==
@@ -1206,9 +1203,6 @@ end
        G2FillSolution /Nsol Nsol 1 add def
    } forall] % /Solutions 1 Args
    /Solutions ED
-   /MaxCrvLen 2
-      Solutions {/CrvLen get MAX} forall
-   def
  end
 }
 
@@ -1884,15 +1878,19 @@ gsave
  0 XpageMax 1 mul translate
 
  BeginFig
+   /_MaxLen 2
+      Solutions {/CrvLen get MAX} forall
+   def
+
    [CrvA CrvB 0] MinMax   % Kmin Kmax
    2 copy sub -10 div dup 3 1 roll add 3 1 roll sub      % Kmax Kmin
-   2 copy sub MaxCrvLen 1.1 mul .25 mul exch div /Kmag ED
-   [MaxCrvLen -.05 mul 3 -1 roll Kmag mul MaxCrvLen 1.05 mul 5 -1 roll Kmag mul]
-   XpageMax MaxCrvLen 1.1 mul div  PicBegin
+   2 copy sub _MaxLen 1.1 mul .25 mul exch div /Kmag ED
+   [_MaxLen -.05 mul 3 -1 roll Kmag mul _MaxLen 1.05 mul 5 -1 roll Kmag mul]
+   XpageMax _MaxLen 1.1 mul div  PicBegin
     /T 12 PicFont
     .2 PicLW PicPath stroke
     .6 PicLW (.s) (.k) PicAxes
-    MaxCrvLen dup 0 moveto 2 Rcross -3 Format .5 -.2 set_text show
+    _MaxLen dup 0 moveto 2 Rcross -3 Format .5 -.2 set_text show
     Red .2 PicLW
     Solutions {%
       begin
@@ -1905,8 +1903,8 @@ gsave
     } forall
     G2GivenCrvPlot
     .6 PicLW [1 Picmm dup] 0 setdash Black
-    0 CrvA Kmag mul moveto MaxCrvLen 0 rlineto
-    0 CrvB Kmag mul moveto MaxCrvLen 0 rlineto stroke
+    0 CrvA Kmag mul moveto _MaxLen 0 rlineto
+    0 CrvB Kmag mul moveto _MaxLen 0 rlineto stroke
  EndFig
  grestore
 }
@@ -1976,10 +1974,6 @@ G2DataDict begin
    /Beta  Tau2 Mu sub G2neg Upd180 def
    /Normalized X1 -1. eq Y1 0. eq and X2 1. eq and Y2 0. eq and def
 
-   BiarcDict begin
-      Alpha Beta CrvA 1 MakeBiarc << BiarcData {} forall >> % dict1
-      Alpha Beta CrvB 2 MakeBiarc << BiarcData {} forall >> % dict2
-   end               /BiarcData2 ED  /BiarcData1 ED
    Alpha Beta 2 copy sub 2 div 3 1 roll add dup 0 le {%  gamma A+B
      360 add exch G2pm180 exch
    } if                                          % gamma sigma
@@ -2221,7 +2215,7 @@ end
   ] {0.} forall
    /Theta0 -999.  /PhiMin -999
    /Matrix matrix
-   /MaxCrvLen 99999 /Infinity 1024 %dup mul
+   /Infinity 1024 %dup mul
    /Solutions [] /XIs [] /GivenCurve [] /GivenCrvPlot []
    /PhiArray []
    /BiarcData1 null   /BiarcData2 null
@@ -2317,8 +2311,13 @@ G2SetPhiArray
   dup /PhiArray exch def
 G2SolveAll
 (G2SolveAll OK) ==
+BiarcDict begin
+   Alpha Beta CrvA 1 MakeBiarc << BiarcData {} forall >> % dict1
+   Alpha Beta CrvB 2 MakeBiarc << BiarcData {} forall >> % dict2
+end
 
 G2DataDict begin
+  /BiarcData2 ED  /BiarcData1 ED
   %Solutions {Pdict (EndSolDict-------------------) == exit}  forall
   /Nsols Solutions length def
   /TotalPages 3                 % Given + Normalized/All + Conic
